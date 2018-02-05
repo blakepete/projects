@@ -3,10 +3,18 @@
 <title>Unnamed</title>
 <body>
 
-<p id="test">words</p>
+<p id="displayMoney">0</p>
 
-<button id="moeny" type="button" onclick="document.getElementById('moeny').innerHTML='i did it?'">button</button>
+<button id="addmoney" type="button" onclick="addmoney()">click</button>
 
+<script>
+var money = 0;
+document.getElementById("displayMoney").innerHTML=money;
+function addmoney(){
+    money++;
+    document.getElementById("displayMoney").innerHTML=money;
+}
+</script>
 
 
 
