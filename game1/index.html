@@ -6,11 +6,23 @@
 <p id="displayKappa">0</p>
 <p id="displayChatbots">0</p>
 
-<div id="kappaButton">
-    <button id="kappa" type="button" onclick="spam(1)">Kappa</button>
+<div id="spamButton">
+    <button id="spam" onclick="spam(1)">Kappa</button>
+</div>
+<div id="followButton">
+        <button id="follow" onclick="follow()">Follow!</button>
+</div>
+<div id="unfollowButton">
+        <button id="unfollow" onclick="unfollow()">Unfollow</button>
+</div>
+<div id="subButton">
+        <button id="sub" onclick="sub()">Subscribe! (7500 KC/mo)</button>
+</div>
+<div id="unsubButton">
+        <button id="unsub" onclick="unsub()">Unsubscribe</button>
 </div>
 <div id="buyBotButton">
-    <button id="buyBot" type="button" onclick="deltaChatbot(1)">Buy Chatbot (5) </button>
+    <button id="buyBot" onclick="deltaChatbot(1)">Buy Chatbot (5 KC)</button>
 </div>
 
 <script>
@@ -18,16 +30,21 @@ window.onload = function(){
     document.getElementById("displayKappa").style.display="none";
     document.getElementById("displayChatbots").style.display="none";
     document.getElementById("buyBotButton").style.display="none";
+    document.getElementById("unfollowButton").style.display="none";
+    document.getElementById("unsubButton").style.display="none";
 };
 
 var bankKappa = 0;
 var amtChatBot = 0;
-var loyalty = 1/10;
-var chatbotloyalty = 1/10;
+var loyalty = 1;
+var chatbotloyalty = 1;
 
 function shopKappa(cost){
     if (bankKappa>=cost) {
         deltaKappa(-cost);
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -49,7 +66,7 @@ function deltaChatbot(x){
 function chatbot(){
     clearInterval(chatbotTimer);
     var chatbotTimer = setInterval(function(){ 
-        deltaKappa(amtChatBot*chatbotloyalty)
+        deltaKappa(amtChatBot*(chatbotloyalty/10))
     }, 1000);
 }
 
@@ -62,9 +79,34 @@ function viewCheck(x,y,min){
 }
 
 function spam(x){
-    deltaKappa(x*loyalty);
+    deltaKappa(x*(loyalty/10));
 }
 
+function follow(){
+    loyalty++;
+    document.getElementById("followButton").style.display="none";
+    document.getElementById("unfollowButton").style.display="block";
+}
+
+function unfollow(){
+    loyalty--;
+    document.getElementById("unfollowButton").style.display="none";
+    document.getElementById("followButton").style.display="block";
+}
+
+function sub(){
+    if (shopKappa(7500)==true){
+        loyalty++;
+        document.getElementById("subButton").style.display="none";
+        document.getElementById("unsubButton").style.display="block";
+    }
+}
+
+function unsub(){
+    loyalty--;
+    document.getElementById("unsubButton").style.display="none";
+    document.getElementById("subButton").style.display="block";
+}
 
 </script>
 
