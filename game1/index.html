@@ -4,32 +4,55 @@
 <body>
 
 <p id="displayKappa">0</p>
+<p id="displayChatbots">0</p>
 
-<button id="typeKappa" type="button" onclick="deltaKappa(1)">click</button>
-<button id="buyChatBot" type="button" onclick="deltaChatbot()">Buy Chatbot (5) </button>
+<div id="kappaButton">
+    <button id="kappa" type="button" onclick="deltaKappa(1)">Kappa</button>
+</div>
+<div id="buyBotButton">
+    <button id="buyBot" type="button" onclick="deltaChatbot(1)">Buy Chatbot (5) </button>
+</div>
 
 <script>
+window.onload = function(){
+    document.getElementById("displayKappa").style.display="none";
+    document.getElementById("displayChatbots").style.display="none";
+    document.getElementById("buyBotButton").style.display="none";
+};
+
 var bankKappa = 0;
-deltaKappa(0);
+var amtChatBot = 0;
+
+function shopKappa(cost){
+    if (bankKappa>=cost) {
+        deltaKappa(-cost);
+    }
+}
 
 function deltaKappa(x){
     bankKappa=bankKappa+x;
     document.getElementById("displayKappa").innerHTML="KappaCoin: " + bankKappa;
+    viewCheck(bankKappa,"displayKappa",1);
+    viewCheck(bankKappa,"buyBotButton",5);
 }
 
-function deltaChatbot(){
-    if (bankKappa>=5){
-        setInterval(function(){
-            deltaKappa(1);
-        }, 1000);
-        deltaKappa(-5);
+function deltaChatbot(x){
+    shopKappa(5*x);
+    setInterval(function(){
+        deltaKappa(1*x);
+    }, 1000);
+    amtChatBot=amtChatBot+x;
+    document.getElementById("displayChatbots").innerHTML="Chatbots: " + amtChatBot;
+    viewCheck(amtChatBot,"displayChatbots",1);
+}
+
+function viewCheck(x,y,min){
+    if (x<min){
+        document.getElementById(y).style.display="none";
+    } else {
+        document.getElementById(y).style.display="block";
     }
 }
-
-
-
-
-
 
 
 
