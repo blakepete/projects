@@ -11,21 +11,25 @@
 <script>
 var money = 0;
 var autolvl = 0;
-document.getElementById("displayMoney").innerHTML=money;
+deltamoney(0);
+
 function addmoney(){
-    money++;
-    document.getElementById("displayMoney").innerHTML=money;
+    deltamoney(1);
 }
 
 function autoclick(){
     if (money>=5){
         setInterval(function(){
-            money++;
-            document.getElementById("displayMoney").innerHTML=money;
+            deltamoney(1);
         }, 1000);
-        money=money-5;
-        document.getElementById("displayMoney").innerHTML=money;
+        deltamoney(-5);
+        
     }
+}
+
+function deltamoney(amt){
+    money=money+amt;
+    document.getElementById("displayMoney").innerHTML=money;
 }
 
 
