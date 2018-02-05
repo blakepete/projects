@@ -38,12 +38,16 @@ function deltaKappa(x){
 
 function deltaChatbot(x){
     shopKappa(5*x);
-    setInterval(function(){
-        deltaKappa(1*x);
-    }, 1000);
     amtChatBot=amtChatBot+x;
+    chatbot();
     document.getElementById("displayChatbots").innerHTML="Chatbots: " + amtChatBot;
     viewCheck(amtChatBot,"displayChatbots",1);
+}
+
+function chatbot(){
+    var chatbotTimer = setInterval(function(){ 
+        deltaKappa(1*amtChatBot)
+    }, 1000);
 }
 
 function viewCheck(x,y,min){
