@@ -24,7 +24,10 @@
 <div id="buyBotButton">
     <button id="buyBot" onclick="deltaChatbot(1)">Buy Chatbot (5 KC)</button>
 </div>
-
+<div id="streamButton">
+    <button id="startStream" onclick="startStream()">Start your own stream</button>
+</div>
+            
 <script>
 window.onload = function(){
     document.getElementById("displayKappa").style.display="none";
@@ -38,6 +41,7 @@ var bankKappa = 0;
 var amtChatBot = 0;
 var loyalty = 1;
 var chatbotloyalty = 1;
+var followers = 0;
 
 function shopKappa(cost){
     if (bankKappa>=cost) {
@@ -108,6 +112,9 @@ function unsub(){
     document.getElementById("subButton").style.display="block";
 }
 
+function startStream(){
+    //dothis
+}
 </script>
 
 </body>
