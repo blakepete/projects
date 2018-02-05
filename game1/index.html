@@ -45,6 +45,7 @@ function deltaChatbot(x){
 }
 
 function chatbot(){
+    clearInterval(chatbotTimer);
     var chatbotTimer = setInterval(function(){ 
         deltaKappa(1*amtChatBot)
     }, 1000);
