@@ -6,6 +6,7 @@
 <p id="displayMoney">0</p>
 
 <button id="addmoney" type="button" onclick="addmoney()">click</button>
+<button id="autoclicker" type="button" onclick="autoclick()">click?</button>
 
 <script>
 var money = 0;
@@ -13,6 +14,14 @@ document.getElementById("displayMoney").innerHTML=money;
 function addmoney(){
     money++;
     document.getElementById("displayMoney").innerHTML=money;
+}
+
+function autoclick(){
+    setInterval(function(){
+        money++;
+        document.getElementById("displayMoney").innerHTML=money;
+    }, 1000);
+   
 }
 </script>
 
