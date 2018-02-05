@@ -7,7 +7,7 @@
 <p id="displayChatbots">0</p>
 
 <div id="kappaButton">
-    <button id="kappa" type="button" onclick="deltaKappa(1)">Kappa</button>
+    <button id="kappa" type="button" onclick="spam(1)">Kappa</button>
 </div>
 <div id="buyBotButton">
     <button id="buyBot" type="button" onclick="deltaChatbot(1)">Buy Chatbot (5) </button>
@@ -22,6 +22,8 @@ window.onload = function(){
 
 var bankKappa = 0;
 var amtChatBot = 0;
+var loyalty = 1/10;
+var chatbotloyalty = 1/10;
 
 function shopKappa(cost){
     if (bankKappa>=cost) {
@@ -32,7 +34,7 @@ function shopKappa(cost){
 function deltaKappa(x){
     bankKappa=bankKappa+x;
     document.getElementById("displayKappa").innerHTML="KappaCoin: " + bankKappa;
-    viewCheck(bankKappa,"displayKappa",1);
+    viewCheck(bankKappa,"displayKappa",0);
     viewCheck(bankKappa,"buyBotButton",5);
 }
 
@@ -47,7 +49,7 @@ function deltaChatbot(x){
 function chatbot(){
     clearInterval(chatbotTimer);
     var chatbotTimer = setInterval(function(){ 
-        deltaKappa(1*amtChatBot)
+        deltaKappa(amtChatBot*chatbotloyalty)
     }, 1000);
 }
 
@@ -59,15 +61,12 @@ function viewCheck(x,y,min){
     }
 }
 
-
+function spam(x){
+    deltaKappa(x*loyalty);
+}
 
 
 </script>
-
-
-
-
-
 
 </body>
 </html>
