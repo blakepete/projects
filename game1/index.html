@@ -6,10 +6,11 @@
 <p id="displayMoney">0</p>
 
 <button id="addmoney" type="button" onclick="addmoney()">click</button>
-<button id="autoclicker" type="button" onclick="autoclick()">click?</button>
+<button id="autoclicker" type="button" onclick="autoclick()">autoclicker (5) </button>
 
 <script>
 var money = 0;
+var autolvl = 0;
 document.getElementById("displayMoney").innerHTML=money;
 function addmoney(){
     money++;
@@ -17,12 +18,22 @@ function addmoney(){
 }
 
 function autoclick(){
-    setInterval(function(){
-        money++;
+    if (money>=5){
+        setInterval(function(){
+            money++;
+            document.getElementById("displayMoney").innerHTML=money;
+        }, 1000);
+        money=money-5;
         document.getElementById("displayMoney").innerHTML=money;
-    }, 1000);
-   
+    }
 }
+
+
+
+
+
+
+
 </script>
 
 
