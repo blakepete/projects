@@ -6,6 +6,9 @@
 <p id="displayKappa">0</p>
 <p id="displayChatbots">0</p>
 
+<div id="cheat">
+    <button id="cheatb" onclick="deltaKappa(1000000)">cheat</button>
+</div>
 <div id="spamButton">
     <button id="spam" onclick="spam(1)">Kappa</button>
 </div>
@@ -15,16 +18,16 @@
 <div id="unfollowButton">
         <button id="unfollow" onclick="unfollow()">Unfollow</button>
 </div>
+<div id="buyBotButton">
+    <button id="buyBot" onclick="deltaChatbot(1)">Buy Chatbot (5 KC)</button>
+</div>
 <div id="subButton">
         <button id="sub" onclick="sub()">Subscribe! (7500 KC/mo)</button>
 </div>
 <div id="unsubButton">
         <button id="unsub" onclick="unsub()">Unsubscribe</button>
 </div>
-<div id="buyBotButton">
-    <button id="buyBot" onclick="deltaChatbot(1)">Buy Chatbot (5 KC)</button>
-</div>
-<div id="streamButton">
+<div id="startStreamButton">
     <button id="startStream" onclick="startStream()">Start your own stream</button>
 </div>
             
@@ -34,7 +37,9 @@ window.onload = function(){
     document.getElementById("displayChatbots").style.display="none";
     document.getElementById("buyBotButton").style.display="none";
     document.getElementById("unfollowButton").style.display="none";
+    document.getElementById("subButton").style.display="none";
     document.getElementById("unsubButton").style.display="none";
+    document.getElementById("startStreamButton").style.display="none";
 };
 
 var bankKappa = 0;
@@ -42,6 +47,7 @@ var amtChatBot = 0;
 var loyalty = 1;
 var chatbotloyalty = 1;
 var followers = 0;
+var streamerlvl = 0;
 
 function shopKappa(cost){
     if (bankKappa>=cost) {
@@ -57,6 +63,9 @@ function deltaKappa(x){
     document.getElementById("displayKappa").innerHTML="KappaCoin: " + bankKappa;
     viewCheck(bankKappa,"displayKappa",0);
     viewCheck(bankKappa,"buyBotButton",5);
+    viewCheck(bankKappa,"subButton",7500);
+    viewCheck(bankKappa,"startStreamButton",7500);
+    viewCheck(streamerlvl,"startStreamButton",0,1);
 }
 
 function deltaChatbot(x){
@@ -74,8 +83,8 @@ function chatbot(){
     }, 1000);
 }
 
-function viewCheck(x,y,min){
-    if (x<min){
+function viewCheck(x,y,min,max){
+    if (x<min||x>=max){
         document.getElementById(y).style.display="none";
     } else {
         document.getElementById(y).style.display="block";
@@ -113,7 +122,18 @@ function unsub(){
 }
 
 function startStream(){
-    //dothis
+    if (shopKappa(45000)==true){
+        streamerlvl++
+        stream(streamerlvl/4);
+        document.getElementById("startStreamButton").style.display="none";
+    }
+}
+
+function stream(x){
+    clearInterval(streamTimer);
+    var streamTimer = setInterval(function(){ 
+        deltaKappa(x)
+    }, 1000);
 }
 </script>
 
