@@ -6,6 +6,9 @@
 <p id="displayKappa">0</p>
 <p id="displayChatbots">0</p>
 <p id="displayStreaming">0</p>
+<p id="displayFollowers">0</p>
+<p id="displaySubs">0</p>
+
 
 <div id="cheat">
     <button id="cheatb" onclick="deltaKappa(1000000)">cheat</button>
@@ -42,6 +45,8 @@ window.onload = function(){
     document.getElementById("subButton").style.display="none";
     document.getElementById("unsubButton").style.display="none";
     document.getElementById("startStreamButton").style.display="none";
+    document.getElementById("displayFollowers").style.display="none";
+    document.getElementById("displaySubs").style.display="none";
 };
 
 var bankKappa = 0;
@@ -51,6 +56,9 @@ var chatbotloyalty = 1;
 var followers = 0;
 var streamerlvl = 0;
 var costChatBot = 1;
+var followers = 0;
+var subs = 0;
+
 
 function shopKappa(cost){
     if (bankKappa>=cost) {
@@ -136,18 +144,22 @@ function unsub(){
 function startStream(){
     if (shopKappa(45000)==true){
         streamerlvl++;
-        stream(streamerlvl/4);
+        stream();
         document.getElementById("displayStreaming").innerHTML="Streamer Level: " + (streamerlvl/4);
         document.getElementById("startStreamButton").style.display="none";
         viewCheck(streamerlvl,"displayStreaming",1);
+        viewCheck(streamerlvl,"displayFollowers",1);
+        viewCheck(streamerlvl,"displaySubs",1);
     }
 }
 
-function stream(x){
+function stream(){
     clearInterval(streamTimer);
     var streamTimer = setInterval(function(){ 
-        deltaKappa(x)
+        deltaKappa(streamerlvl*(followers+subs)/4);
     }, 1000);
+    document.getElementById("displayFollowers").innerHTML="Followers: " + followers;
+    document.getElementById("displaySubs").innerHTML="Subscribers: " + subs;
 }
 </script>
 
