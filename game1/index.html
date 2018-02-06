@@ -20,7 +20,7 @@
         <button id="unfollow" onclick="unfollow()">Unfollow</button>
 </div>
 <div id="buyBotButton">
-    <button id="buyBot" onclick="deltaChatbot(1)">Buy Chatbot (5 KC)</button>
+    <button id="buyBot" onclick="deltaChatbot(1)">Buy Chatbot (1)</button>
 </div>
 <div id="subButton">
         <button id="sub" onclick="sub()">Subscribe! (7500 KC/mo)</button>
@@ -50,6 +50,7 @@ var loyalty = 1;
 var chatbotloyalty = 1;
 var followers = 0;
 var streamerlvl = 0;
+var costChatBot = 1;
 
 function shopKappa(cost){
     if (bankKappa>=cost) {
@@ -64,9 +65,10 @@ function deltaKappa(x){
     bankKappa=((((bankKappa*10)+(x*10))/10));
     document.getElementById("displayKappa").innerHTML="KappaCoin: " + bankKappa;
     viewCheck(bankKappa,"displayKappa",0);
-    viewCheck(bankKappa,"buyBotButton",5);
-    viewCheck(bankKappa,"subButton",7500);
-    viewCheck(loyalty,"subButton",2,3);
+    viewCheck(bankKappa,"buyBotButton",costChatBot);
+    if (viewCheck(bankKappa,"subButton",7500)==true) {
+        viewCheck(loyalty,"subButton",2,3);
+    }
     if (viewCheck(bankKappa,"startStreamButton",45000)==true) {
         viewCheck(streamerlvl,"startStreamButton",0,1);
     }
@@ -75,10 +77,12 @@ function deltaKappa(x){
 }
 
 function deltaChatbot(x){
-    shopKappa(5*x);
+    shopKappa(costChatBot*x);
     amtChatBot=amtChatBot+x;
+    costChatBot=costChatBot*2;
     chatbot();
     document.getElementById("displayChatbots").innerHTML="Chatbots: " + amtChatBot;
+    document.getElementById("buyBot").innerHTML="Buy Chatbot (" + costChatBot + " KC)";
     viewCheck(amtChatBot,"displayChatbots",1);
 }
 
