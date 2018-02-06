@@ -2,6 +2,7 @@
 <html>
 <title>Unnamed</title>
 <body>
+<p>Every time you drop a Kappa in chat, you earn KappaCoin. Have fun.</p>
 
 <p id="displayKappa">0</p>
 <p id="displayChatbots">0</p>
@@ -47,6 +48,7 @@ window.onload = function(){
     document.getElementById("startStreamButton").style.display="none";
     document.getElementById("displayFollowers").style.display="none";
     document.getElementById("displaySubs").style.display="none";
+//    document.getElementById("cheat").style.display="none";
 };
 
 var bankKappa = 0;
@@ -81,7 +83,6 @@ function deltaKappa(x){
         viewCheck(streamerlvl,"startStreamButton",0,1);
     }
     viewCheck(streamerlvl,"displayStreaming",1);
-    
 }
 
 function deltaChatbot(x){
@@ -154,13 +155,31 @@ function startStream(){
 }
 
 function stream(){
-    clearInterval(streamTimer);
-    var streamTimer = setInterval(function(){ 
+    clearInterval(streamKTimer);
+    var streamKTimer = setInterval(function(){ 
         deltaKappa(streamerlvl*(followers+subs)/4);
     }, 1000);
+    clearInterval(streamFTimer);
+    var streamFTimer = setInterval(function(){ 
+        deltaFollowers(1);
+    }, 50000);
+    clearInterval(streamSTimer);
+    var streamSTimer = setInterval(function(){ 
+        deltaSubs(1);
+    }, 100000);
     document.getElementById("displayFollowers").innerHTML="Followers: " + followers;
     document.getElementById("displaySubs").innerHTML="Subscribers: " + subs;
 }
+
+function deltaFollowers(x){
+    followers=followers+x;
+    document.getElementById("displayFollowers").innerHTML="Followers: " + followers;
+}
+function deltaSubs(x){
+    subs=subs+x;
+    document.getElementById("displaySubs").innerHTML="Subscribers: " + subs;
+}
+
 </script>
 
 </body>
