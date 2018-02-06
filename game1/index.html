@@ -2,6 +2,7 @@
 <html>
 <title>Unnamed</title>
 <body>
+
 <p>Every time you drop a Kappa in chat, you earn KappaCoin. Have fun.</p>
 
 <p id="displayKappa">0</p>
@@ -10,32 +11,45 @@
 <p id="displayFollowers">0</p>
 <p id="displaySubs">0</p>
 
-
-<div id="cheat">
-    <button id="cheatb" onclick="deltaKappa(1000000)">cheat</button>
-</div>
 <div id="spamButton">
-    <button id="spam" onclick="spam(1)">Kappa</button>
+    <button id="spam" onclick="spam(1)">Kappa</button>.1 per click
 </div>
 <div id="followButton">
-        <button id="follow" onclick="follow()">Follow!</button>
+        <button id="follow" onclick="follow()">Follow!</button>+.1 per click
 </div>
 <div id="unfollowButton">
         <button id="unfollow" onclick="unfollow()">Unfollow</button>
 </div>
 <div id="buyBotButton">
-    <button id="buyBot" onclick="deltaChatbot(1)">Buy Chatbot (1)</button>
+    <button id="buyBot" onclick="deltaChatbot(1)">Buy Chatbot (1)</button>auto .1 per second ea
 </div>
 <div id="subButton">
-        <button id="sub" onclick="sub()">Subscribe! (7500 KC/mo)</button>
+        <button id="sub" onclick="sub()">Subscribe! (7500 KC/mo)</button>+.1 per click
 </div>
 <div id="unsubButton">
         <button id="unsub" onclick="unsub()">Unsubscribe</button>
 </div>
 <div id="startStreamButton">
-    <button id="startStream" onclick="startStream()">Start your own stream</button>
+    <button id="startStream" onclick="startStream()">Start your own stream</button>.25 per follower/sub per second
 </div>
-            
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<p>.</p>
+<div id="cheat">
+    <button id="cheata" onclick="deltaKappa(1000000)">cheat 1mil kappa</button>
+</div>
+<div id="cheat">
+    <button id="cheatb" onclick="deltaFollowers(50)">cheat 50 followers</button>
+</div>      
+
 <script>
 window.onload = function(){
     document.getElementById("displayKappa").style.display="none";
@@ -61,6 +75,13 @@ var costChatBot = 1;
 var followers = 0;
 var subs = 0;
 
+//maybe this will be a thing??
+/*function globalTimer(){
+    clearInterval(globalTimer);
+    var globalTimer = setInterval(function(){ 
+        ///////
+    }, 1000);
+}*/
 
 function shopKappa(cost){
     if (bankKappa>=cost) {
@@ -162,18 +183,25 @@ function stream(){
     clearInterval(streamFTimer);
     var streamFTimer = setInterval(function(){ 
         deltaFollowers(1);
-    }, 50000);
+    }, 60000);
     clearInterval(streamSTimer);
-    var streamSTimer = setInterval(function(){ 
-        deltaSubs(1);
-    }, 100000);
-    document.getElementById("displayFollowers").innerHTML="Followers: " + followers;
-    document.getElementById("displaySubs").innerHTML="Subscribers: " + subs;
+    if (streamerlvl>=2){
+        var streamSTimer = setInterval(function(){ 
+            deltaSubs(1);
+        }, 300000);
+    }
+    document.getElementById("displayFollowers").innerHTML="Followers(1/60s): " + followers;
+    document.getElementById("displaySubs").innerHTML="Subscriber(1/300s): " + subs;
 }
 
 function deltaFollowers(x){
     followers=followers+x;
     document.getElementById("displayFollowers").innerHTML="Followers: " + followers;
+    if (followers>=50 && streamerlvl==1){
+        streamerlvl++;
+        stream();
+        document.getElementById("displayStreaming").innerHTML="Streamer Level: " + (streamerlvl/4);
+    };
 }
 function deltaSubs(x){
     subs=subs+x;
