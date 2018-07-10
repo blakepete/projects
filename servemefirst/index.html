@@ -10,11 +10,13 @@ blake.r.peterson@gmail.com>
 
 <p id="table1">get a table, noob</p>
 <p id="t1time">Table Time: 0</p>
+<p id="t1need">Need:</p>
 <p id="t1guest1">Guest 1: Drink = 0% | Status = Reading Menu | Happiness = 0</p>
 <p id="t1guest2">Guest 2: Drink = 0% | Status = Reading Menu | Happiness = 0</p>
 <p id="debugOut">debug</p>
 <button id="greet" type="button" onclick="greetTable()">greet</button>
 <button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
+<!--
 <button id="giveDrinks" type="button" onclick="giveDrinks()">giveDrinks</button>
 <button id="orderFood" type="button" onclick="orderFood()">orderFood</button>
 <button id="checkup" type="button" onclick="checkup()">checkup</button>
@@ -25,6 +27,7 @@ blake.r.peterson@gmail.com>
 <button id="getCheck" type="button" onclick="getCheck()">getCheck</button>
 <button id="runCheck" type="button" onclick="runCheck()">runCheck</button>
 <button id="finalVisit" type="button" onclick="finalVisit()">finalVisit</button>
+-->
 
 <button id="addTable" type="button" onclick="newTable()">Add Table</button>
 <button id="debug" type="button" onclick="debug()">debug</button>
@@ -50,6 +53,8 @@ var g01tipper = 0;
 var g02tipper = 0;
 var payor = 0;
 var tableTime = 0;
+var needTime = 0;
+var t1need = "Greet"
 
 //function updater(){
 //    setInterval(function() {
@@ -79,10 +84,13 @@ function newTable(){
     g01tipper = getRnd(5, 26);
     g02tipper = getRnd(5, 26);
     payor = getRnd(1, 3);
+    needTime = 30;
     tableTimer();
+    needTimer();
     document.getElementById("table1").innerHTML= "Table 1";
     document.getElementById("t1guest1").innerHTML= "Guest 1: Drink = " + g01drink + "% | Status = " + g01stage + " | Happiness = " + g01happy;
     document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02stage + " | Happiness = " + g02happy;
+    document.getElementById("t1need").innerHTML= "Need: " + t1need + ": " + needTime;
     document.getElementById("t1guest1").style.display="block";
     document.getElementById("t1guest2").style.display="block";
     
@@ -95,6 +103,28 @@ function tableTimer(){
         tableTime++;
             document.getElementById("t1time").innerHTML= "Table Time: " + tableTime;
     }, 1000);
+}
+function needTimer(){
+    setInterval(function() {
+        needTime--;
+            document.getElementById("t1need").innerHTML= "Need: " + t1need + ": " + needTime;
+    }, 1000);
+}
+function greetTable(){
+    if (tableTime < 5) {
+        g01happy = Math.round(g01happy - Math.random());
+        g02happy = Math.round(g02happy - Math.random());
+    } else if (tableTime > 30) {
+        g01happy = Math.round(g01happy - Math.random());
+        g02happy = Math.round(g02happy - Math.random());
+    } else {
+        g01happy = Math.round(g01happy + Math.random());
+        g02happy = Math.round(g02happy + Math.random());
+    }
+    document.getElementById("t1guest1").innerHTML= "Guest 1: Drink = " + g01drink + "% | Status = " + g01stage + " | Happiness = " + g01happy;
+    document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02stage + " | Happiness = " + g02happy;
+//    g01happy = Math.round(g01happy + Math.random());
+//    g02happy = Math.round(g02happy + Math.random());
 }
 
 function debug(){
