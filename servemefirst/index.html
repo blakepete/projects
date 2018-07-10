@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 1.1.0</title>
+<title>ServeMeFirst Alpha 1.2.0</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -12,7 +12,6 @@ blake.r.peterson@gmail.com>
 <p id="t0need">table</p>
 <p id="t0g0status">ya</p>
 <p id="t0g1status">noob</p>
-<p id="debugOut">debug</p>
 <button id="addTable" type="button" onclick="newTable()">Add Table</button>
 <button id="greet" type="button" onclick="greetTable()">greet</button>
 <button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
@@ -29,18 +28,22 @@ blake.r.peterson@gmail.com>
 <button id="runCheck" type="button" onclick="runCheck()">runCheck</button>
 <button id="finalVisit" type="button" onclick="finalVisit()">finalVisit</button>
 -->
-<button id="debug" type="button" onclick="debug()">debug</button>
-
+<p id="playerDisplay">yo ho ho, serving life for me</p>
+<p></p><button id="debug" type="button" onclick="debug()">debug</button>
+<p id="debugOut">debug</p>
 <script>
 window.onload = function(){
     document.getElementById("greet").style.display="none";
     document.getElementById("orderDrinks").style.display="none";
     document.getElementById("makeDrinks").style.display="none";
-    document.getElementById("giveDrinks").style.display="none";
-    
+    document.getElementById("giveDrinks").style.display="none"; 
 };
 
 var gameTime = 0;
+var player = {
+    display: "servant mode engage",
+    tempd: 0
+}
 var t0 = {
     visitTime: 0,
     visitTimer: 0,
@@ -75,6 +78,7 @@ function updater(){
     document.getElementById("t0g0status").innerHTML= "Guest 1: Drink = " + t0.guest[0].drink + "% | Happiness = " + t0.guest[0].happy;
     document.getElementById("t0g1status").innerHTML= "Guest 1: Drink = " + t0.guest[1].drink + "% | Happiness = " + t0.guest[1].happy;
     document.getElementById("t0need").innerHTML= "Need: " + t0.status + ": " + t0.needTime;
+    document.getElementById("playerDisplay").innerHTML= player.display;
 }
 
 function visitTimerOn(){
@@ -112,6 +116,7 @@ function newTable(){
     t0.guest[0].tipper = getRnd(5, 26);
     t0.guest[1].tipper = getRnd(5, 26);
     t0.payor = getRnd(0, 2);
+    player.display = "you've been sat";
     document.getElementById("t0title").innerHTML= "Table 0";
     document.getElementById("greet").style.display="inline";
     document.getElementById("addTable").disabled = true;
@@ -123,9 +128,11 @@ function greetTable(){
     if (t0.visitTime < 5) {
         t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
+        player.display = "they're still playing musical chairs. but hi.";
     } else {
         t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
+        player.display = "yada yada yada"
     }
     document.getElementById("greet").style.display="none";
     document.getElementById("orderDrinks").style.display="inline";
@@ -139,6 +146,7 @@ function greetTable(){
         t0.status = 3;
         t0.needTime = 90;
         t0.needTimer = setInterval(needTimerOn, 1000);
+        player.display = "greeted. time for a drink order";
     }, 5000);
     updater();
 }
@@ -148,9 +156,11 @@ function orderDrinks(){
     if (t0.visitTime < 15) {
         t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
+        player.display = "they literally just sat down, waters around";
     } else {
         t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
+        player.display = "2 diets probably"
     }
     document.getElementById("orderDrinks").style.display="none";
     document.getElementById("makeDrinks").style.display="inline";
@@ -166,8 +176,30 @@ function orderDrinks(){
         t0.status = 5;
         t0.needTime = 120;
         t0.needTimer = setInterval(needTimerOn, 1000);
+        player.display = "got drinks, go make em";
     }, 30000);
     updater();
+}
+
+function makeDrinks(){
+    document.getElementById("makeDrinks").style.display="none";
+    player.display = "scooping ice";
+    setTimeout(function(){
+        player.display = "filling first cup";
+    }, 10000);
+    setTimeout(function(){
+        player.display = "filling second cup";
+    }, 20000);    
+    setTimeout(function(){
+        player.display = "drink em if u got em, wait. no. these are for the table.";
+        document.getElementById("giveDrinks").disabled = false;
+    }, 30000);
+}
+
+function giveDrinks(){
+    document.getElementById("giveDrinks").style.display="none";
+    player.display = "here's your drunks";
+
 }
 
 function debug(){
