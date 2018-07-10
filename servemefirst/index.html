@@ -41,17 +41,51 @@ window.onload = function(){
     document.getElementById("orderApps").style.display="none"; 
 };
 
-var gameTime = 0;
+
 var player = {
-    display: "servant mode engage",
-    tempd: 0
+    display: "servant mode engage"
 };
+
 var t0 = {
-    visitTime: 0,
-    visitTimer: 0,
+    timer: [0, 0, 0, 0, 0, 0, 0],
+        //0visit,1drinks,2apps,3salads,4entrees,5dessert,6bill
+    timerVar: [0, 0, 0, 0, 0, 0, 0],
+    activeTimer: 0,
     status: 0,
-    needTime: 0,
-    needTimer: 0,
+    statuses: [
+        "0Reading menu",
+        "1Waiting for greeting",
+        "2Greeting",
+        "3Waiting to order drinks",
+        "4Ordering drinks",
+        "5Reading menu",
+        "6Waiting for drinks",
+        "7Waiting to order apps",
+        "8Ordering apps",
+        "9Reading menu",
+        "10Waiting for apps",
+        "11Eating apps",
+        "12Waiting to order entrees",
+        "13Ordering entrees",
+        "14Finishing apps",
+        "15Waiting for salads",
+        "16Eating salads",
+        "17Finishing salads",
+        "18Waiting for entree",
+        "19Eating entree",
+        "20Halfway entree",
+        "21Finishing entree",
+        "22Waiting to order dessert",
+        "23Ordering dessert",
+        "24Waiting for dessert",
+        "25Eating dessert",
+        "26Finishing dessert",
+        "27Waiting for bill",
+        "28Looking at bill and not paying it",
+        "29Bill ready to collect",
+        "30Waiting for receipt",
+        "31Leaving tip",
+    ],
     guest: [
         {
             drink: 0,
@@ -76,37 +110,41 @@ function getRnd(min, max) {
 }
 
 function updater(){
-    document.getElementById("t0time").innerHTML= "Table Time: " + t0.visitTime;
+    document.getElementById("t0time").innerHTML= "Table Time: " + t0.timer[0];
     document.getElementById("t0g0status").innerHTML= "Guest 1: Drink = " + t0.guest[0].drink + "% | Happiness = " + t0.guest[0].happy;
     document.getElementById("t0g1status").innerHTML= "Guest 1: Drink = " + t0.guest[1].drink + "% | Happiness = " + t0.guest[1].happy;
-    document.getElementById("t0need").innerHTML= "Need: " + t0.status + ": " + t0.needTime;
+    document.getElementById("t0need").innerHTML= "Need: " + t0.statuses[t0.status] + ": " + t0.timer[t0.activeTimer];
     document.getElementById("playerDisplay").innerHTML= player.display;
 }
 
-function visitTimerOn(){
-    t0.visitTime++;
+
+function timerOn(k, l = -1){
+    t0.timer[k] = t0.timer[k] + l;
     updater();
 }
 
-function needTimerOn(){
-    t0.needTime--;
-    updater();
-    if (t0.needTime == -1){
-        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
-        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
-        updater();
-    } else if (t0.needTime == -30){
-        t0.guest[0].happy = t0.guest[0].happy - 1;
-        t0.guest[1].happy = t0.guest[1].happy - 1;
-        updater();
-    }
-}
+
+
+//function needTimerOn(){
+//    t0.needTime--;
+//    updater();
+//    if (t0.needTime == -1){
+//        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
+//        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
+//        updater();
+//    } else if (t0.needTime == -30){
+//        t0.guest[0].happy = t0.guest[0].happy - 1;
+//        t0.guest[1].happy = t0.guest[1].happy - 1;
+//        updater();
+//    }
+//}
 
 function newTable(){
-    t0.visitTimer = setInterval(visitTimerOn, 1000);
+    t0.timerVar[0] = setInterval(timerOn.bind(null, 0 , 1), 1000);
     t0.status = 0;
-    t0.needTime = 30;
-    t0.needTimer = setInterval(needTimerOn, 1000);
+    t0.timer[1] = 30;
+    t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
+    t0.activeTimer = 1;
     t0.guest[0].drink = 0;
     t0.guest[1].drink = 0;
     t0.guest[0].happy = getRnd(-1, 5);
@@ -126,8 +164,8 @@ function newTable(){
 }
 
 function greetTable(){
-    clearInterval(t0.needTimer);
-    if (t0.visitTime < 5) {
+    clearInterval(t0.timerVar[1]);
+    if (t0.timer[0] < 5) {
         t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
         player.display = "they're still playing musical chairs. but hi.";
@@ -140,22 +178,23 @@ function greetTable(){
     document.getElementById("orderDrinks").style.display="inline";
     document.getElementById("orderDrinks").disabled = true;
     t0.status = 2;
-    t0.needTime = 5;
-    t0.needTimer = setInterval(needTimerOn, 1000);
+    t0.timer[1] = 5;
+    t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
     setTimeout(function(){ 
-        clearInterval(t0.needTimer);
+        clearInterval(t0.timerVar[1]);
         document.getElementById("orderDrinks").disabled = false;
         t0.status = 3;
-        t0.needTime = 90;
-        t0.needTimer = setInterval(needTimerOn, 1000);
+        t0.timer[1] = 90;
+        t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
         player.display = "greeted. time for a drink order";
+        updater();
     }, 5000);
     updater();
 }
 
 function orderDrinks(){
-    clearInterval(t0.needTimer);
-    if (t0.visitTime < 15) {
+    clearInterval(t0.timerVar[1]);
+    if (t0.timer[0] < 15) {
         t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
         player.display = "they literally just sat down, waters around";
@@ -172,16 +211,17 @@ function orderDrinks(){
     document.getElementById("orderApps").style.display="inline";
     document.getElementById("orderApps").disabled = true;
     t0.status = 4;
-    t0.needTime = 30;
-    t0.needTimer = setInterval(needTimerOn, 1000);
+    t0.timer[1] = 30;
+    t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
     setTimeout(function(){
-        clearInterval(t0.needTimer);
+        clearInterval(t0.timerVar[1]);
         document.getElementById("makeDrinks").disabled = false;
         document.getElementById("orderApps").disabled = false;
-        t0.status = 5;
-        t0.needTime = 120;
-        t0.needTimer = setInterval(needTimerOn, 1000);
+        t0.status = 6;
+        t0.timer[1] = 120;
+        t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
         player.display = "got drinks, go make em";
+        updater();
     }, 30000);
     updater();
 }
@@ -200,25 +240,27 @@ function makeDrinks(){
         player.display = "drink em if u got em, wait. no. these are for the table.";
         document.getElementById("giveDrinks").disabled = false;
     }, 30000);
+    updater();
 }
 
 function giveDrinks(){
     document.getElementById("giveDrinks").style.display="none";
     document.getElementById("orderApps").disabled = false;
+    t0.guest[0].happy = t0.guest[0].happy + 1;
+    t0.guest[1].happy = t0.guest[1].happy + 1;
     player.display = "here's your drunks";
+    updater();
 }
 
 function orderApps(){
     document.getElementById("orderApps").style.display="none";
     //start here
     //copypasta orderDrinks
-    //need to solve apps timer (use visitTimer)
-    //forgot happiness asjustments earlier
+    //reincorporate timer fails (happyiness)
 }
 
 function debug(){
-    document.getElementById("debugOut").innerHTML= t0.needTime;
-    
+    document.getElementById("debugOut").innerHTML= t0.timer[5];
 }
 
 </script>
