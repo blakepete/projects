@@ -16,8 +16,9 @@ blake.r.peterson@gmail.com>
 <button id="addTable" type="button" onclick="newTable()">Add Table</button>
 <button id="greet" type="button" onclick="greetTable()">greet</button>
 <button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
-<!--
+<button id="makeDrinks" type="button" onclick="makeDrinks()">makeDrinks</button>
 <button id="giveDrinks" type="button" onclick="giveDrinks()">giveDrinks</button>
+<!--
 <button id="orderFood" type="button" onclick="orderFood()">orderFood</button>
 <button id="checkup" type="button" onclick="checkup()">checkup</button>
 <button id="giveFood" type="button" onclick="giveFood()">giveFood</button>
@@ -34,6 +35,9 @@ blake.r.peterson@gmail.com>
 window.onload = function(){
     document.getElementById("greet").style.display="none";
     document.getElementById("orderDrinks").style.display="none";
+    document.getElementById("makeDrinks").style.display="none";
+    document.getElementById("giveDrinks").style.display="none";
+    
 };
 
 var gameTime = 0;
@@ -79,7 +83,6 @@ function visitTimerOn(){
 }
 
 function needTimerOn(){
-    document.getElementById("debugOut").innerHTML= t0.needTime;
     t0.needTime--;
     updater();
     if (t0.needTime == -1){
@@ -136,12 +139,40 @@ function greetTable(){
         t0.status = 3;
         t0.needTime = 90;
         t0.needTimer = setInterval(needTimerOn, 1000);
-        }, 5000);
+    }, 5000);
+    updater();
+}
+
+function orderDrinks(){
+    clearInterval(t0.needTimer);
+    if (t0.visitTime < 15) {
+        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
+        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
+    } else {
+        t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
+        t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
+    }
+    document.getElementById("orderDrinks").style.display="none";
+    document.getElementById("makeDrinks").style.display="inline";
+    document.getElementById("makeDrinks").disabled = true;
+    document.getElementById("giveDrinks").style.display="inline";
+    document.getElementById("giveDrinks").disabled = true;
+    t0.status = 4;
+    t0.needTime = 30;
+    t0.needTimer = setInterval(needTimerOn, 1000);
+    setTimeout(function(){
+        clearInterval(t0.needTimer);
+        document.getElementById("makeDrinks").disabled = false;
+        t0.status = 5;
+        t0.needTime = 120;
+        t0.needTimer = setInterval(needTimerOn, 1000);
+    }, 30000);
     updater();
 }
 
 function debug(){
     document.getElementById("debugOut").innerHTML= t0.needTime;
+    
 }
 
 </script>
