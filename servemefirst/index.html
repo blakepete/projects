@@ -45,7 +45,7 @@ var gameTime = 0;
 var player = {
     display: "servant mode engage",
     tempd: 0
-}
+};
 var t0 = {
     visitTime: 0,
     visitTimer: 0,
@@ -134,7 +134,7 @@ function greetTable(){
     } else {
         t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
-        player.display = "yada yada yada"
+        player.display = "yada yada yada";
     }
     document.getElementById("greet").style.display="none";
     document.getElementById("orderDrinks").style.display="inline";
@@ -162,7 +162,7 @@ function orderDrinks(){
     } else {
         t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
-        player.display = "2 diets probably"
+        player.display = "2 diets probably";
     }
     document.getElementById("orderDrinks").style.display="none";
     document.getElementById("makeDrinks").style.display="inline";
