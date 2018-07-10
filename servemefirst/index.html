@@ -9,8 +9,10 @@ blake.r.peterson@gmail.com>
 
 
 <p id="table1">get a table, noob</p>
+<p id="t1time">Table Time: 0</p>
 <p id="t1guest1">Guest 1: Drink = 0% | Status = Reading Menu | Happiness = 0</p>
 <p id="t1guest2">Guest 2: Drink = 0% | Status = Reading Menu | Happiness = 0</p>
+<p id="debugOut">debug</p>
 <button id="greet" type="button" onclick="greetTable()">greet</button>
 <button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
 <button id="giveDrinks" type="button" onclick="giveDrinks()">giveDrinks</button>
@@ -25,15 +27,36 @@ blake.r.peterson@gmail.com>
 <button id="finalVisit" type="button" onclick="finalVisit()">finalVisit</button>
 
 <button id="addTable" type="button" onclick="newTable()">Add Table</button>
+<button id="debug" type="button" onclick="debug()">debug</button>
 
 <script>
-window.onload = function(){
+//window.onload = function(){
 //    document.getElementById("t1guest1").style.display="none";
 //    document.getElementById("t1guest2").style.display="none";
-};
+//updater();
+//};
 
 var gameTime = 0;
 var tableCount = 0;
+var g01drink = 0;
+var g02drink = 0;
+var g01stage = 0;
+var g02stage = 0;
+var g01happy = 0;
+var g02happy = 0;
+var g01needy = 0;
+var g02needy = 0;
+var g01tipper = 0;
+var g02tipper = 0;
+var payor = 0;
+var tableTime = 0;
+
+//function updater(){
+//    setInterval(function() {
+//        document.getElementById("t1time").innerHTML= "Table Time: " + tableTime;
+//    }, 1000);
+//}
+
 function useTime(delta, target = gameTime){
     target = target + delta;
 }
@@ -45,27 +68,38 @@ function getRnd(min, max) {
 
 function newTable(){
     tableCount++;
-    var g01drink = 0;
-    var g02drink = 0;
-    var g01stage = 0;
-    var g02stage = 0;
-    var g01happy = getRnd(-1, 5);
-    var g02happy = getRnd(-1, 5);
-    var g01needy = getRnd(0, 10);
-    var g02needy = getRnd(0, 10);
-    var g01tipper = getRnd(5, 26);
-    var g02tipper = getRnd(5, 26);
-    var payor = getRnd(1, 3);
-    var tableTime = 0
+    g01drink = 0;
+    g02drink = 0;
+    g01stage = 0;
+    g02stage = 0;
+    g01happy = getRnd(-1, 5);
+    g02happy = getRnd(-1, 5);
+    g01needy = getRnd(0, 10);
+    g02needy = getRnd(0, 10);
+    g01tipper = getRnd(5, 26);
+    g02tipper = getRnd(5, 26);
+    payor = getRnd(1, 3);
+    tableTimer();
     document.getElementById("table1").innerHTML= "Table 1";
     document.getElementById("t1guest1").innerHTML= "Guest 1: Drink = " + g01drink + "% | Status = " + g01stage + " | Happiness = " + g01happy;
     document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02stage + " | Happiness = " + g02happy;
     document.getElementById("t1guest1").style.display="block";
     document.getElementById("t1guest2").style.display="block";
+    
+    //timer(gameTime);
+
 }
 
+function tableTimer(){
+    setInterval(function() {
+        tableTime++;
+            document.getElementById("t1time").innerHTML= "Table Time: " + tableTime;
+    }, 1000);
+}
 
-
+function debug(){
+    document.getElementById("debugOut").innerHTML= tableTime;
+}
 </script>
  
 </body>
