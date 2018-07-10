@@ -79,22 +79,18 @@ function visitTimerOn(){
 }
 
 function needTimerOn(){
+    document.getElementById("debugOut").innerHTML= t0.needTime;
     t0.needTime--;
     updater();
-    if (t0.needTime == 0){
+    if (t0.needTime == -1){
         t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
         updater();
-    } else if (needTime == -30){
+    } else if (t0.needTime == -30){
         t0.guest[0].happy = t0.guest[0].happy - 1;
         t0.guest[1].happy = t0.guest[1].happy - 1;
         updater();
     }
-}
-
-function busyTimer(){
-    t0.needTime--;
-    updater();
 }
 
 function newTable(){
@@ -117,11 +113,9 @@ function newTable(){
     document.getElementById("greet").style.display="inline";
     document.getElementById("addTable").disabled = true;
     updater(); 
-    
 }
 
 function greetTable(){
-    document.getElementById("debugOut").innerHTML= "clicked";
     clearInterval(t0.needTimer);
     if (t0.visitTime < 5) {
         t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
@@ -135,9 +129,9 @@ function greetTable(){
     document.getElementById("orderDrinks").disabled = true;
     t0.status = 2;
     t0.needTime = 5;
-    var busyTimerVar = setInterval(busyTimer, 1000);
+    t0.needTimer = setInterval(needTimerOn, 1000);
     setTimeout(function(){ 
-        clearInterval(busyTimerVar);
+        clearInterval(t0.needTimer);
         document.getElementById("orderDrinks").disabled = false;
         t0.status = 3;
         t0.needTime = 90;
@@ -147,7 +141,7 @@ function greetTable(){
 }
 
 function debug(){
-    document.getElementById("debugOut").innerHTML= t0.guest[0].happy;
+    document.getElementById("debugOut").innerHTML= t0.needTime;
 }
 
 </script>
