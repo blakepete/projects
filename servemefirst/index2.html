@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<title>ServeMeFirst Alpha 1.1.0</title>
+<head>
+<!Blake Peterson 2018
+blake.r.peterson@gmail.com>
+</head>
+<body>
+
+<p id="t0title">get</p>
+<p id="t0time">a</p>
+<p id="t0need">table</p>
+<p id="t0g0status">ya</p>
+<p id="t0g1status">noob</p>
+<p id="debugOut">debug</p>
+<button id="addTable" type="button" onclick="newTable()">Add Table</button>
+<button id="greet" type="button" onclick="greetTable()">greet</button>
+<button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
+<!--
+<button id="giveDrinks" type="button" onclick="giveDrinks()">giveDrinks</button>
+<button id="orderFood" type="button" onclick="orderFood()">orderFood</button>
+<button id="checkup" type="button" onclick="checkup()">checkup</button>
+<button id="giveFood" type="button" onclick="giveFood()">giveFood</button>
+<button id="orderDesert" type="button" onclick="orderDesert()">orderDesert</button>
+<button id="giveDesert" type="button" onclick="giveDesert()">giveDesert</button>
+<button id="dropCheck" type="button" onclick="dropCheck()">dropCheck</button>
+<button id="getCheck" type="button" onclick="getCheck()">getCheck</button>
+<button id="runCheck" type="button" onclick="runCheck()">runCheck</button>
+<button id="finalVisit" type="button" onclick="finalVisit()">finalVisit</button>
+-->
+<button id="debug" type="button" onclick="debug()">debug</button>
+
+<script>
+window.onload = function(){
+    document.getElementById("greet").style.display="none";
+    document.getElementById("orderDrinks").style.display="none";
+};
+
+var gameTime = 0;
+var t0 = {
+    visitTime: 0,
+    visitTimer: 0,
+    status: 0,
+    needTime: 0,
+    needTimer: 0,
+    guest: [
+        {
+            drink: 0,
+            happy: 0,
+            thirst: 0,
+            needy: 0,
+            tipper: 0
+        }, {
+            drink: 0,
+            happy: 0,
+            thirst: 0,
+            needy: 0,
+            tipper: 0
+        }
+    ],
+    payor: 0
+};
+
+function getRnd(min, max) {
+    //returns int; min (included) and max (excluded)
+    return Math.floor(Math.random() * (max - min) ) + min;
+}
+
+function updater(){
+    document.getElementById("t0time").innerHTML= "Table Time: " + t0.visitTime;
+    document.getElementById("t0g0status").innerHTML= "Guest 1: Drink = " + t0.guest[0].drink + "% | Happiness = " + t0.guest[0].happy;
+    document.getElementById("t0g1status").innerHTML= "Guest 1: Drink = " + t0.guest[1].drink + "% | Happiness = " + t0.guest[1].happy;
+    document.getElementById("t0need").innerHTML= "Need: " + t0.status + ": " + t0.needTime;
+}
+
+function visitTimerOn(){
+    t0.visitTime++;
+    updater();
+}
+
+function needTimerOn(){
+    t0.needTime--;
+    updater();
+    if (t0.needTime == 0){
+        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
+        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
+        updater();
+    } else if (needTime == -30){
+        t0.guest[0].happy = t0.guest[0].happy - 1;
+        t0.guest[1].happy = t0.guest[1].happy - 1;
+        updater();
+    }
+}
+
+function busyTimer(){
+    t0.needTime--;
+    updater();
+}
+
+function newTable(){
+    t0.visitTimer = setInterval(visitTimerOn, 1000);
+    t0.status = 0;
+    t0.needTime = 30;
+    t0.needTimer = setInterval(needTimerOn, 1000);
+    t0.guest[0].drink = 0;
+    t0.guest[1].drink = 0;
+    t0.guest[0].happy = getRnd(-1, 5);
+    t0.guest[1].happy = getRnd(-1, 5);
+    t0.guest[0].thirst = getRnd(1, 4);
+    t0.guest[1].thirst = getRnd(1, 4);    
+    t0.guest[0].needy = getRnd(1, 11);
+    t0.guest[1].needy = getRnd(1, 11);
+    t0.guest[0].tipper = getRnd(5, 26);
+    t0.guest[1].tipper = getRnd(5, 26);
+    t0.payor = getRnd(0, 2);
+    document.getElementById("t0title").innerHTML= "Table 0";
+    document.getElementById("greet").style.display="inline";
+    document.getElementById("addTable").disabled = true;
+    updater(); 
+    
+}
+
+function greetTable(){
+    document.getElementById("debugOut").innerHTML= "clicked";
+    clearInterval(t0.needTimer);
+    if (t0.visitTime < 5) {
+        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
+        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
+    } else {
+        t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
+        t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
+    }
+    document.getElementById("greet").style.display="none";
+    document.getElementById("orderDrinks").style.display="inline";
+    document.getElementById("orderDrinks").disabled = true;
+    t0.status = 2;
+    t0.needTime = 5;
+    var busyTimerVar = setInterval(busyTimer, 1000);
+    setTimeout(function(){ 
+        clearInterval(busyTimerVar);
+        document.getElementById("orderDrinks").disabled = false;
+        t0.status = 3;
+        t0.needTime = 90;
+        t0.needTimer = setInterval(needTimerOn, 1000);
+        }, 5000);
+    updater();
+}
+
+function debug(){
+    document.getElementById("debugOut").innerHTML= t0.guest[0].happy;
+}
+
+</script>
+ 
+</body>
+</html>

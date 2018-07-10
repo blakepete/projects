@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 1.0.0</title>
+<title>ServeMeFirst Alpha 1.0.1</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -13,6 +13,7 @@ blake.r.peterson@gmail.com>
 <p id="t1guest1">Guest 1: Drink = 0% | Status = Reading Menu | Happiness = 0</p>
 <p id="t1guest2">Guest 2: Drink = 0% | Status = Reading Menu | Happiness = 0</p>
 <p id="debugOut">debug</p>
+<button id="addTable" type="button" onclick="newTable()">Add Table</button>
 <button id="greet" type="button" onclick="greetTable()">greet</button>
 <button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
 <!--
@@ -27,7 +28,6 @@ blake.r.peterson@gmail.com>
 <button id="runCheck" type="button" onclick="runCheck()">runCheck</button>
 <button id="finalVisit" type="button" onclick="finalVisit()">finalVisit</button>
 -->
-<button id="addTable" type="button" onclick="newTable()">Add Table</button>
 <button id="debug" type="button" onclick="debug()">debug</button>
 
 <script>
@@ -55,34 +55,18 @@ var tableTime = 0;
 var needTime = 0;
 var t1need = "Greet";
 var needTimerVar;
+var tableTimerVar;
 
 function getRnd(min, max) {
     //returns int; min (included) and max (excluded)
     return Math.floor(Math.random() * (max - min) ) + min;
 }
 
-function newTable(){
-    tableCount++;
-    g01drink = 0;
-    g02drink = 0;
-    g01stage = 0;
-    g02stage = 0;
-    g01happy = getRnd(-1, 5);
-    g02happy = getRnd(-1, 5);
-    g01needy = getRnd(0, 10);
-    g02needy = getRnd(0, 10);
-    g01tipper = getRnd(5, 26);
-    g02tipper = getRnd(5, 26);
-    payor = getRnd(1, 3);
-    t1need = "Greet";
-    needTime = 30;
-    setInterval(tableTimer, 1000);
-    needTimerVar = setInterval(needTimer, 1000);
-    document.getElementById("table1").innerHTML= "Table 1";
-    document.getElementById("addTable").disabled = true;
-    document.getElementById("greet").style.display="inline";
-    document.getElementById("orderDrinks").style.display="inline";
-    updater(); 
+function updater(){
+    document.getElementById("t1time").innerHTML= "Table Time: " + tableTime;
+    document.getElementById("t1guest1").innerHTML= "Guest 1: Drink = " + g01drink + "% | Status = " + g01status + " | Happiness = " + g01happy;
+    document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02status + " | Happiness = " + g02happy;
+    document.getElementById("t1need").innerHTML= "Need: " + t1need + ": " + needTime;
 }
 
 function tableTimer(){
@@ -107,6 +91,30 @@ function needTimer(){
 function busyTimer(){
     needTime--;
     updater();
+}
+
+function newTable(){
+    tableCount++;
+    g01drink = 0;
+    g02drink = 0;
+    g01stage = 0;
+    g02stage = 0;
+    g01happy = getRnd(-1, 5);
+    g02happy = getRnd(-1, 5);
+    g01needy = getRnd(0, 10);
+    g02needy = getRnd(0, 10);
+    g01tipper = getRnd(5, 26);
+    g02tipper = getRnd(5, 26);
+    payor = getRnd(1, 3);
+    t1need = "Greet";
+    needTime = 30;
+    tableTimerVar = setInterval(tableTimer, 1000);
+    needTimerVar = setInterval(needTimer, 1000);
+    document.getElementById("table1").innerHTML= "Table 1";
+    document.getElementById("addTable").disabled = true;
+    document.getElementById("greet").style.display="inline";
+    document.getElementById("orderDrinks").style.display="inline";
+    updater(); 
 }
 
 function greetTable(){
@@ -134,13 +142,6 @@ function greetTable(){
 
 function debug(){
     document.getElementById("debugOut").innerHTML= tableTime;
-}
-
-function updater(){
-    document.getElementById("t1time").innerHTML= "Table Time: " + tableTime;
-    document.getElementById("t1guest1").innerHTML= "Guest 1: Drink = " + g01drink + "% | Status = " + g01status + " | Happiness = " + g01happy;
-    document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02status + " | Happiness = " + g02happy;
-    document.getElementById("t1need").innerHTML= "Need: " + t1need + ": " + needTime;
 }
 
 </script>
