@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 1.2.0</title>
+<title>ServeMeFirst Alpha 1.2.1</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -17,6 +17,7 @@ blake.r.peterson@gmail.com>
 <button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
 <button id="makeDrinks" type="button" onclick="makeDrinks()">makeDrinks</button>
 <button id="giveDrinks" type="button" onclick="giveDrinks()">giveDrinks</button>
+<button id="orderApps" type="button" onclick="orderApps()">orderApps</button>
 <!--
 <button id="orderFood" type="button" onclick="orderFood()">orderFood</button>
 <button id="checkup" type="button" onclick="checkup()">checkup</button>
@@ -37,6 +38,7 @@ window.onload = function(){
     document.getElementById("orderDrinks").style.display="none";
     document.getElementById("makeDrinks").style.display="none";
     document.getElementById("giveDrinks").style.display="none"; 
+    document.getElementById("orderApps").style.display="none"; 
 };
 
 var gameTime = 0;
@@ -167,12 +169,15 @@ function orderDrinks(){
     document.getElementById("makeDrinks").disabled = true;
     document.getElementById("giveDrinks").style.display="inline";
     document.getElementById("giveDrinks").disabled = true;
+    document.getElementById("orderApps").style.display="inline";
+    document.getElementById("orderApps").disabled = true;
     t0.status = 4;
     t0.needTime = 30;
     t0.needTimer = setInterval(needTimerOn, 1000);
     setTimeout(function(){
         clearInterval(t0.needTimer);
         document.getElementById("makeDrinks").disabled = false;
+        document.getElementById("orderApps").disabled = false;
         t0.status = 5;
         t0.needTime = 120;
         t0.needTimer = setInterval(needTimerOn, 1000);
@@ -183,6 +188,7 @@ function orderDrinks(){
 
 function makeDrinks(){
     document.getElementById("makeDrinks").style.display="none";
+    document.getElementById("orderApps").disabled = true;
     player.display = "scooping ice";
     setTimeout(function(){
         player.display = "filling first cup";
@@ -198,8 +204,16 @@ function makeDrinks(){
 
 function giveDrinks(){
     document.getElementById("giveDrinks").style.display="none";
+    document.getElementById("orderApps").disabled = false;
     player.display = "here's your drunks";
+}
 
+function orderApps(){
+    document.getElementById("orderApps").style.display="none";
+    //start here
+    //copypasta orderDrinks
+    //need to solve apps timer (use visitTimer)
+    //forgot happiness asjustments earlier
 }
 
 function debug(){
