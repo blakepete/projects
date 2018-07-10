@@ -31,6 +31,10 @@ blake.r.peterson@gmail.com>
 <button id="debug" type="button" onclick="debug()">debug</button>
 
 <script>
+window.onload = function(){
+    document.getElementById("greet").style.display="none";
+    document.getElementById("orderDrinks").style.display="none";
+};
 
 var gameTime = 0;
 var tableCount = 0;
@@ -50,6 +54,7 @@ var payor = 0;
 var tableTime = 0;
 var needTime = 0;
 var t1need = "Greet";
+var needTimerVar;
 
 function getRnd(min, max) {
     //returns int; min (included) and max (excluded)
@@ -72,11 +77,12 @@ function newTable(){
     t1need = "Greet";
     needTime = 30;
     setInterval(tableTimer, 1000);
-    setInterval(needTimer, 1000);
+    needTimerVar = setInterval(needTimer, 1000);
     document.getElementById("table1").innerHTML= "Table 1";
-    updater();
-    document.getElementById("t1guest1").style.display="block";
-    document.getElementById("t1guest2").style.display="block";
+    document.getElementById("addTable").disabled = true;
+    document.getElementById("greet").style.display="inline";
+    document.getElementById("orderDrinks").style.display="inline";
+    updater(); 
 }
 
 function tableTimer(){
@@ -98,7 +104,13 @@ function needTimer(){
     }
 }
 
+function busyTimer(){
+    needTime--;
+    updater();
+}
+
 function greetTable(){
+    clearInterval(needTimerVar);
     if (tableTime < 5) {
         g01happy = Math.round(g01happy - Math.random());
         g02happy = Math.round(g02happy - Math.random());
@@ -106,6 +118,17 @@ function greetTable(){
         g01happy = Math.round(g01happy + Math.random());
         g02happy = Math.round(g02happy + Math.random());
     }
+    document.getElementById("greet").style.display="none";
+    document.getElementById("orderDrinks").disabled = true;
+    t1need = "Introducing Yourself";
+    needTime = 5;
+    busyTimerVar = setInterval(busyTimer, 1000);
+    setTimeout(function(){ 
+        document.getElementById("orderDrinks").disabled = false;
+        clearInterval(busyTimerVar);
+        t1need = "Standing at Table";
+        needTime = 0;
+        }, 5000);
     updater();
 }
 
@@ -119,6 +142,7 @@ function updater(){
     document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02status + " | Happiness = " + g02happy;
     document.getElementById("t1need").innerHTML= "Need: " + t1need + ": " + needTime;
 }
+
 </script>
  
 </body>
