@@ -11,14 +11,25 @@ blake.r.peterson@gmail.com>
 <p id="table1">get a table, noob</p>
 <p id="t1guest1">Guest 1: Drink = 0% | Status = Reading Menu | Happiness = 0</p>
 <p id="t1guest2">Guest 2: Drink = 0% | Status = Reading Menu | Happiness = 0</p>
-
+<button id="greet" type="button" onclick="greetTable()">greet</button>
+<button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
+<button id="giveDrinks" type="button" onclick="giveDrinks()">giveDrinks</button>
+<button id="orderFood" type="button" onclick="orderFood()">orderFood</button>
+<button id="checkup" type="button" onclick="checkup()">checkup</button>
+<button id="giveFood" type="button" onclick="giveFood()">giveFood</button>
+<button id="orderDesert" type="button" onclick="orderDesert()">orderDesert</button>
+<button id="giveDesert" type="button" onclick="giveDesert()">giveDesert</button>
+<button id="dropCheck" type="button" onclick="dropCheck()">dropCheck</button>
+<button id="getCheck" type="button" onclick="getCheck()">getCheck</button>
+<button id="runCheck" type="button" onclick="runCheck()">runCheck</button>
+<button id="finalVisit" type="button" onclick="finalVisit()">finalVisit</button>
 
 <button id="addTable" type="button" onclick="newTable()">Add Table</button>
 
 <script>
 window.onload = function(){
-    document.getElementById("t1guest1").style.display="none";
-    document.getElementById("t1guest2").style.display="none";
+//    document.getElementById("t1guest1").style.display="none";
+//    document.getElementById("t1guest2").style.display="none";
 };
 
 var gameTime = 0;
@@ -45,6 +56,7 @@ function newTable(){
     var g01tipper = getRnd(5, 26);
     var g02tipper = getRnd(5, 26);
     var payor = getRnd(1, 3);
+    var tableTime = 0
     document.getElementById("table1").innerHTML= "Table 1";
     document.getElementById("t1guest1").innerHTML= "Guest 1: Drink = " + g01drink + "% | Status = " + g01stage + " | Happiness = " + g01happy;
     document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02stage + " | Happiness = " + g02happy;
