@@ -85,8 +85,8 @@ function newTable(){
     g02tipper = getRnd(5, 26);
     payor = getRnd(1, 3);
     needTime = 7;
-    tableTimer();
-    needTimer();
+    setInterval(tableTimer, 1000);
+    setInterval(needTimer, 1000);
     document.getElementById("table1").innerHTML= "Table 1";
     document.getElementById("t1guest1").innerHTML= "Guest 1: Drink = " + g01drink + "% | Status = " + g01stage + " | Happiness = " + g01happy;
     document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02stage + " | Happiness = " + g02happy;
@@ -99,25 +99,20 @@ function newTable(){
 }
 
 function tableTimer(){
-    setInterval(function() {
-        tableTime++;
-            document.getElementById("t1time").innerHTML= "Table Time: " + tableTime;
-    }, 1000);
+    tableTime++;
+    document.getElementById("t1time").innerHTML= "Table Time: " + tableTime;
 }
 function needTimer(){
-    setInterval(function() {
-        needTime--;
-            document.getElementById("t1need").innerHTML= "Need: " + t1need + ": " + needTime;
-            if (needTime < 0){
-                g01happy = Math.round(g01happy - Math.random());
-                g02happy = Math.round(g02happy - Math.random());
-                document.getElementById("t1guest1").innerHTML= "Guest 1: Drink = " + g01drink + "% | Status = " + g01stage + " | Happiness = " + g01happy;
-                document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02stage + " | Happiness = " + g02happy;
-                clearInterval(needTimer);
-            }
-
-    }, 1000);
+    needTime--;
+    document.getElementById("t1need").innerHTML= "Need: " + t1need + ": " + needTime;
+    if (needTime == 0){
+        g01happy = Math.round(g01happy - Math.random());
+        g02happy = Math.round(g02happy - Math.random());
+        document.getElementById("t1guest1").innerHTML= "Guest 1: Drink = " + g01drink + "% | Status = " + g01stage + " | Happiness = " + g01happy;
+        document.getElementById("t1guest2").innerHTML= "Guest 2: Drink = " + g02drink + "% | Status = " + g02stage + " | Happiness = " + g02happy;
+    }
 }
+
 function greetTable(){
     if (tableTime < 5) {
         g01happy = Math.round(g01happy - Math.random());
