@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 1.3.1</title>
+<title>ServeMeFirst Alpha 1.3.2</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -13,7 +13,7 @@ blake.r.peterson@gmail.com>
 <p id="t0status">table</p>
 <p id="t0g0status">ya</p>
 <p id="t0g1status">noob</p>
-<button id="addTable" type="button" onclick="newTable()">Add Table</button>
+<button id="newTable" type="button" onclick="newTable()">newTable</button>
 <button id="greet" type="button" onclick="greetTable()">greet</button>
 <button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
 <button id="makeDrinks" type="button" onclick="makeDrinks()">makeDrinks</button>
@@ -51,6 +51,8 @@ window.onload = function(){
     document.getElementById("sendApps").style.display="none";
     document.getElementById("giveApps").style.display="none";
     document.getElementById("orderEntrees").style.display="none";
+    document.getElementById("debugOut").style.display="none";
+    document.getElementById("debug").style.display="none";
 };
 
 var player = { //soon to be used?
@@ -59,9 +61,9 @@ var player = { //soon to be used?
 
 //table array. i plan to use t[0=..] or table[0=..] eventually to support infinite(?) tables
 var t0 = {
-    timer: [0, 0, 0, 0, 0, 0, 0], //0visit,1drinks,2apps,3salads,4entrees,5dessert,6bill
-    timerVar: [0, 0, 0, 0, 0, 0, 0], //vars to cancel timers as needed
-    activeTimer: 0, //tells display which timer to show. movable to statuses?
+    timer: [0, 0, 0, 0, 0, 0, 0, 0], //0visit,1drinks,2apps,3salads,4entrees,5dessert,6bill,7cook
+    timerVar: [0, 0, 0, 0, 0, 0, 0, 0], //vars to cancel timers as needed
+    displayTimer: 0, //tells display which timer to show. movable to statuses?
     status: 0,
     statuses: [ //this should def be stored elsewhere. later.
         "0Reading menu",
@@ -125,23 +127,26 @@ function updater(){
     document.getElementById("t0time").innerHTML= "Table Time: " + t0.timer[0];
     document.getElementById("t0g0status").innerHTML= "Guest 1: Drink = " + t0.guest[0].drink + "% | Happiness = " + t0.guest[0].happy;
     document.getElementById("t0g1status").innerHTML= "Guest 1: Drink = " + t0.guest[1].drink + "% | Happiness = " + t0.guest[1].happy;
-    document.getElementById("t0status").innerHTML= "Status: " + t0.statuses[t0.status] + ": " + t0.timer[t0.activeTimer];
+    document.getElementById("t0status").innerHTML= "Status: " + t0.statuses[t0.status] + ": " + t0.timer[t0.displayTimer];
     document.getElementById("playerDisplay").innerHTML= player.display;
+    document.getElementById("giveApps").innerHTML= "giveApps" + t0.timer[7];
 }
 
 function timerOn(k, l = -1){ //the time to rule all timers. passing which timer and up or down. default is down.
     t0.timer[k] = t0.timer[k] + l;
     updater();
+    //need to do something better with negative output
 }
 
 function newTable(){
+    document.getElementById("newTable").style.display="none";
     t0.timerVar[0] = setInterval(timerOn.bind(null, 0 , 1), 1000); 
     t0.status = 0;
     t0.timer[1] = 30; //timer start value, probably should be passed to timer instead of declared here.
     t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
     t0.timer[2] = 180; //app timer, runs in background for a while
     t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
-    t0.activeTimer = 1; //this should also maybe be controlled in a function (timerOn?)
+    t0.displayTimer = 1; //this should also maybe be controlled in a function (timerOn?)
     t0.guest[0].drink = 0; //fine for two tops. not for 10 tops. loops for all this eventually.
     t0.guest[1].drink = 0;
     t0.guest[0].happy = getRnd(-1, 5); //see t0 declaration
@@ -177,7 +182,7 @@ function greetTable(){
     t0.status = 2;
     t0.timer[1] = 5; //timer for actual greet
     t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
-    setTimeout(function(){ //triggers when greet is over.
+    setTimeout(function(){ //triggers when greet is over. this will break when i add power ups
         clearInterval(t0.timerVar[1]);
         document.getElementById("orderDrinks").disabled = false;
         t0.status = 3;
@@ -244,17 +249,19 @@ function giveDrinks(){
     clearInterval(t0.timerVar[1]);
     document.getElementById("giveDrinks").style.display="none";
     document.getElementById("orderApps").disabled = false;
+    t0.guest[0].drink = 100;
+    t0.guest[1].drink = 100;
     t0.guest[0].happy = t0.guest[0].happy + 1; //need more of these
     t0.guest[1].happy = t0.guest[1].happy + 1;
     player.display = "here's your drunks";
-    t0.status = 7;
-    t0.activeTimer = 2; //stops using drink timer in display. uses already running app timer
+    t0.status = 7; //check if apps ordered
+    t0.displayTimer = 2; //stops using drink timer in display. uses already running app timer
     updater();
 }
 
 function orderApps(){
     clearInterval(t0.timerVar[2]);
-    if (t0.timer[2] < 45) {
+    if (t0.timer[2] > 135) {
         t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
         player.display = "if this weren't a game, they wouldnt get apps";
@@ -263,6 +270,7 @@ function orderApps(){
         t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
         player.display = "something fried and something mushroom";
     }
+    document.getElementById("makeDrinks").disabled = true;
     document.getElementById("orderApps").style.display="none";
     document.getElementById("sendApps").style.display="inline";
     document.getElementById("sendApps").disabled = true;
@@ -271,12 +279,14 @@ function orderApps(){
     document.getElementById("orderEntrees").style.display="inline";
     document.getElementById("orderEntrees").disabled = true;
     t0.status = 8;
+    t0.displayTimer = 2;
     t0.timer[2] = 30;
     t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
     setTimeout(function(){
         clearInterval(t0.timerVar[2]);
         document.getElementById("sendApps").disabled = false;
         document.getElementById("orderEntrees").disabled = false;
+        document.getElementById("makeDrinks").disabled = false;
         t0.status = 10;
         t0.timer[2] = 300;
         t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
@@ -284,6 +294,37 @@ function orderApps(){
         updater();
     }, 30000);
     updater();
+}
+
+function sendApps(){
+    document.getElementById("sendApps").style.display="none";
+    document.getElementById("orderEntrees").disabled = true;
+    document.getElementById("makeDrinks").disabled = true;
+    player.display = "punching in the apps..";
+    setTimeout(function(){
+        player.display = "...nachos...fried shrimp....";
+    }, 10000);
+    setTimeout(function(){
+        player.display = "alright kitchen, dont screw it up";
+        document.getElementById("orderEntrees").disabled = false;
+        document.getElementById("makeDrinks").disabled = false;
+        t0.timer[7] = 180;
+        t0.timerVar[7] = setInterval(timerOn.bind(null, 7), 1000);
+        setTimeout(function(){
+            document.getElementById("giveApps").disabled = false;
+        }, 180000);
+    }, 20000);
+    updater();
+}
+
+function giveApps(){
+    document.getElementById("giveApps").style.display="none";
+    player.display = "wow u beat the game. whew.";
+}
+
+function orderEntrees(){
+    document.getElementById("orderEntrees").style.display="none";
+    player.display = "to be coded...";
 }
 
 function debug(){
