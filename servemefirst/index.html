@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 1.3.0</title>
+<title>ServeMeFirst Alpha 1.3.1</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -18,8 +18,10 @@ blake.r.peterson@gmail.com>
 <button id="makeDrinks" type="button" onclick="makeDrinks()">makeDrinks</button>
 <button id="giveDrinks" type="button" onclick="giveDrinks()">giveDrinks</button>
 <button id="orderApps" type="button" onclick="orderApps()">orderApps</button>
+<button id="sendApps" type="button" onclick="sendApps()">sendApps</button>
+<button id="giveApps" type="button" onclick="giveApps()">giveApps</button>
+<button id="orderEntrees" type="button" onclick="orderEntrees()">orderEntrees</button>
 <!--
-<button id="orderFood" type="button" onclick="orderFood()">orderFood</button>
 <button id="checkup" type="button" onclick="checkup()">checkup</button>
 <button id="giveFood" type="button" onclick="giveFood()">giveFood</button>
 <button id="orderDesert" type="button" onclick="orderDesert()">orderDesert</button>
@@ -39,6 +41,9 @@ window.onload = function(){
     document.getElementById("makeDrinks").style.display="none";
     document.getElementById("giveDrinks").style.display="none"; 
     document.getElementById("orderApps").style.display="none"; 
+    document.getElementById("sendApps").style.display="none";
+    document.getElementById("giveApps").style.display="none";
+    document.getElementById("orderEntrees").style.display="none";
 };
 
 
@@ -144,6 +149,8 @@ function newTable(){
     t0.status = 0;
     t0.timer[1] = 30;
     t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
+    t0.timer[2] = 180;
+    t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
     t0.activeTimer = 1;
     t0.guest[0].drink = 0;
     t0.guest[1].drink = 0;
@@ -244,24 +251,53 @@ function makeDrinks(){
 }
 
 function giveDrinks(){
+    clearInterval(t0.timerVar[1]);
     document.getElementById("giveDrinks").style.display="none";
     document.getElementById("orderApps").disabled = false;
     t0.guest[0].happy = t0.guest[0].happy + 1;
     t0.guest[1].happy = t0.guest[1].happy + 1;
     player.display = "here's your drunks";
     t0.status = 7;
+    t0.activeTimer = 2;
     updater();
 }
 
 function orderApps(){
+    clearInterval(t0.timerVar[2]);
+    if (t0.timer[2] < 45) {
+        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
+        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
+        player.display = "if this weren't a game, they wouldnt get apps";
+    } else {
+        t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
+        t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
+        player.display = "something fried and something mushroom";
+    }
     document.getElementById("orderApps").style.display="none";
-    //start here
-    //copypasta orderDrinks
-    //reincorporate timer fails (happyiness)
+    document.getElementById("sendApps").style.display="inline";
+    document.getElementById("sendApps").disabled = true;
+    document.getElementById("giveApps").style.display="inline";
+    document.getElementById("giveApps").disabled = true;
+    document.getElementById("orderEntrees").style.display="inline";
+    document.getElementById("orderEntrees").disabled = true;
+    t0.status = 8;
+    t0.timer[2] = 30;
+    t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
+    setTimeout(function(){
+        clearInterval(t0.timerVar[2]);
+        document.getElementById("sendApps").disabled = false;
+        document.getElementById("orderEntrees").disabled = false;
+        t0.status = 10;
+        t0.timer[2] = 300;
+        t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
+        player.display = "apps ordered, send em to the kitchen";
+        updater();
+    }, 30000);
+    updater();
 }
 
 function debug(){
-    document.getElementById("debugOut").innerHTML= t0.timer[1];
+    document.getElementById("debugOut").innerHTML= t0.timer[2];
 }
 
 </script>
