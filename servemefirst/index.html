@@ -7,9 +7,10 @@ blake.r.peterson@gmail.com>
 </head>
 <body>
 
+<!-- Temp display matrix, have to learn css, one thing at a time-->
 <p id="t0title">get</p>
 <p id="t0time">a</p>
-<p id="t0need">table</p>
+<p id="t0status">table</p>
 <p id="t0g0status">ya</p>
 <p id="t0g1status">noob</p>
 <button id="addTable" type="button" onclick="newTable()">Add Table</button>
@@ -21,7 +22,8 @@ blake.r.peterson@gmail.com>
 <button id="sendApps" type="button" onclick="sendApps()">sendApps</button>
 <button id="giveApps" type="button" onclick="giveApps()">giveApps</button>
 <button id="orderEntrees" type="button" onclick="orderEntrees()">orderEntrees</button>
-<!--
+
+<!-- to be (or not to be) used buttons:
 <button id="checkup" type="button" onclick="checkup()">checkup</button>
 <button id="giveFood" type="button" onclick="giveFood()">giveFood</button>
 <button id="orderDesert" type="button" onclick="orderDesert()">orderDesert</button>
@@ -31,9 +33,14 @@ blake.r.peterson@gmail.com>
 <button id="runCheck" type="button" onclick="runCheck()">runCheck</button>
 <button id="finalVisit" type="button" onclick="finalVisit()">finalVisit</button>
 -->
+
+<!-- a even more temp player display. i expect to utilize the player array shortly-->
 <p id="playerDisplay">yo ho ho, serving life for me</p>
+
+<!-- display line mainly for tracking variables over time-->
 <p></p><button id="debug" type="button" onclick="debug()">debug</button>
 <p id="debugOut">debug</p>
+
 <script>
 window.onload = function(){
     document.getElementById("greet").style.display="none";
@@ -46,18 +53,17 @@ window.onload = function(){
     document.getElementById("orderEntrees").style.display="none";
 };
 
-
-var player = {
+var player = { //soon to be used?
     display: "servant mode engage"
 };
 
+//table array. i plan to use t[0=..] or table[0=..] eventually to support infinite(?) tables
 var t0 = {
-    timer: [0, 0, 0, 0, 0, 0, 0],
-        //0visit,1drinks,2apps,3salads,4entrees,5dessert,6bill
-    timerVar: [0, 0, 0, 0, 0, 0, 0],
-    activeTimer: 0,
+    timer: [0, 0, 0, 0, 0, 0, 0], //0visit,1drinks,2apps,3salads,4entrees,5dessert,6bill
+    timerVar: [0, 0, 0, 0, 0, 0, 0], //vars to cancel timers as needed
+    activeTimer: 0, //tells display which timer to show. movable to statuses?
     status: 0,
-    statuses: [
+    statuses: [ //this should def be stored elsewhere. later.
         "0Reading menu",
         "1Waiting for greeting",
         "2Greeting",
@@ -93,11 +99,11 @@ var t0 = {
     ],
     guest: [
         {
-            drink: 0,
-            happy: 0,
-            thirst: 0,
-            needy: 0,
-            tipper: 0
+            drink: 0,  //how full(empty?) is it
+            happy: 0, 
+            thirst: 0, //how quickly drink (1,2,or3)
+            needy: 0,  //TBD used to make visits longer and more frequent
+            tipper: 0  //how much percent (5-25)
         }, {
             drink: 0,
             happy: 0,
@@ -106,7 +112,7 @@ var t0 = {
             tipper: 0
         }
     ],
-    payor: 0
+    payor: 0 //who's paying
 };
 
 function getRnd(min, max) {
@@ -115,46 +121,30 @@ function getRnd(min, max) {
 }
 
 function updater(){
+    //refreshes shitty matrix. to be replaced when optimizing for css
     document.getElementById("t0time").innerHTML= "Table Time: " + t0.timer[0];
     document.getElementById("t0g0status").innerHTML= "Guest 1: Drink = " + t0.guest[0].drink + "% | Happiness = " + t0.guest[0].happy;
     document.getElementById("t0g1status").innerHTML= "Guest 1: Drink = " + t0.guest[1].drink + "% | Happiness = " + t0.guest[1].happy;
-    document.getElementById("t0need").innerHTML= "Need: " + t0.statuses[t0.status] + ": " + t0.timer[t0.activeTimer];
+    document.getElementById("t0status").innerHTML= "Status: " + t0.statuses[t0.status] + ": " + t0.timer[t0.activeTimer];
     document.getElementById("playerDisplay").innerHTML= player.display;
 }
 
-
-function timerOn(k, l = -1){
+function timerOn(k, l = -1){ //the time to rule all timers. passing which timer and up or down. default is down.
     t0.timer[k] = t0.timer[k] + l;
     updater();
 }
 
-
-
-//function needTimerOn(){
-//    t0.needTime--;
-//    updater();
-//    if (t0.needTime == -1){
-//        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
-//        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
-//        updater();
-//    } else if (t0.needTime == -30){
-//        t0.guest[0].happy = t0.guest[0].happy - 1;
-//        t0.guest[1].happy = t0.guest[1].happy - 1;
-//        updater();
-//    }
-//}
-
 function newTable(){
-    t0.timerVar[0] = setInterval(timerOn.bind(null, 0 , 1), 1000);
+    t0.timerVar[0] = setInterval(timerOn.bind(null, 0 , 1), 1000); 
     t0.status = 0;
-    t0.timer[1] = 30;
+    t0.timer[1] = 30; //timer start value, probably should be passed to timer instead of declared here.
     t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
-    t0.timer[2] = 180;
+    t0.timer[2] = 180; //app timer, runs in background for a while
     t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
-    t0.activeTimer = 1;
-    t0.guest[0].drink = 0;
+    t0.activeTimer = 1; //this should also maybe be controlled in a function (timerOn?)
+    t0.guest[0].drink = 0; //fine for two tops. not for 10 tops. loops for all this eventually.
     t0.guest[1].drink = 0;
-    t0.guest[0].happy = getRnd(-1, 5);
+    t0.guest[0].happy = getRnd(-1, 5); //see t0 declaration
     t0.guest[1].happy = getRnd(-1, 5);
     t0.guest[0].thirst = getRnd(1, 4);
     t0.guest[1].thirst = getRnd(1, 4);    
@@ -172,26 +162,26 @@ function newTable(){
 
 function greetTable(){
     clearInterval(t0.timerVar[1]);
-    if (t0.timer[0] < 5) {
+    if (t0.timer[0] < 5) { //random chance to be mad you are to quick. yes that happens.
         t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
         player.display = "they're still playing musical chairs. but hi.";
-    } else {
+    } else { //chance of credit just for showing up.
         t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
         t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
         player.display = "yada yada yada";
     }
     document.getElementById("greet").style.display="none";
     document.getElementById("orderDrinks").style.display="inline";
-    document.getElementById("orderDrinks").disabled = true;
+    document.getElementById("orderDrinks").disabled = true; //lock btn while greet is happening.
     t0.status = 2;
-    t0.timer[1] = 5;
+    t0.timer[1] = 5; //timer for actual greet
     t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
-    setTimeout(function(){ 
+    setTimeout(function(){ //triggers when greet is over.
         clearInterval(t0.timerVar[1]);
         document.getElementById("orderDrinks").disabled = false;
         t0.status = 3;
-        t0.timer[1] = 90;
+        t0.timer[1] = 90; //timer for next task (order drinks)
         t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
         player.display = "greeted. time for a drink order";
         updater();
@@ -199,7 +189,7 @@ function greetTable(){
     updater();
 }
 
-function orderDrinks(){
+function orderDrinks(){ //a lot of repeat code here on out. need some sort of visit general function to updates statuses and timers. sounds complex.
     clearInterval(t0.timerVar[1]);
     if (t0.timer[0] < 15) {
         t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
@@ -254,11 +244,11 @@ function giveDrinks(){
     clearInterval(t0.timerVar[1]);
     document.getElementById("giveDrinks").style.display="none";
     document.getElementById("orderApps").disabled = false;
-    t0.guest[0].happy = t0.guest[0].happy + 1;
+    t0.guest[0].happy = t0.guest[0].happy + 1; //need more of these
     t0.guest[1].happy = t0.guest[1].happy + 1;
     player.display = "here's your drunks";
     t0.status = 7;
-    t0.activeTimer = 2;
+    t0.activeTimer = 2; //stops using drink timer in display. uses already running app timer
     updater();
 }
 
@@ -299,6 +289,8 @@ function orderApps(){
 function debug(){
     document.getElementById("debugOut").innerHTML= t0.timer[2];
 }
+
+//i think my inline comments are probably bad practice. /shrug
 
 </script>
  
