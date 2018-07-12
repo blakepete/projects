@@ -56,16 +56,17 @@ window.onload = function(){
 };
 
 var player = { //soon to be used?
-    display: "servant mode engage"
+    display: "servant mode engage",
+    tableCount: -1,
 };
 
 //table array. i plan to use t[0=..] or table[0=..] eventually to support infinite(?) tables
-var t0 = {
-    timer: [0, 0, 0, 0, 0, 0, 0, 0], //0visit,1drinks,2apps,3salads,4entrees,5dessert,6bill,7cook
-    timerVar: [0, 0, 0, 0, 0, 0, 0, 0], //vars to cancel timers as needed
-    displayTimer: 0, //tells display which timer to show. movable to statuses?
-    status: 0,
-    statuses: [ //this should def be stored elsewhere. later.
+var stageRef = {
+    early: [0, 15, 30, 0, 60, 0, 90, 0, 120, 600, 720, 1, 0],
+    late: [0, 120, 120, 120, 180, 300, 120, 240, 900, 900, 300, 300, 180],
+    earlyRef: [0, 0, 0, 0, 0, 0, 0, 0, 7, 8, 8, 10, 0],
+    lateRef: [0, 0, 0, 2, 0, 4, 4, 6, 6, 8, 9, 10, 11],
+    display: [
         "0Reading menu",
         "1Waiting for greeting",
         "2Greeting",
@@ -98,8 +99,14 @@ var t0 = {
         "29Bill ready to collect",
         "30Waiting for receipt",
         "31Leaving tip",
-    ],
-    guest: [
+    ]
+}
+var gameTime = "0"//need to boot this
+var t = [
+    flag = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //0sat,1greeted,2ordereddrinks,3havedrinks,4orderedapps,5haveapps,6orderedentrees,7haveslads,8haveentrees,9orderdeserts,10havedesserts,11havebill,12havereceipt
+    timer = 0,
+    payor = 0,
+    guest = [
         {
             drink: 0,  //how full(empty?) is it
             happy: 0, 
@@ -114,17 +121,42 @@ var t0 = {
             tipper: 0
         }
     ],
-    payor: 0 //who's paying
-};
+];
+//var t0 = {
+//    //timer: [0, 0, 0, 0, 0, 0, 0, 0], //0visit,1drinks,2apps,3salads,4entrees,5dessert,6bill,7cook
+//    //timerVar: [0, 0, 0, 0, 0, 0, 0, 0], //vars to cancel timers as needed
+//    //displayTimer: 0, //replaceable by display to check flags
+//    flag: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //0sat,1greeted,2ordereddrinks,3havedrinks,4orderedapps,5haveapps,6orderedentrees,7haveslads,8haveentrees,9orderdeserts,10havedesserts,11havebill,12havereceipt,
+//    //status: 0,
+//    guest: [
+//        {
+//            drink: 0,  //how full(empty?) is it
+//            happy: 0, 
+//            thirst: 0, //how quickly drink (1,2,or3)
+//            needy: 0,  //TBD used to make visits longer and more frequent
+//            tipper: 0  //how much percent (5-25)
+//        }, {
+//            drink: 0,
+//            happy: 0,
+//            thirst: 0,
+//            needy: 0,
+//            tipper: 0
+//        }
+//    ],
+//    payor: 0 //who's paying
+//};
 
 function getRnd(min, max) {
     //returns int; min (included) and max (excluded)
     return Math.floor(Math.random() * (max - min) ) + min;
 }
 
-function updater(){
+function updater(k){
     //refreshes shitty matrix. to be replaced when optimizing for css
-    document.getElementById("t0time").innerHTML= "Table Time: " + t0.timer[0];
+    
+    
+ 
+    document.getElementById("t0time").innerHTML= "Table Time: " + ;
     document.getElementById("t0g0status").innerHTML= "Guest 1: Drink = " + t0.guest[0].drink + "% | Happiness = " + t0.guest[0].happy;
     document.getElementById("t0g1status").innerHTML= "Guest 1: Drink = " + t0.guest[1].drink + "% | Happiness = " + t0.guest[1].happy;
     document.getElementById("t0status").innerHTML= "Status: " + t0.statuses[t0.status] + ": " + t0.timer[t0.displayTimer];
@@ -132,38 +164,57 @@ function updater(){
     document.getElementById("giveApps").innerHTML= "giveApps" + t0.timer[7];
 }
 
-function timerOn(k, l = -1){ //the time to rule all timers. passing which timer and up or down. default is down.
-    t0.timer[k] = t0.timer[k] + l;
-    updater();
-    //need to do something better with negative output
-}
+//function timerOn(k, l = -1){ //the time to rule all timers. passing which timer and up or down. default is down.
+//    t0.timer[k] = t0.timer[k] + l;
+//    updater();
+//    //need to do something better with negative output
+//}
+
 
 function newTable(){
-    document.getElementById("newTable").style.display="none";
-    t0.timerVar[0] = setInterval(timerOn.bind(null, 0 , 1), 1000); 
-    t0.status = 0;
-    t0.timer[1] = 30; //timer start value, probably should be passed to timer instead of declared here.
-    t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
-    t0.timer[2] = 180; //app timer, runs in background for a while
-    t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
-    t0.displayTimer = 1; //this should also maybe be controlled in a function (timerOn?)
-    t0.guest[0].drink = 0; //fine for two tops. not for 10 tops. loops for all this eventually.
-    t0.guest[1].drink = 0;
-    t0.guest[0].happy = getRnd(-1, 5); //see t0 declaration
-    t0.guest[1].happy = getRnd(-1, 5);
-    t0.guest[0].thirst = getRnd(1, 4);
-    t0.guest[1].thirst = getRnd(1, 4);    
-    t0.guest[0].needy = getRnd(1, 11);
-    t0.guest[1].needy = getRnd(1, 11);
-    t0.guest[0].tipper = getRnd(5, 26);
-    t0.guest[1].tipper = getRnd(5, 26);
-    t0.payor = getRnd(0, 2);
-    player.display = "you've been sat";
-    document.getElementById("t0title").innerHTML= "Table 0";
-    document.getElementById("greet").style.display="inline";
-    document.getElementById("addTable").disabled = true;
-    updater(); 
+    tbl == player.tableCount++;
+    document.getElementById("newTable").disabled = true;
+    t[tbl].timerVar = setInterval(function(){t[tbl].timer++;}, 1000);
+    t[tbl].flag[0] = 1;
+    t[tbl].guest[0].drink = 0;
+    t[tbl].guest[1].drink = 0;
+    t[tbl].guest[0].happy = getRnd(-1, 5); //see t0 declaration
+    t[tbl].guest[1].happy = getRnd(-1, 5);
+    t[tbl].guest[0].thirst = getRnd(1, 4);
+    t[tbl].guest[1].thirst = getRnd(1, 4);    
+    t[tbl].guest[0].needy = getRnd(1, 11);
+    t[tbl].guest[1].needy = getRnd(1, 11);
+    t[tbl].guest[0].tipper = getRnd(5, 26);
+    t[tbl].guest[1].tipper = getRnd(5, 26);
+    t[tbl].payor = getRnd(0, 2);
 }
+
+//function newTable(){
+//    document.getElementById("newTable").style.display="none";
+//    t0.timerVar[0] = setInterval(timerOn.bind(null, 0 , 1), 1000); 
+//    t0.status = 0;
+//    t0.timer[1] = 30; //timer start value, probably should be passed to timer instead of declared here.
+//    t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
+//    t0.timer[2] = 180; //app timer, runs in background for a while
+//    t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
+//    t0.displayTimer = 1; //this should also maybe be controlled in a function (timerOn?)
+//    t0.guest[0].drink = 0; //fine for two tops. not for 10 tops. loops for all this eventually.
+//    t0.guest[1].drink = 0;
+//    t0.guest[0].happy = getRnd(-1, 5); //see t0 declaration
+//    t0.guest[1].happy = getRnd(-1, 5);
+//    t0.guest[0].thirst = getRnd(1, 4);
+//    t0.guest[1].thirst = getRnd(1, 4);    
+//    t0.guest[0].needy = getRnd(1, 11);
+//    t0.guest[1].needy = getRnd(1, 11);
+//    t0.guest[0].tipper = getRnd(5, 26);
+//    t0.guest[1].tipper = getRnd(5, 26);
+//    t0.payor = getRnd(0, 2);
+//    player.display = "you've been sat";
+//    document.getElementById("t0title").innerHTML= "Table 0";
+//    document.getElementById("greet").style.display="inline";
+//    document.getElementById("newTable").disabled = true;
+//    updater(); 
+//}
 
 function greetTable(){
     clearInterval(t0.timerVar[1]);
