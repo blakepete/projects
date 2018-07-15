@@ -73,9 +73,9 @@ blake.r.peterson@gmail.com>
     </tbody>
 </table>
 
-<p>
+<!--<p>
     <button id="newTable" type="button" onclick="newTable()">newTable</button>
-</p>
+</p>-->
 <p>
     <button id="orderGreet" type="button" onclick="order('greet')">orderGreet</button> 
 </p>
@@ -121,20 +121,21 @@ blake.r.peterson@gmail.com>
     <button id="dropReceipt" type="button" onclick="drop('receipt')">dropReceipt</button>
     <button id="busReceipt" type="button" onclick="bus('receipt')">busReceipt</button>
 </p>
-<p id = "test">its a game</p>
-<p id = "test2">its a game</p>
-<p id = "test3">its a game</p>
-<button id="debug" type="button" onclick="update(0,1)">debug</button>
+<p id = "test">test</p>
+<p id = "test2">test2</p>
+<p id = "test3">test3</p>
+<button id="debug" type="button" onclick="debug()">debug</button>
     
 <script>
 
 window.onload = function(){
-    var gTimer = 0;
-    var gTimerVar = setInterval(function(){
+    gTimer = 0;
+    gTimerVar = setInterval(function(){
         gTimer++;
         document.getElementById("test3").innerHTML= gTimer;
+        update();
     }, 1000);
-    
+    newTable();
 };
 
 var t = [
@@ -390,11 +391,30 @@ var t = [
     }
 ];
 
-function update(tk,gk){
+function update(){
     document.getElementById("dispTblOut").innerHTML= 0; //changes when multi table added
-    document.getElementById("dispTmeOut").innerHTML= tk;
+    tTime = gTimer - t[0].timeStart;
+    document.getElementById("dispTmeOut").innerHTML= tTime;
 }
 
+function debug(){
+    document.getElementById("test2").innerHTML= gTimer;
+}
+
+function newTable(){
+    tbl = 0;//player.tableCount++;
+    t[tbl].timeStart = gTimer;
+    t[tbl].g[0].drink = 0;
+    t[tbl].g[1].drink = 0;
+    t[tbl].g[0].happy = getRnd(-1, 5);
+    t[tbl].g[1].happy = getRnd(-1, 5);
+    t[tbl].g[0].speed = getRnd(1, 4);
+    t[tbl].g[1].speed = getRnd(1, 4);    
+    t[tbl].g[0].needy = getRnd(1, 11);
+    t[tbl].g[1].needy = getRnd(1, 11);
+    t[tbl].g[0].tipAmt = getRnd(5, 26);
+    t[tbl].g[1].tipAmt = getRnd(5, 26);
+}
 function order(k){
     document.getElementById("test").innerHTML= "order";
     document.getElementById("test2").innerHTML= k;
@@ -412,7 +432,7 @@ function order(k){
         //set timer dropDue
     //future
         //cost
-};
+}
 function make(k){
     document.getElementById("test").innerHTML= "make";
     document.getElementById("test2").innerHTML= k;
@@ -424,7 +444,7 @@ function make(k){
     //tasks
         //set timer makeDone
         //set flag shown
-};
+}
 function send(k){
     document.getElementById("test").innerHTML= "send";
     document.getElementById("test2").innerHTML= k;
@@ -436,7 +456,7 @@ function send(k){
         //set flag makeSent
         //set flag shown
         //set timer makeDone
-};
+}
 function get(k){
     document.getElementById("test").innerHTML= "get";
     document.getElementById("test2").innerHTML= k;
@@ -447,7 +467,7 @@ function get(k){
     //tasks
         //set flag makeGot
         //set flag shown
-};
+}
 function drop(k){
     document.getElementById("test").innerHTML= "drop";
     document.getElementById("test2").innerHTML= k;
@@ -465,7 +485,7 @@ function drop(k){
         //set timer fullness
     //future
         //set bill dropDue
-};
+}
 function bus(k){
     document.getElementById("test").innerHTML= "bus";
     document.getElementById("test2").innerHTML= k;
@@ -482,12 +502,12 @@ function bus(k){
     //future 
         //set receipt dropDue
         //clear dirty
-};
-
+}
 function repeater(k){
     //checks v tabletime
         //== makeDone then makeReady = 1
 }
+
 
 </script>
 </body>
