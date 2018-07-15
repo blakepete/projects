@@ -11,7 +11,7 @@ blake.r.peterson@gmail.com>
     <tbody>
     <tr>
     <td id = "dispTblKey">Table:</td>
-    <td id = "dispTblOut">n</td>
+    <td id = "dispTblOut">XXX</td>
     <td id = "dispTmeKey">Time:</td>
     <td id = "dispTmeOut">t[n].time</td>
     </tr>
@@ -123,7 +123,19 @@ blake.r.peterson@gmail.com>
 </p>
 <p id = "test">its a game</p>
 <p id = "test2">its a game</p>
+<p id = "test3">its a game</p>
+<button id="debug" type="button" onclick="update(0,1)">debug</button>
+    
 <script>
+
+window.onload = function(){
+    var gTimer = 0;
+    var gTimerVar = setInterval(function(){
+        gTimer++;
+        document.getElementById("test3").innerHTML= gTimer;
+    }, 1000);
+    
+};
 
 var t = [
     { //table 0
@@ -377,6 +389,11 @@ var t = [
     { //table 1
     }
 ];
+
+function update(tk,gk){
+    document.getElementById("dispTblOut").innerHTML= 0; //changes when multi table added
+    document.getElementById("dispTmeOut").innerHTML= tk;
+}
 
 function order(k){
     document.getElementById("test").innerHTML= "order";
