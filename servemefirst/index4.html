@@ -77,51 +77,148 @@ blake.r.peterson@gmail.com>
     <button id="newTable" type="button" onclick="newTable()">newTable</button>
 </p>
 <p>
-    <button id="orderGreet" type="button" onclick="order("greet")">orderGreet</button> 
+    <button id="orderGreet" type="button" onclick="order('greet')">orderGreet</button> 
 </p>
 <p>
-    <button id="ordrDrink" type="button" onclick="ordr("drink")">ordrDrink</button>
-    <button id="makeDrink" type="button" onclick="make("drink")">makeDrink</button>
-    <button id="dropDrink" type="button" onclick="drop("drink")">dropDrink</button>
-    <button id="bussDrink" type="button" onclick="buss("drink")">bussDrink</button>
+    <button id="orderDrink" type="button" onclick="order('drink')">orderDrink</button>
+    <button id="makeDrink" type="button" onclick="make('drink')">makeDrink</button>
+    <button id="dropDrink" type="button" onclick="drop('drink')">dropDrink</button>
+    <button id="busDrink" type="button" onclick="bus('drink')">busDrink</button>
 </p>
 <p>
-    <button id="ordrApp" type="button" onclick="ordr("app")">ordrApp</button>
-    <button id="sendApp" type="button" onclick="send("app")">sendApp</button>
-    <button id="gettApp" type="button" onclick="gett("app")">gettApp</button>
-    <button id="dropApp" type="button" onclick="drop("app")">dropApp</button>
-    <button id="bussApp" type="button" onclick="buss("app")">bussApp</button>
+    <button id="orderApp" type="button" onclick="order('app')">orderApp</button>
+    <button id="sendApp" type="button" onclick="send('app')">sendApp</button>
+    <button id="getApp" type="button" onclick="get('app')">getApp</button>
+    <button id="dropApp" type="button" onclick="drop('app')">dropApp</button>
+    <button id="busApp" type="button" onclick="bus('app')">busApp</button>
 </p>
 <p>
-    <button id="makeSalad" type="button" onclick="make("salad")">makeSalad</button>
-    <button id="dropSalad" type="button" onclick="drop("salad")">dropSalad</button>
-    <button id="bussSalad" type="button" onclick="buss("salad")">bussSalad</button>
+    <button id="makeSalad" type="button" onclick="make('salad')">makeSalad</button>
+    <button id="dropSalad" type="button" onclick="drop('salad')">dropSalad</button>
+    <button id="busSalad" type="button" onclick="bus('salad')">busSalad</button>
 </p>
 <p>
-    <button id="ordrEntree" type="button" onclick="ordr("entree")">ordrEntree</button>
-    <button id="sendEntree" type="button" onclick="send("entree")">sendEntree</button>
-    <button id="gettEntree" type="button" onclick="gett("entree")">gettEntree</button>
-    <button id="dropEntree" type="button" onclick="drop("entree")">dropEntree</button>
-    <button id="bussEntree" type="button" onclick="buss("entree")">bussEntree</button>
+    <button id="orderEntree" type="button" onclick="order('entree')">orderEntree</button>
+    <button id="sendEntree" type="button" onclick="send('entree')">sendEntree</button>
+    <button id="getEntree" type="button" onclick="get('entree')">getEntree</button>
+    <button id="dropEntree" type="button" onclick="drop('entree')">dropEntree</button>
+    <button id="busEntree" type="button" onclick="bus('entree')">busEntree</button>
 </p>
 <p>
-    <button id="ordrDessert" type="button" onclick="ordr("dessert")">ordrDessert</button>
-    <button id="sendDessert" type="button" onclick="send("dessert")">sendDessert</button>
-    <button id="gettDessert" type="button" onclick="gett("dessert")">gettDessert</button>
-    <button id="dropDessert" type="button" onclick="drop("dessert")">dropDessert</button>
-    <button id="bussDessert" type="button" onclick="buss("dessert")">bussDessert</button>
+    <button id="orderDessert" type="button" onclick="order('dessert')">orderDessert</button>
+    <button id="sendDessert" type="button" onclick="send('dessert')">sendDessert</button>
+    <button id="getDessert" type="button" onclick="get('dessert')">getDessert</button>
+    <button id="dropDessert" type="button" onclick="drop('dessert')">dropDessert</button>
+    <button id="busDessert" type="button" onclick="bus('dessert')">busDessert</button>
 </p>
 <p>
-    <button id="makeBill" type="button" onclick="make("bill")">makeBill</button>
-    <button id="dropBill" type="button" onclick="drop("bill")">dropBill</button>
-    <button id="bussBill" type="button" onclick="buss("bill")">bussBill</button>
+    <button id="makeBill" type="button" onclick="make('bill')">makeBill</button>
+    <button id="dropBill" type="button" onclick="drop('bill')">dropBill</button>
+    <button id="busBill" type="button" onclick="bus('bill')">busBill</button>
 </p>
 <p>
-    <button id="makeReceipt" type="button" onclick="make("receipt")">makeReceipt</button>
-    <button id="dropReceipt" type="button" onclick="drop("receipt")">dropReceipt</button>
-    <button id="bussReceipt" type="button" onclick="buss("receipt")">bussReceipt</button>
+    <button id="makeReceipt" type="button" onclick="make('receipt')">makeReceipt</button>
+    <button id="dropReceipt" type="button" onclick="drop('receipt')">dropReceipt</button>
+    <button id="busReceipt" type="button" onclick="bus('receipt')">busReceipt</button>
 </p>
-<p id = "comment">its a game</p>
+<p id = "test">its a game</p>
+<p id = "test2">its a game</p>
+<script>
 
+function order(k){
+    document.getElementById("test").innerHTML= "order";
+    document.getElementById("test2").innerHTML= k;
+    //callers
+        //greet
+        //drink
+        //app
+        //entree
+        //dessert
+    //tasks
+        //set flag orderTaken
+        //set flag shown
+        //set timer needAct
+        //set timer actDone
+        //set timer dropDue
+    //future
+        //cost
+};
+function make(k){
+    document.getElementById("test").innerHTML= "make";
+    document.getElementById("test2").innerHTML= k;
+    //callers
+        //drink
+        //salad
+        //bill
+        //receipt
+    //tasks
+        //set timer makeDone
+        //set flag shown
+};
+function send(k){
+    document.getElementById("test").innerHTML= "send";
+    document.getElementById("test2").innerHTML= k;
+    //callers
+        //app
+        //entree
+        //dessert
+    //tasks
+        //set flag makeSent
+        //set flag shown
+        //set timer makeDone
+};
+function get(k){
+    document.getElementById("test").innerHTML= "get";
+    document.getElementById("test2").innerHTML= k;
+    //callers
+        //app
+        //entree
+        //dessert
+    //tasks
+        //set flag makeGot
+        //set flag shown
+};
+function drop(k){
+    document.getElementById("test").innerHTML= "drop";
+    document.getElementById("test2").innerHTML= k;
+    //callers
+        //drink
+        //app
+        //salad
+        //entree
+        //dessert
+        //bill
+        //receipt
+    //tasks
+        //set flag orderDropd
+        //set flag shown
+        //set timer fullness
+    //future
+        //set bill dropDue
+};
+function bus(k){
+    document.getElementById("test").innerHTML= "bus";
+    document.getElementById("test2").innerHTML= k;
+    //callers
+        //drink
+        //app
+        //salad
+        //entree
+        //dessert
+        //bill
+        //receipt
+    //tasks
+        //set flag shown
+    //future 
+        //set receipt dropDue
+        //clear dirty
+};
+
+function repeater(k){
+    //checks v tabletime
+        //== makeDone then makeReady = 1
+}
+
+</script>
 </body>
 </html>
