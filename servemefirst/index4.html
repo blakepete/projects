@@ -13,13 +13,13 @@ blake.r.peterson@gmail.com>
     <td id = "dispTblKey">Table:</td>
     <td id = "dispTblOut">XXX</td>
     <td id = "dispTmeKey">Time:</td>
-    <td id = "dispTmeOut">t[n].time</td>
+    <td id = "dispTmeOut">XXX</td>
     </tr>
     <tr>
     <td id = "dispGstKey">Guests:</td>
-    <td id = "dispGstOut">t[n].guests.len</td>
+    <td id = "dispGstOut">XXX</td>
     <td id = "dispBilKey">Bill:</td>
-    <td id = "dispBilOut">sum(t[n].guests[ALL].debt)</td>
+    <td id = "dispBilOut">XXX</td>
     </tr>
     </tbody>
 </table>
@@ -27,48 +27,48 @@ blake.r.peterson@gmail.com>
     <tbody>
     <tr>
     <td id = "dispNaHed">---</td>
-    <td id = "dispG1Hed">Guest 0</td>
-    <td id = "dispG2Hed">Guest 1</td>
+    <td id = "dispG0Hed">Guest 0</td> <!--need loop to print these-->
+    <td id = "dispG1Hed">Guest 1</td>
     </tr>
     <tr>
     <td id = "dispIdGrt">Greet</td>
+    <td id = "dispG0Grt">g0.greet.display</td>
     <td id = "dispG1Grt">g1.greet.display</td>
-    <td id = "dispG2Grt">g2.greet.display</td>
     </tr>
     <tr>
     <td id = "dispIdDrk">Drink</td>
+    <td id = "dispG0Drk">g0.drink.display</td>
     <td id = "dispG1Drk">g1.drink.display</td>
-    <td id = "dispG2Drk">g2.drink.display</td>
     </tr>
     <tr>
     <td id = "dispIdApp">Appetizer</td>
+    <td id = "dispG0App">g0.app.display</td>
     <td id = "dispG1App">g1.app.display</td>
-    <td id = "dispG2App">g2.app.display</td>
     </tr>
     <tr>
     <td id = "dispIdSal">Salad</td>
+    <td id = "dispG0Sal">g0.salad.display</td>
     <td id = "dispG1Sal">g1.salad.display</td>
-    <td id = "dispG2Sal">g2.salad.display</td>
     </tr>
     <tr>
     <td id = "dispIdEnt">Entree</td>
+    <td id = "dispG0Ent">g0.entree.display</td>
     <td id = "dispG1Ent">g1.entree.display</td>
-    <td id = "dispG2Ent">g2.entree.display</td>
     </tr>
     <tr>
     <td id = "dispIdDst">Dessert</td>
+    <td id = "dispG0Dst">g0.dessert.display</td>
     <td id = "dispG1Dst">g1.dessert.display</td>
-    <td id = "dispG2Dst">g2.dessert.display</td>
     </tr>
     <tr>
     <td id = "dispIdBil">Bill</td>
+    <td id = "dispG0Bil">g0.bill.display</td>
     <td id = "dispG1Bil">g1.bill.display</td>
-    <td id = "dispG2Bil">g2.bill.display</td>
     </tr>
     <tr>
     <td id = "dispIdRct">Receipt</td>
+    <td id = "dispG0Rct">g0.receipt.display</td>
     <td id = "dispG1Rct">g1.receipt.display</td>
-    <td id = "dispG2Rct">g2.receipt.display</td>
     </tr>
     </tbody>
 </table>
@@ -124,6 +124,12 @@ blake.r.peterson@gmail.com>
 <p id = "test">test</p>
 <p id = "test2">test2</p>
 <p id = "test3">test3</p>
+<p id = "test4">test4</p>
+<p id = "test5">test5</p>
+<p id = "test6">test6</p>
+<p id = "test7">test7</p>
+<p id = "test8">test8</p>
+<p id = "test9">test9</p>
 <button id="debug" type="button" onclick="debug()">debug</button>
     
 <script>
@@ -392,13 +398,153 @@ var t = [
 ];
 
 function update(){
-    document.getElementById("dispTblOut").innerHTML= 0; //changes when multi table added
-    tTime = gTimer - t[0].timeStart;
-    document.getElementById("dispTmeOut").innerHTML= tTime;
+    tbl = 0;
+    document.getElementById("dispTblOut").innerHTML= tbl; //changes when multi table added
+    document.getElementById("dispTmeOut").innerHTML= gTimer - t[tbl].timeStart;
+    document.getElementById("dispGstOut").innerHTML= t[tbl].g.length;
+    document.getElementById("dispBilOut").innerHTML= t[tbl].g[0].debt + t[tbl].g[1].debt;
+    //greet show check
+    switch(t[0].g[0].course.greet.show){
+        case 0:
+            document.getElementById("dispG0Grt").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG0Grt").style.visibility = "visible";
+            break;
+    }
+    switch(t[0].g[1].course.greet.show){
+        case 0:
+            document.getElementById("dispG1Grt").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG1Grt").style.visibility = "visible";
+            break;
+    }
+    //drink show check
+    switch(t[0].g[0].course.drink.show){
+        case 0:
+            document.getElementById("dispG0Drk").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG0Drk").style.visibility = "visible";
+            break;
+    }
+    switch(t[0].g[1].course.drink.show){
+        case 0:
+            document.getElementById("dispG1Drk").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG1Drk").style.visibility = "visible";
+            break;
+    }
+    //app show check
+    switch(t[0].g[0].course.app.show){
+        case 0:
+            document.getElementById("dispG0App").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG0App").style.visibility = "visible";
+            break;
+    }
+    switch(t[0].g[1].course.app.show){
+        case 0:
+            document.getElementById("dispG1App").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG1App").style.visibility = "visible";
+            break;
+    }
+    //salad show check
+    switch(t[0].g[0].course.salad.show){
+        case 0:
+            document.getElementById("dispG0Sal").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG0Sal").style.visibility = "visible";
+            break;
+    }
+    switch(t[0].g[1].course.salad.show){
+        case 0:
+            document.getElementById("dispG1Sal").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG1Sal").style.visibility = "visible";
+            break;
+    }
+    //entree show check
+    switch(t[0].g[0].course.entree.show){
+        case 0:
+            document.getElementById("dispG0Ent").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG0Ent").style.visibility = "visible";
+            break;
+    }
+    switch(t[0].g[1].course.entree.show){
+        case 0:
+            document.getElementById("dispG1Ent").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG1Ent").style.visibility = "visible";
+            break;
+    }
+    //dessert show check
+    switch(t[0].g[0].course.dessert.show){
+        case 0:
+            document.getElementById("dispG0Dst").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG0Dst").style.visibility = "visible";
+            break;
+    }
+    switch(t[0].g[1].course.dessert.show){
+        case 0:
+            document.getElementById("dispG1Dst").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG1Dst").style.visibility = "visible";
+            break;
+    }
+    //bill show check
+    switch(t[0].g[0].course.bill.show){
+        case 0:
+            document.getElementById("dispG0Bil").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG0Bil").style.visibility = "visible";
+            break;
+    }
+    switch(t[0].g[1].course.bill.show){
+        case 0:
+            document.getElementById("dispG1Bil").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG1Bil").style.visibility = "visible";
+            break;
+    }
+    //receipt show check
+    switch(t[0].g[0].course.receipt.show){
+        case 0:
+            document.getElementById("dispG0Rct").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG0Rct").style.visibility = "visible";
+            break;
+    }
+    switch(t[0].g[1].course.receipt.show){
+        case 0:
+            document.getElementById("dispG1Rct").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispG1Rct").style.visibility = "visible";
+            break;
+    }
+
 }
 
 function debug(){
-    document.getElementById("test2").innerHTML= gTimer;
+    document.getElementById("test4").innerHTML= gTimer;
+    document.getElementById("test5").innerHTML= t[0].g[1].happy;
 }
 
 function newTable(){
@@ -414,6 +560,8 @@ function newTable(){
     t[tbl].g[1].needy = getRnd(1, 11);
     t[tbl].g[0].tipAmt = getRnd(5, 26);
     t[tbl].g[1].tipAmt = getRnd(5, 26);
+    t[tbl].g[0].debt = 0;
+    t[tbl].g[1].debt = 0;
 }
 function order(k){
     document.getElementById("test").innerHTML= "order";
@@ -508,6 +656,10 @@ function repeater(k){
         //== makeDone then makeReady = 1
 }
 
+function getRnd(min, max) {
+    //returns int; min (included) and max (excluded)
+    return Math.floor(Math.random() * (max - min) ) + min;
+}
 
 </script>
 </body>
