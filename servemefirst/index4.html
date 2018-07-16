@@ -76,8 +76,9 @@ blake.r.peterson@gmail.com>
 <!--<p>
     <button id="newTable" type="button" onclick="newTable()">newTable</button>
 </p>-->
+<div id="buttons">
 <p>
-    <button id="orderGreet" type="button" onclick="order('greet')">orderGreet</button> 
+    <button id="orderGreet" type="button" onclick="order(0)">orderGreet</button> 
 </p>
 <p>
     <button id="orderDrink" type="button" onclick="order('drink')">orderDrink</button>
@@ -121,6 +122,7 @@ blake.r.peterson@gmail.com>
     <button id="dropReceipt" type="button" onclick="drop('receipt')">dropReceipt</button>
     <button id="busReceipt" type="button" onclick="bus('receipt')">busReceipt</button>
 </p>
+</div>
 <p id = "test">test</p>
 <p id = "test2">test2</p>
 <p id = "test3">test3</p>
@@ -133,7 +135,8 @@ blake.r.peterson@gmail.com>
 <button id="debug" type="button" onclick="debug()">debug</button>
     
 <script>
-
+var gTimer = 0;
+var gTimerVar = 0;
 window.onload = function(){
     gTimer = 0;
     gTimerVar = setInterval(function(){
@@ -398,7 +401,7 @@ var t = [
 ];
 
 function update(){
-    tbl = 0;
+    var tbl = 0;
     document.getElementById("dispTblOut").innerHTML= tbl; //changes when multi table added
     document.getElementById("dispTmeOut").innerHTML= gTimer - t[tbl].timeStart;
     document.getElementById("dispGstOut").innerHTML= t[tbl].g.length;
@@ -540,15 +543,45 @@ function update(){
             break;
     }
 
+    //greet taken check
+    switch(t[0].g[0].course.greet.orderTaken){
+        case 1:
+            break;
+        case 0:
+            document.getElementById("dispG0Grt").innerHTML = "Need " + (t[tbl].g[0].course.greet.needAct - gTimer);
+            break;
+    }
+    switch(t[0].g[1].course.greet.orderTaken){
+        case 1:
+            break;
+        case 0:
+            document.getElementById("dispG1Grt").innerHTML = "Need " + (t[tbl].g[1].course.greet.needAct - gTimer);
+            break;
+    } 
 }
+
+function busy(){
+    //disable buttons
+    var el = document.getElementById('buttons');
+    var all = el.getElementsByTagName('button');
+    var i;
+    for (i = 0; i < all.length; i++) {
+        all[i].disabled = true;
+    };
+}
+
 
 function debug(){
     document.getElementById("test4").innerHTML= gTimer;
     document.getElementById("test5").innerHTML= t[0].g[1].happy;
+    //disable buttons
+    busy();
+    
+    
 }
 
 function newTable(){
-    tbl = 0;//player.tableCount++;
+    var tbl = 0;//player.tableCount++;
     t[tbl].timeStart = gTimer;
     t[tbl].g[0].drink = 0;
     t[tbl].g[1].drink = 0;
@@ -562,10 +595,27 @@ function newTable(){
     t[tbl].g[1].tipAmt = getRnd(5, 26);
     t[tbl].g[0].debt = 0;
     t[tbl].g[1].debt = 0;
+    t[tbl].g[0].course.greet.show = 1;
+    t[tbl].g[1].course.greet.show = 1;
+    t[tbl].g[0].course.greet.needAct = t[tbl].timeStart + 60;
+    t[tbl].g[1].course.greet.needAct = t[tbl].timeStart + 60;
+    
+    
 }
 function order(k){
+    var tbl = 0;
     document.getElementById("test").innerHTML= "order";
     document.getElementById("test2").innerHTML= k;
+    //switch(k){
+    //    case 0:
+    //        document.getElementsByTagName("button".disabled) = true;
+    //        t[tbl].g[0].course.greet.actDone = (gTimer - t[tbl].timeStart) + 5;
+    //        t[0].g[0].course.greet.orderTaken = 1;
+    //        t[0].g[1].course.greet.orderTaken = 1;
+    //        switch(t[0].g[0].course.greet.){
+    //            case 1:
+    //                break;
+
     //callers
         //greet
         //drink
@@ -652,7 +702,7 @@ function bus(k){
         //clear dirty
 }
 function repeater(k){
-    //checks v tabletime
+    //checks v table time
         //== makeDone then makeReady = 1
 }
 
