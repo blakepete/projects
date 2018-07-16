@@ -367,38 +367,6 @@ function update(){
             break;
     }
 
-    //greet taken/over check
-    if (t[0].course.greet.actDone == (gTimer - t[tbl].timeStart)){
-        //when timer hits 0, order is taken
-        t[0].course.greet.orderTaken = 1;
-    }
-
-    //if (t[0].course.greet.orderTaken == 1){
-    //    document.getElementById("dispG0Grt").innerHTML= "Greeted";
-    //    document.getElementById("dispG1Grt").innerHTML= "Greeted";
-    //    t[0].course.greet.show = 0;
-    //} else if (t[0].course.greet.orderTaken == 0){
-    //    document.getElementById("dispG0Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
-    //    document.getElementById("dispG1Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
-    //}
-
-    //switch(t[0].course.greet.orderTaken){
-    //    case 1:
-    //        if (t[0].course.greet.actDone == (gTimer - t[tbl].timeStart)){
-    //            //t[0].occupied = 0;
-    //            //document.getElementById("dispG0Grt").innerHTML= "Greeted";
-    //            //document.getElementById("dispG1Grt").innerHTML= "Greeted";
-    //            //t[0].course.greet.show = 0;
-    //        } else if (t[0].course.greet.actDone > (gTimer - t[tbl].timeStart) ) {
-    //            //document.getElementById("dispG0Grt").innerHTML= (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
-    //            //document.getElementById("dispG1Grt").innerHTML= (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
-    //        }
-    //        break;
-    //    case 0:
-    //        //document.getElementById("dispG0Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
-    //        //document.getElementById("dispG1Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
-    //}
-
     switch(t[0].occupied){
         case "no":
             //enable buttons
@@ -432,13 +400,14 @@ function update(){
             }
 
             //display timer difference
-            document.getElementById("dispG0Grt").innerHTML= (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
-            document.getElementById("dispG1Grt").innerHTML= (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
+            document.getElementById("dispG0Grt").innerHTML= "Greeting.. " + (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
+            document.getElementById("dispG1Grt").innerHTML= "Greeting.. " + (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
             
             //when timers match, change case back to "no", kick off new stuff
             if (t[0].course.greet.actDone == (gTimer - t[tbl].timeStart)){
                 t[0].occupied = "no";
                 t[0].course.greet.orderTaken = 1;
+                update();
             }
             //other greet stuff
             break;
@@ -478,8 +447,9 @@ function order(k){
         case 'greet':
             t[tbl].course.greet.actDone = (gTimer - t[tbl].timeStart) + 5;
             t[tbl].occupied = "greet";
+            update();
     }
-
+    
 
     //callers
         //greet
