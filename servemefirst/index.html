@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 2.2.0</title>
+<title>ServeMeFirst Alpha 2.2.1</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -77,7 +77,7 @@ blake.r.peterson@gmail.com>
     <button id="newTable" type="button" onclick="newTable()">newTable</button>
 </p>-->
 <div id="buttons">
-<!--p> alpha note: dont click buttons out of order.</p-->
+<p> alpha note: dont click buttons out of order. yes i know the timers freeze. they work in the background though.</p>
 <p>
     <button id="orderGreet" type="button" onclick="order('greet')">orderGreet</button> 
 </p>
@@ -128,9 +128,11 @@ blake.r.peterson@gmail.com>
 <p id = "test">test</p>
 <p id = "test2">test2</p>
 <button id="debug" type="button" onclick="debug()">debug</button>
-<button id="cheat" type="button" onclick="cheat()">cheat1</button>
-<button id="cheat50" type="button" onclick="cheat50()">cheat50</button>
 </div>
+<button id="cheat1" type="button" onclick="cheat1()">cheat1</button>
+<button id="cheat25" type="button" onclick="cheat25()">cheat25</button>
+<button id="cheat50" type="button" onclick="cheat50()">cheat50</button>
+
     
 <script>
 var gTimer = 0;
@@ -143,8 +145,8 @@ window.onload = function(){
     gTimerVar = setInterval(function(){
         gTimer++;
         update();
-    }, 75);
-//    document.getElementById("dev").style.visibility = 'hidden'; //un comment for show mode
+    }, 1000);
+    document.getElementById("dev").style.visibility = 'hidden'; //un comment for show mode
 };
 
 var t = [
@@ -426,6 +428,8 @@ function update(){
             if (t[tbl].course.entree.orderDropd == 1){
                 document.getElementById("dispG0Ent").innerHTML= t[tbl].course.entree.fullness;
                 document.getElementById("dispG1Ent").innerHTML= t[tbl].course.entree.fullness;
+                t[tbl].course.app.show = 0
+                t[tbl].course.salad.show = 0;
             } else if (t[tbl].course.entree.orderTaken == 1){
                 document.getElementById("dispG0Ent").innerHTML= "Waiting on Entrees " + (t[tbl].course.entree.dropDue - (gTimer - t[tbl].timeStart));
                 document.getElementById("dispG1Ent").innerHTML= "Waiting on Entrees " + (t[tbl].course.entree.dropDue - (gTimer - t[tbl].timeStart));
@@ -822,10 +826,12 @@ function debug(){
     var tbl = 0;
 }
 
-function cheat(){
+function cheat1(){
     gTimer++;
 }
-
+function cheat25(){
+    gTimer = gTimer + 25;
+}
 function cheat50(){
     gTimer = gTimer + 50;
 }
