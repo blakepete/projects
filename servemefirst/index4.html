@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 2.0.0</title>
+<title>ServeMeFirst Alpha 2.0.1</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -25,47 +25,47 @@ blake.r.peterson@gmail.com>
 </table>
 <table id = "dispBod">
     <tbody>
-    <tr>
+    <tr id = "dispRowHed">
     <td id = "dispNaHed">---</td>
     <td id = "dispG0Hed">Guest 0</td> <!--need loop to print these-->
     <td id = "dispG1Hed">Guest 1</td>
     </tr>
-    <tr>
+    <tr id = "dispRowGrt">
     <td id = "dispIdGrt">Greet</td>
     <td id = "dispG0Grt">g0.greet.display</td>
     <td id = "dispG1Grt">g1.greet.display</td>
     </tr>
-    <tr>
+    <tr id = "dispRowDrk">
     <td id = "dispIdDrk">Drink</td>
     <td id = "dispG0Drk">g0.drink.display</td>
     <td id = "dispG1Drk">g1.drink.display</td>
     </tr>
-    <tr>
+    <tr id = "dispRowApp">
     <td id = "dispIdApp">Appetizer</td>
     <td id = "dispG0App">g0.app.display</td>
     <td id = "dispG1App">g1.app.display</td>
     </tr>
-    <tr>
+    <tr id = "dispRowSal">
     <td id = "dispIdSal">Salad</td>
     <td id = "dispG0Sal">g0.salad.display</td>
     <td id = "dispG1Sal">g1.salad.display</td>
     </tr>
-    <tr>
+    <tr id = "dispRowEnt">
     <td id = "dispIdEnt">Entree</td>
     <td id = "dispG0Ent">g0.entree.display</td>
     <td id = "dispG1Ent">g1.entree.display</td>
     </tr>
-    <tr>
+    <tr id = "dispRowDst">
     <td id = "dispIdDst">Dessert</td>
     <td id = "dispG0Dst">g0.dessert.display</td>
     <td id = "dispG1Dst">g1.dessert.display</td>
     </tr>
-    <tr>
+    <tr id = "dispRowBil">
     <td id = "dispIdBil">Bill</td>
     <td id = "dispG0Bil">g0.bill.display</td>
     <td id = "dispG1Bil">g1.bill.display</td>
     </tr>
-    <tr>
+    <tr id = "dispRowRct">
     <td id = "dispIdRct">Receipt</td>
     <td id = "dispG0Rct">g0.receipt.display</td>
     <td id = "dispG1Rct">g1.receipt.display</td>
@@ -78,7 +78,7 @@ blake.r.peterson@gmail.com>
 </p>-->
 <div id="buttons">
 <p>
-    <button id="orderGreet" type="button" onclick="order(0)">orderGreet</button> 
+    <button id="orderGreet" type="button" onclick="order('greet')">orderGreet</button> 
 </p>
 <p>
     <button id="orderDrink" type="button" onclick="order('drink')">orderDrink</button>
@@ -137,20 +137,136 @@ blake.r.peterson@gmail.com>
 <script>
 var gTimer = 0;
 var gTimerVar = 0;
+
 window.onload = function(){
+    newTable();
+    update();
     gTimer = 0;
     gTimerVar = setInterval(function(){
         gTimer++;
         document.getElementById("test3").innerHTML= gTimer;
         update();
     }, 1000);
-    newTable();
 };
 
 var t = [
     { //table 0
         timeStart: 0,
-        test: 0,
+        occupied: "no",
+        course: {
+            greet: {
+                show: 0,
+                needAct: 0,
+                actDone: -1,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            drink: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            app: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            salad: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            entree: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            dessert: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            bill: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            receipt: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+        },
         g: [
             { //guest 0
                 happy: 0,
@@ -158,120 +274,6 @@ var t = [
                 needy: 0,
                 debt: 0,
                 tipAmt: 0,
-                course: {
-                    greet: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    drink: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    app: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    salad: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    entree: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    dessert: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    bill: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    receipt: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                }
             },
             { //guest 1
                 happy: 0,
@@ -279,120 +281,6 @@ var t = [
                 needy: 0,
                 debt: 0,
                 tipAmt: 0,
-                course: {
-                    greet: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    drink: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    app: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    salad: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    entree: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    dessert: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    bill: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                    receipt: {
-                        show: 0,
-                        needAct: 0,
-                        actDone: 0,
-                        orderTaken: 0,
-                        dropDue: 0,
-                        makeSent: 0,
-                        makeDone: 0,
-                        makeReady: 0,
-                        makeGot: 0,
-                        orderDropd: 0,
-                        fullness: 0,
-                        dirty: 0
-                    },
-                }
             }
         ]
     },
@@ -407,177 +295,159 @@ function update(){
     document.getElementById("dispGstOut").innerHTML= t[tbl].g.length;
     document.getElementById("dispBilOut").innerHTML= t[tbl].g[0].debt + t[tbl].g[1].debt;
     //greet show check
-    switch(t[0].g[0].course.greet.show){
+    switch(t[0].course.greet.show){
         case 0:
-            document.getElementById("dispG0Grt").style.visibility = "hidden";
+            document.getElementById("dispRowGrt").style.visibility = 'hidden';
             break;
         case 1:
-            document.getElementById("dispG0Grt").style.visibility = "visible";
-            break;
-    }
-    switch(t[0].g[1].course.greet.show){
-        case 0:
-            document.getElementById("dispG1Grt").style.visibility = "hidden";
-            break;
-        case 1:
-            document.getElementById("dispG1Grt").style.visibility = "visible";
+            document.getElementById("dispRowGrt").style.visibility = "visible";
             break;
     }
     //drink show check
-    switch(t[0].g[0].course.drink.show){
+    switch(t[0].course.drink.show){
         case 0:
-            document.getElementById("dispG0Drk").style.visibility = "hidden";
+            document.getElementById("dispRowDrk").style.visibility = "hidden";
             break;
         case 1:
-            document.getElementById("dispG0Drk").style.visibility = "visible";
-            break;
-    }
-    switch(t[0].g[1].course.drink.show){
-        case 0:
-            document.getElementById("dispG1Drk").style.visibility = "hidden";
-            break;
-        case 1:
-            document.getElementById("dispG1Drk").style.visibility = "visible";
+            document.getElementById("dispRowDrk").style.visibility = "visible";
             break;
     }
     //app show check
-    switch(t[0].g[0].course.app.show){
+    switch(t[0].course.app.show){
         case 0:
-            document.getElementById("dispG0App").style.visibility = "hidden";
+            document.getElementById("dispRowApp").style.visibility = "hidden";
             break;
         case 1:
-            document.getElementById("dispG0App").style.visibility = "visible";
-            break;
-    }
-    switch(t[0].g[1].course.app.show){
-        case 0:
-            document.getElementById("dispG1App").style.visibility = "hidden";
-            break;
-        case 1:
-            document.getElementById("dispG1App").style.visibility = "visible";
+            document.getElementById("dispRowApp").style.visibility = "visible";
             break;
     }
     //salad show check
-    switch(t[0].g[0].course.salad.show){
+    switch(t[0].course.salad.show){
         case 0:
-            document.getElementById("dispG0Sal").style.visibility = "hidden";
+            document.getElementById("dispRowSal").style.visibility = "hidden";
             break;
         case 1:
-            document.getElementById("dispG0Sal").style.visibility = "visible";
-            break;
-    }
-    switch(t[0].g[1].course.salad.show){
-        case 0:
-            document.getElementById("dispG1Sal").style.visibility = "hidden";
-            break;
-        case 1:
-            document.getElementById("dispG1Sal").style.visibility = "visible";
+            document.getElementById("dispRowSal").style.visibility = "visible";
             break;
     }
     //entree show check
-    switch(t[0].g[0].course.entree.show){
+    switch(t[0].course.entree.show){
         case 0:
-            document.getElementById("dispG0Ent").style.visibility = "hidden";
+            document.getElementById("dispRowEnt").style.visibility = "hidden";
             break;
         case 1:
-            document.getElementById("dispG0Ent").style.visibility = "visible";
-            break;
-    }
-    switch(t[0].g[1].course.entree.show){
-        case 0:
-            document.getElementById("dispG1Ent").style.visibility = "hidden";
-            break;
-        case 1:
-            document.getElementById("dispG1Ent").style.visibility = "visible";
+            document.getElementById("dispRowEnt").style.visibility = "visible";
             break;
     }
     //dessert show check
-    switch(t[0].g[0].course.dessert.show){
+    switch(t[0].course.dessert.show){
         case 0:
-            document.getElementById("dispG0Dst").style.visibility = "hidden";
+            document.getElementById("dispRowDst").style.visibility = "hidden";
             break;
         case 1:
-            document.getElementById("dispG0Dst").style.visibility = "visible";
-            break;
-    }
-    switch(t[0].g[1].course.dessert.show){
-        case 0:
-            document.getElementById("dispG1Dst").style.visibility = "hidden";
-            break;
-        case 1:
-            document.getElementById("dispG1Dst").style.visibility = "visible";
+            document.getElementById("dispRowDst").style.visibility = "visible";
             break;
     }
     //bill show check
-    switch(t[0].g[0].course.bill.show){
+    switch(t[0].course.bill.show){
         case 0:
-            document.getElementById("dispG0Bil").style.visibility = "hidden";
+            document.getElementById("dispRowBil").style.visibility = "hidden";
             break;
         case 1:
-            document.getElementById("dispG0Bil").style.visibility = "visible";
-            break;
-    }
-    switch(t[0].g[1].course.bill.show){
-        case 0:
-            document.getElementById("dispG1Bil").style.visibility = "hidden";
-            break;
-        case 1:
-            document.getElementById("dispG1Bil").style.visibility = "visible";
+            document.getElementById("dispRowBil").style.visibility = "visible";
             break;
     }
     //receipt show check
-    switch(t[0].g[0].course.receipt.show){
+    switch(t[0].course.receipt.show){
         case 0:
-            document.getElementById("dispG0Rct").style.visibility = "hidden";
+            document.getElementById("dispRowRct").style.visibility = "hidden";
             break;
         case 1:
-            document.getElementById("dispG0Rct").style.visibility = "visible";
-            break;
-    }
-    switch(t[0].g[1].course.receipt.show){
-        case 0:
-            document.getElementById("dispG1Rct").style.visibility = "hidden";
-            break;
-        case 1:
-            document.getElementById("dispG1Rct").style.visibility = "visible";
+            document.getElementById("dispRowRct").style.visibility = "visible";
             break;
     }
 
-    //greet taken check
-    switch(t[0].g[0].course.greet.orderTaken){
-        case 1:
+    //greet taken/over check
+    if (t[0].course.greet.actDone == (gTimer - t[tbl].timeStart)){
+        //when timer hits 0, order is taken
+        t[0].course.greet.orderTaken = 1;
+    }
+
+    //if (t[0].course.greet.orderTaken == 1){
+    //    document.getElementById("dispG0Grt").innerHTML= "Greeted";
+    //    document.getElementById("dispG1Grt").innerHTML= "Greeted";
+    //    t[0].course.greet.show = 0;
+    //} else if (t[0].course.greet.orderTaken == 0){
+    //    document.getElementById("dispG0Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
+    //    document.getElementById("dispG1Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
+    //}
+
+    //switch(t[0].course.greet.orderTaken){
+    //    case 1:
+    //        if (t[0].course.greet.actDone == (gTimer - t[tbl].timeStart)){
+    //            //t[0].occupied = 0;
+    //            //document.getElementById("dispG0Grt").innerHTML= "Greeted";
+    //            //document.getElementById("dispG1Grt").innerHTML= "Greeted";
+    //            //t[0].course.greet.show = 0;
+    //        } else if (t[0].course.greet.actDone > (gTimer - t[tbl].timeStart) ) {
+    //            //document.getElementById("dispG0Grt").innerHTML= (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
+    //            //document.getElementById("dispG1Grt").innerHTML= (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
+    //        }
+    //        break;
+    //    case 0:
+    //        //document.getElementById("dispG0Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
+    //        //document.getElementById("dispG1Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
+    //}
+
+    switch(t[0].occupied){
+        case "no":
+            //enable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = false;
+            }
+
+            //check to show greet need
+            if (t[0].course.greet.orderTaken == 1){
+                t[0].course.greet.show = 0;
+                document.getElementById("dispG0Grt").innerHTML= "Greeted";
+                document.getElementById("dispG1Grt").innerHTML= "Greeted";
+            } else if (t[0].course.greet.orderTaken == 0){
+                t[0].course.greet.show = 1;
+                document.getElementById("dispG0Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
+            }
+           
             break;
-        case 0:
-            document.getElementById("dispG0Grt").innerHTML = "Need " + (t[tbl].g[0].course.greet.needAct - gTimer);
+
+        case "greet":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("dispG0Grt").innerHTML= (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
+            document.getElementById("dispG1Grt").innerHTML= (t[0].course.greet.actDone - (gTimer - t[tbl].timeStart));
+            
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[0].course.greet.actDone == (gTimer - t[tbl].timeStart)){
+                t[0].occupied = "no";
+                t[0].course.greet.orderTaken = 1;
+            }
+            //other greet stuff
             break;
     }
-    switch(t[0].g[1].course.greet.orderTaken){
-        case 1:
-            break;
-        case 0:
-            document.getElementById("dispG1Grt").innerHTML = "Need " + (t[tbl].g[1].course.greet.needAct - gTimer);
-            break;
-    } 
 }
-
-function busy(){
-    //disable buttons
-    var el = document.getElementById('buttons');
-    var all = el.getElementsByTagName('button');
-    var i;
-    for (i = 0; i < all.length; i++) {
-        all[i].disabled = true;
-    };
-}
-
 
 function debug(){
     document.getElementById("test4").innerHTML= gTimer;
-    document.getElementById("test5").innerHTML= t[0].g[1].happy;
-    //disable buttons
-    busy();
-    
-    
+    document.getElementById("test5").innerHTML= t[0].course.greet.actDone;
 }
 
 function newTable(){
@@ -595,10 +465,8 @@ function newTable(){
     t[tbl].g[1].tipAmt = getRnd(5, 26);
     t[tbl].g[0].debt = 0;
     t[tbl].g[1].debt = 0;
-    t[tbl].g[0].course.greet.show = 1;
-    t[tbl].g[1].course.greet.show = 1;
-    t[tbl].g[0].course.greet.needAct = t[tbl].timeStart + 60;
-    t[tbl].g[1].course.greet.needAct = t[tbl].timeStart + 60;
+    t[tbl].course.greet.show = 1;
+    t[tbl].course.greet.needAct = (gTimer - t[tbl].timeStart) + 60;
     
     
 }
@@ -606,15 +474,12 @@ function order(k){
     var tbl = 0;
     document.getElementById("test").innerHTML= "order";
     document.getElementById("test2").innerHTML= k;
-    //switch(k){
-    //    case 0:
-    //        document.getElementsByTagName("button".disabled) = true;
-    //        t[tbl].g[0].course.greet.actDone = (gTimer - t[tbl].timeStart) + 5;
-    //        t[0].g[0].course.greet.orderTaken = 1;
-    //        t[0].g[1].course.greet.orderTaken = 1;
-    //        switch(t[0].g[0].course.greet.){
-    //            case 1:
-    //                break;
+    switch(k){
+        case 'greet':
+            t[tbl].course.greet.actDone = (gTimer - t[tbl].timeStart) + 5;
+            t[tbl].occupied = "greet";
+    }
+
 
     //callers
         //greet
