@@ -1,390 +1,747 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 1.3.2</title>
+<title>ServeMeFirst Alpha 2.1.1</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
 </head>
 <body>
 
-<!-- Temp display matrix, have to learn css, one thing at a time-->
-<p id="t0title">get</p>
-<p id="t0time">a</p>
-<p id="t0status">table</p>
-<p id="t0g0status">ya</p>
-<p id="t0g1status">noob</p>
-<button id="newTable" type="button" onclick="newTable()">newTable</button>
-<button id="greet" type="button" onclick="greetTable()">greet</button>
-<button id="orderDrinks" type="button" onclick="orderDrinks()">orderDrinks</button>
-<button id="makeDrinks" type="button" onclick="makeDrinks()">makeDrinks</button>
-<button id="giveDrinks" type="button" onclick="giveDrinks()">giveDrinks</button>
-<button id="orderApps" type="button" onclick="orderApps()">orderApps</button>
-<button id="sendApps" type="button" onclick="sendApps()">sendApps</button>
-<button id="giveApps" type="button" onclick="giveApps()">giveApps</button>
-<button id="orderEntrees" type="button" onclick="orderEntrees()">orderEntrees</button>
+<table id = "dispHed">
+    <tbody>
+    <tr>
+    <td id = "dispTblKey">Table:</td>
+    <td id = "dispTblOut">XXX</td>
+    <td id = "dispTmeKey">Time:</td>
+    <td id = "dispTmeOut">XXX</td>
+    </tr>
+    <tr>
+    <td id = "dispGstKey">Guests:</td>
+    <td id = "dispGstOut">XXX</td>
+    <td id = "dispBilKey">Bill:</td>
+    <td id = "dispBilOut">XXX</td>
+    </tr>
+    </tbody>
+</table>
+<table id = "dispBod">
+    <tbody>
+    <tr id = "dispRowHed">
+    <td id = "dispNaHed">---</td>
+    <td id = "dispG0Hed">Guest 0</td> <!--need loop to print these-->
+    <td id = "dispG1Hed">Guest 1</td>
+    </tr>
+    <tr id = "dispRowGrt">
+    <td id = "dispIdGrt">Greet</td>
+    <td id = "dispG0Grt">g0.greet.display</td>
+    <td id = "dispG1Grt">g1.greet.display</td>
+    </tr>
+    <tr id = "dispRowDrk">
+    <td id = "dispIdDrk">Drink</td>
+    <td id = "dispG0Drk">g0.drink.display</td>
+    <td id = "dispG1Drk">g1.drink.display</td>
+    </tr>
+    <tr id = "dispRowApp">
+    <td id = "dispIdApp">Appetizer</td>
+    <td id = "dispG0App">g0.app.display</td>
+    <td id = "dispG1App">g1.app.display</td>
+    </tr>
+    <tr id = "dispRowSal">
+    <td id = "dispIdSal">Salad</td>
+    <td id = "dispG0Sal">g0.salad.display</td>
+    <td id = "dispG1Sal">g1.salad.display</td>
+    </tr>
+    <tr id = "dispRowEnt">
+    <td id = "dispIdEnt">Entree</td>
+    <td id = "dispG0Ent">g0.entree.display</td>
+    <td id = "dispG1Ent">g1.entree.display</td>
+    </tr>
+    <tr id = "dispRowDst">
+    <td id = "dispIdDst">Dessert</td>
+    <td id = "dispG0Dst">g0.dessert.display</td>
+    <td id = "dispG1Dst">g1.dessert.display</td>
+    </tr>
+    <tr id = "dispRowBil">
+    <td id = "dispIdBil">Bill</td>
+    <td id = "dispG0Bil">g0.bill.display</td>
+    <td id = "dispG1Bil">g1.bill.display</td>
+    </tr>
+    <tr id = "dispRowRct">
+    <td id = "dispIdRct">Receipt</td>
+    <td id = "dispG0Rct">g0.receipt.display</td>
+    <td id = "dispG1Rct">g1.receipt.display</td>
+    </tr>
+    </tbody>
+</table>
 
-<!-- to be (or not to be) used buttons:
-<button id="checkup" type="button" onclick="checkup()">checkup</button>
-<button id="giveFood" type="button" onclick="giveFood()">giveFood</button>
-<button id="orderDesert" type="button" onclick="orderDesert()">orderDesert</button>
-<button id="giveDesert" type="button" onclick="giveDesert()">giveDesert</button>
-<button id="dropCheck" type="button" onclick="dropCheck()">dropCheck</button>
-<button id="getCheck" type="button" onclick="getCheck()">getCheck</button>
-<button id="runCheck" type="button" onclick="runCheck()">runCheck</button>
-<button id="finalVisit" type="button" onclick="finalVisit()">finalVisit</button>
+<!--<p>
+    <button id="newTable" type="button" onclick="newTable()">newTable</button>
+</p>-->
+<div id="buttons">
+<p> alpha note: dont click buttons out of order.</p>
+<p>
+    <button id="orderGreet" type="button" onclick="order('greet')">orderGreet</button> 
+</p>
+<p>
+    <button id="orderDrink" type="button" onclick="order('drink')">orderDrink</button>
+    <button id="makeDrink" type="button" onclick="make('drink')">makeDrink</button>
+    <button id="dropDrink" type="button" onclick="drop('drink')">dropDrink</button>
+    <button id="busDrink" type="button" onclick="bus('drink')">busDrink</button>
+</p>
+<p>
+    <button id="orderApp" type="button" onclick="order('app')">orderApp</button>
+    <button id="sendApp" type="button" onclick="send('app')">sendApp</button>
+    <button id="getApp" type="button" onclick="get('app')">getApp</button>
+    <button id="dropApp" type="button" onclick="drop('app')">dropApp</button>
+    <button id="busApp" type="button" onclick="bus('app')">busApp</button>
+</p>
+<p>
+    <button id="makeSalad" type="button" onclick="make('salad')">makeSalad</button>
+    <button id="dropSalad" type="button" onclick="drop('salad')">dropSalad</button>
+    <button id="busSalad" type="button" onclick="bus('salad')">busSalad</button>
+</p>
+<p>
+    <button id="orderEntree" type="button" onclick="order('entree')">orderEntree</button>
+    <button id="sendEntree" type="button" onclick="send('entree')">sendEntree</button>
+    <button id="getEntree" type="button" onclick="get('entree')">getEntree</button>
+    <button id="dropEntree" type="button" onclick="drop('entree')">dropEntree</button>
+    <button id="busEntree" type="button" onclick="bus('entree')">busEntree</button>
+</p>
+<p>
+    <button id="orderDessert" type="button" onclick="order('dessert')">orderDessert</button>
+    <button id="sendDessert" type="button" onclick="send('dessert')">sendDessert</button>
+    <button id="getDessert" type="button" onclick="get('dessert')">getDessert</button>
+    <button id="dropDessert" type="button" onclick="drop('dessert')">dropDessert</button>
+    <button id="busDessert" type="button" onclick="bus('dessert')">busDessert</button>
+</p>
+<p>
+    <button id="makeBill" type="button" onclick="make('bill')">makeBill</button>
+    <button id="dropBill" type="button" onclick="drop('bill')">dropBill</button>
+    <button id="busBill" type="button" onclick="bus('bill')">busBill</button>
+</p>
+<p>
+    <button id="makeReceipt" type="button" onclick="make('receipt')">makeReceipt</button>
+    <button id="dropReceipt" type="button" onclick="drop('receipt')">dropReceipt</button>
+    <button id="busReceipt" type="button" onclick="bus('receipt')">busReceipt</button>
+</p>
+</div>
+<!--
+<p id = "test">test</p>
+<p id = "test2">test2</p>
+<p id = "test3">test3</p>
+<p id = "test4">test4</p>
+<p id = "test5">test5</p>
+<p id = "test6">test6</p>
+<button id="debug" type="button" onclick="debug()">debug</button>
+<button id="cheat" type="button" onclick="cheat()">cheat</button>
 -->
-
-<!-- a even more temp player display. i expect to utilize the player array shortly-->
-<p id="playerDisplay">yo ho ho, serving life for me</p>
-
-<!-- display line mainly for tracking variables over time-->
-<p></p><button id="debug" type="button" onclick="debug()">debug</button>
-<p id="debugOut">debug</p>
-
+    
 <script>
+var gTimer = 0;
+var gTimerVar = 0;
+
 window.onload = function(){
-    document.getElementById("greet").style.display="none";
-    document.getElementById("orderDrinks").style.display="none";
-    document.getElementById("makeDrinks").style.display="none";
-    document.getElementById("giveDrinks").style.display="none"; 
-    document.getElementById("orderApps").style.display="none"; 
-    document.getElementById("sendApps").style.display="none";
-    document.getElementById("giveApps").style.display="none";
-    document.getElementById("orderEntrees").style.display="none";
-    document.getElementById("debugOut").style.display="none";
-    document.getElementById("debug").style.display="none";
+    newTable();
+    update();
+    gTimer = 0;
+    gTimerVar = setInterval(function(){
+        gTimer++;
+        document.getElementById("test3").innerHTML= gTimer;
+        update();
+    }, 1000);
 };
 
-var player = { //soon to be used?
-    display: "servant mode engage",
-    tableCount: -1,
-};
-
-//table array. i plan to use t[0=..] or table[0=..] eventually to support infinite(?) tables
-var stageRef = {
-    early: [0, 15, 30, 0, 60, 0, 90, 0, 120, 600, 720, 1, 0],
-    late: [0, 120, 120, 120, 180, 300, 120, 240, 900, 900, 300, 300, 180],
-    earlyRef: [0, 0, 0, 0, 0, 0, 0, 0, 7, 8, 8, 10, 0],
-    lateRef: [0, 0, 0, 2, 0, 4, 4, 6, 6, 8, 9, 10, 11],
-    display: [
-        "0Reading menu",
-        "1Waiting for greeting",
-        "2Greeting",
-        "3Waiting to order drinks",
-        "4Ordering drinks",
-        "5Reading menu",
-        "6Waiting for drinks",
-        "7Waiting to order apps",
-        "8Ordering apps",
-        "9Reading menu",
-        "10Waiting for apps",
-        "11Eating apps",
-        "12Waiting to order entrees",
-        "13Ordering entrees",
-        "14Finishing apps",
-        "15Waiting for salads",
-        "16Eating salads",
-        "17Finishing salads",
-        "18Waiting for entree",
-        "19Eating entree",
-        "20Halfway entree",
-        "21Finishing entree",
-        "22Waiting to order dessert",
-        "23Ordering dessert",
-        "24Waiting for dessert",
-        "25Eating dessert",
-        "26Finishing dessert",
-        "27Waiting for bill",
-        "28Looking at bill and not paying it",
-        "29Bill ready to collect",
-        "30Waiting for receipt",
-        "31Leaving tip",
-    ]
-}
-var gameTime = "0"//need to boot this
 var t = [
-    flag = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //0sat,1greeted,2ordereddrinks,3havedrinks,4orderedapps,5haveapps,6orderedentrees,7haveslads,8haveentrees,9orderdeserts,10havedesserts,11havebill,12havereceipt
-    timer = 0,
-    payor = 0,
-    guest = [
-        {
-            drink: 0,  //how full(empty?) is it
-            happy: 0, 
-            thirst: 0, //how quickly drink (1,2,or3)
-            needy: 0,  //TBD used to make visits longer and more frequent
-            tipper: 0  //how much percent (5-25)
-        }, {
-            drink: 0,
-            happy: 0,
-            thirst: 0,
-            needy: 0,
-            tipper: 0
-        }
-    ],
+    { //table 0
+        timeStart: 0,
+        occupied: "no",
+        course: {
+            greet: {
+                show: 0,
+                needAct: 0,
+                actDone: -1,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            drink: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            app: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: -1,
+                sendDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            salad: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            entree: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            dessert: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            bill: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+            receipt: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeReady: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                fullness: 0,
+                dirty: 0
+            },
+        },
+        g: [
+            { //guest 0
+                happy: 0,
+                speed: 0,
+                needy: 0,
+                debt: 0,
+                tipAmt: 0,
+            },
+            { //guest 1
+                happy: 0,
+                speed: 0,
+                needy: 0,
+                debt: 0,
+                tipAmt: 0,
+            }
+        ]
+    },
+    { //table 1
+    }
 ];
-//var t0 = {
-//    //timer: [0, 0, 0, 0, 0, 0, 0, 0], //0visit,1drinks,2apps,3salads,4entrees,5dessert,6bill,7cook
-//    //timerVar: [0, 0, 0, 0, 0, 0, 0, 0], //vars to cancel timers as needed
-//    //displayTimer: 0, //replaceable by display to check flags
-//    flag: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], //0sat,1greeted,2ordereddrinks,3havedrinks,4orderedapps,5haveapps,6orderedentrees,7haveslads,8haveentrees,9orderdeserts,10havedesserts,11havebill,12havereceipt,
-//    //status: 0,
-//    guest: [
-//        {
-//            drink: 0,  //how full(empty?) is it
-//            happy: 0, 
-//            thirst: 0, //how quickly drink (1,2,or3)
-//            needy: 0,  //TBD used to make visits longer and more frequent
-//            tipper: 0  //how much percent (5-25)
-//        }, {
-//            drink: 0,
-//            happy: 0,
-//            thirst: 0,
-//            needy: 0,
-//            tipper: 0
-//        }
-//    ],
-//    payor: 0 //who's paying
-//};
+
+function update(){
+    var tbl = 0;
+    document.getElementById("dispTblOut").innerHTML= tbl; //changes when multi table added
+    document.getElementById("dispTmeOut").innerHTML= gTimer - t[tbl].timeStart;
+    document.getElementById("dispGstOut").innerHTML= t[tbl].g.length;
+    document.getElementById("dispBilOut").innerHTML= t[tbl].g[0].debt + t[tbl].g[1].debt;
+
+    //greet show check
+    switch(t[tbl].course.greet.show){
+        case 0:
+            document.getElementById("dispRowGrt").style.visibility = 'hidden';
+            break;
+        case 1:
+            document.getElementById("dispRowGrt").style.visibility = "visible";
+            break;
+    }
+    //drink show check
+    switch(t[tbl].course.drink.show){
+        case 0:
+            document.getElementById("dispRowDrk").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispRowDrk").style.visibility = "visible";
+            break;
+    }
+    //app show check
+    switch(t[tbl].course.app.show){
+        case 0:
+            document.getElementById("dispRowApp").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispRowApp").style.visibility = "visible";
+            break;
+    }
+    //salad show check
+    switch(t[tbl].course.salad.show){
+        case 0:
+            document.getElementById("dispRowSal").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispRowSal").style.visibility = "visible";
+            break;
+    }
+    //entree show check
+    switch(t[tbl].course.entree.show){
+        case 0:
+            document.getElementById("dispRowEnt").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispRowEnt").style.visibility = "visible";
+            break;
+    }
+    //dessert show check
+    switch(t[tbl].course.dessert.show){
+        case 0:
+            document.getElementById("dispRowDst").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispRowDst").style.visibility = "visible";
+            break;
+    }
+    //bill show check
+    switch(t[tbl].course.bill.show){
+        case 0:
+            document.getElementById("dispRowBil").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispRowBil").style.visibility = "visible";
+            break;
+    }
+    //receipt show check
+    switch(t[tbl].course.receipt.show){
+        case 0:
+            document.getElementById("dispRowRct").style.visibility = "hidden";
+            break;
+        case 1:
+            document.getElementById("dispRowRct").style.visibility = "visible";
+            break;
+    }
+
+    switch(t[tbl].occupied){
+        case "no":
+            //enable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = false;
+            }
+
+            //greet display checks
+            if (t[tbl].course.greet.orderTaken == 1){
+                t[tbl].course.greet.show = 0;
+                document.getElementById("dispG0Grt").innerHTML= "Greeted";
+                document.getElementById("dispG1Grt").innerHTML= "Greeted";
+            } else if (t[tbl].course.greet.orderTaken === 0){
+                t[tbl].course.greet.show = 1;
+                document.getElementById("dispG0Grt").innerHTML= "Greet " + (t[tbl].course.greet.needAct - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1Grt").innerHTML= "Greet " + (t[tbl].course.greet.needAct - (gTimer - t[tbl].timeStart));
+            }
+              
+            //drink display checks
+            if (t[tbl].course.drink.orderDropd == 1){
+                document.getElementById("dispG0Drk").innerHTML= t[tbl].course.drink.fullness;
+                document.getElementById("dispG1Drk").innerHTML= t[tbl].course.drink.fullness;
+            } else if (t[tbl].course.drink.orderTaken == 1){
+                document.getElementById("dispG0Drk").innerHTML= "Waiting on Drinks " + (t[tbl].course.drink.dropDue - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1Drk").innerHTML= "Waiting on Drinks " + (t[tbl].course.drink.dropDue - (gTimer - t[tbl].timeStart));
+            } else if (t[tbl].course.drink.orderTaken === 0){
+                document.getElementById("dispG0Drk").innerHTML= "Order " + (t[tbl].course.drink.needAct - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1Drk").innerHTML= "Order " + (t[tbl].course.drink.needAct - (gTimer - t[tbl].timeStart));
+            }
+
+            //app display checks
+            if (t[tbl].course.app.orderDropd == 1){
+                document.getElementById("dispG0App").innerHTML= t[tbl].course.app.fullness;
+                document.getElementById("dispG1App").innerHTML= t[tbl].course.app.fullness;
+            } else if (t[tbl].course.app.orderTaken == 1){
+                document.getElementById("dispG0App").innerHTML= "Waiting on Apps " + (t[tbl].course.app.dropDue - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1App").innerHTML= "Waiting on Apps " + (t[tbl].course.app.dropDue - (gTimer - t[tbl].timeStart));
+                if (t[tbl].course.app.makeSent == 1){
+                    document.getElementById("getApp").innerHTML= "getApp" + (t[tbl].course.app.makeDone - (gTimer - t[tbl].timeStart));
+                }
+            } else if (t[tbl].course.app.orderTaken === 0){
+                document.getElementById("dispG0App").innerHTML= "Order " + (t[tbl].course.app.needAct - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1App").innerHTML= "Order " + (t[tbl].course.app.needAct - (gTimer - t[tbl].timeStart));
+            }
+            break;
+
+        case "greet":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("dispG0Grt").innerHTML= "Greeting.. " + (t[tbl].course.greet.actDone - (gTimer - t[tbl].timeStart));
+            document.getElementById("dispG1Grt").innerHTML= "Greeting.. " + (t[tbl].course.greet.actDone - (gTimer - t[tbl].timeStart));
+            
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[tbl].course.greet.actDone == (gTimer - t[tbl].timeStart)){
+                t[tbl].occupied = "no";
+                t[tbl].course.greet.orderTaken = 1;
+                t[tbl].course.drink.show = 1;
+                t[tbl].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
+                update();
+            }
+            //other greet stuff
+            break;
+        
+        case "orderDrink":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("dispG0Drk").innerHTML= "Ordering Drinks.. " + (t[tbl].course.drink.actDone - (gTimer - t[tbl].timeStart));
+            document.getElementById("dispG1Drk").innerHTML= "Ordering Drinks.. " + (t[tbl].course.drink.actDone - (gTimer - t[tbl].timeStart));
+            
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[tbl].course.drink.actDone == (gTimer - t[tbl].timeStart)){
+                t[tbl].occupied = "no";
+                t[tbl].course.drink.orderTaken = 1;
+                t[tbl].course.drink.dropDue = (gTimer - t[tbl].timeStart) + 120;
+                t[tbl].course.app.needAct = (gTimer - t[tbl].timeStart) + 180;
+                t[tbl].course.app.show = 1;
+                //t[tbl].course.drink.show = 1; //need to prep make/send
+                //t[tbl].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
+                update();
+            }
+            //other greet stuff
+            break;
+        
+        case "orderApp":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("dispG0App").innerHTML= "Ordering Apps.. " + (t[tbl].course.app.actDone - (gTimer - t[tbl].timeStart));
+            document.getElementById("dispG1App").innerHTML= "Ordering Apps.. " + (t[tbl].course.app.actDone - (gTimer - t[tbl].timeStart));
+            
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[tbl].course.app.actDone == (gTimer - t[tbl].timeStart)){
+                t[tbl].occupied = "no";
+                t[tbl].course.app.orderTaken = 1;
+                t[tbl].course.app.dropDue = (gTimer - t[tbl].timeStart) + 300;
+                //t[tbl].course.app.needAct = (gTimer - t[tbl].timeStart) + 180;
+                //t[tbl].course.app.show = 1;
+                //t[tbl].course.drink.show = 1; //need to prep make/send
+                //t[tbl].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
+                update();
+            }
+            //other greet stuff
+            break;
+
+        case "makeDrink":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("makeDrink").innerHTML= "makeDrink" + (t[tbl].course.drink.makeDone - (gTimer - t[tbl].timeStart));
+            
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[tbl].course.drink.makeDone == (gTimer - t[tbl].timeStart)){
+                t[tbl].occupied = "no";
+                t[tbl].course.drink.makeGot = 1;
+                //t[tbl].course.drink.show = 1; //need to prep make/send
+                //t[tbl].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
+                update();
+            }
+            //other greet stuff
+            break;
+        
+        case "sendApp":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("sendApp").innerHTML= "sendApp" + (t[tbl].course.app.sendDone - (gTimer - t[tbl].timeStart));
+            
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[tbl].course.app.sendDone == (gTimer - t[tbl].timeStart)){
+                t[tbl].occupied = "no";
+                t[tbl].course.app.makeSent = 1;
+                //t[tbl].course.drink.makeGot = 1;
+                //t[tbl].course.drink.show = 1; //need to prep make/send
+                //t[tbl].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
+                update();
+            }
+            //other greet stuff
+            break;
+    }
+}
+
+function newTable(){
+    var tbl = 0;//player.tableCount++;
+    t[tbl].timeStart = gTimer;
+    t[tbl].g[0].drink = 0;
+    t[tbl].g[1].drink = 0;
+    t[tbl].g[0].happy = getRnd(-1, 5);
+    t[tbl].g[1].happy = getRnd(-1, 5);
+    t[tbl].g[0].speed = getRnd(1, 4);
+    t[tbl].g[1].speed = getRnd(1, 4);    
+    t[tbl].g[0].needy = getRnd(1, 11);
+    t[tbl].g[1].needy = getRnd(1, 11);
+    t[tbl].g[0].tipAmt = getRnd(5, 26);
+    t[tbl].g[1].tipAmt = getRnd(5, 26);
+    t[tbl].g[0].debt = 0;
+    t[tbl].g[1].debt = 0;
+    t[tbl].course.greet.show = 1;
+    t[tbl].course.greet.needAct = (gTimer - t[tbl].timeStart) + 60;
+}
+function order(k){
+    var tbl = 0;
+    document.getElementById("test").innerHTML= "order";
+    document.getElementById("test2").innerHTML= k;
+    switch(k){
+        case 'greet':
+            t[tbl].course.greet.actDone = (gTimer - t[tbl].timeStart) + 5;
+            t[tbl].occupied = "greet";
+            update();
+            break;
+        case 'drink':
+            t[tbl].course.drink.actDone = (gTimer - t[tbl].timeStart) + 30;
+            t[tbl].occupied = "orderDrink";
+            update();
+            break;
+        case 'app':
+            t[tbl].course.app.actDone = (gTimer - t[tbl].timeStart) + 30;
+            t[tbl].occupied = "orderApp";
+            update();
+            break;
+    }
+    //callers
+        //greet
+        //drink
+        //app
+        //entree
+        //dessert
+    //tasks
+        //set flag orderTaken
+        //set flag shown
+        //set timer needAct
+        //set timer actDone
+        //set timer dropDue
+    //future
+        //cost
+}
+function make(k){
+    var tbl = 0;
+    document.getElementById("test").innerHTML= "make";
+    document.getElementById("test2").innerHTML= k;
+    switch(k){
+        case 'drink':
+            t[tbl].course.drink.makeDone = (gTimer - t[tbl].timeStart) + 30;
+            t[tbl].occupied = "makeDrink";
+            update();
+            break;
+    }
+    //callers
+        //drink
+        //salad
+        //bill
+        //receipt
+    //tasks
+        //set timer makeDone
+        //set flag shown
+}
+function send(k){
+    var tbl = 0;
+    document.getElementById("test").innerHTML= "send";
+    document.getElementById("test2").innerHTML= k;
+    switch(k){
+        case 'app':
+            t[tbl].course.app.makeDone = (gTimer - t[tbl].timeStart) + 180;
+            t[tbl].course.app.sendDone = (gTimer - t[tbl].timeStart) + 15;
+            t[tbl].occupied = "sendApp";
+            update();
+            break;
+    }
+    //callers
+        //app
+        //entree
+        //dessert
+    //tasks
+        //set flag makeSent
+        //set flag shown
+        //set timer makeDone
+}
+function get(k){
+    var tbl = 0;
+    document.getElementById("test").innerHTML= "get";
+    document.getElementById("test2").innerHTML= k;
+    switch(k){
+        case 'app':
+            if (t[tbl].course.app.makeDone <= (gTimer - t[tbl].timeStart)){
+                t[tbl].course.app.makeGot = 1;
+                document.getElementById("getApp").innerHTML= "getApp";
+            }
+            update();
+            break;
+    }
+    //callers
+        //app
+        //entree
+        //dessert
+    //tasks
+        //set flag makeGot
+        //set flag shown
+}
+function drop(k){
+    var tbl = 0;
+    document.getElementById("test").innerHTML= "drop";
+    document.getElementById("test2").innerHTML= k;
+    switch(k){
+        case 'drink':
+            if(t[tbl].course.drink.makeGot == 1){
+                t[tbl].course.drink.orderDropd = 1;
+                t[tbl].course.drink.fullness = 100;
+                document.getElementById("makeDrink").innerHTML= "makeDrink"
+            }
+            update();
+            break;
+        case 'app':
+            if(t[tbl].course.app.makeGot == 1){
+                t[tbl].course.app.orderDropd = 1;
+                t[tbl].course.app.fullness = 100;
+            }
+            update();
+            break;
+    }
+    //callers
+        //drink
+        //app
+        //salad
+        //entree
+        //dessert
+        //bill
+        //receipt
+    //tasks
+        //set flag orderDropd
+        //set flag shown
+        //set timer fullness
+    //future
+        //set bill dropDue
+}
+function bus(k){
+    document.getElementById("test").innerHTML= "bus";
+    document.getElementById("test2").innerHTML= k;
+    //callers
+        //drink
+        //app
+        //salad
+        //entree
+        //dessert
+        //bill
+        //receipt
+    //tasks
+        //set flag shown
+    //future 
+        //set receipt dropDue
+        //clear dirty
+}
+function repeater(k){
+    //checks v table time
+        //== makeDone then makeReady = 1
+}
 
 function getRnd(min, max) {
     //returns int; min (included) and max (excluded)
     return Math.floor(Math.random() * (max - min) ) + min;
 }
 
-function updater(k){
-    //refreshes shitty matrix. to be replaced when optimizing for css
-    
-    
- 
-    document.getElementById("t0time").innerHTML= "Table Time: " + 0;
-    document.getElementById("t0g0status").innerHTML= "Guest 1: Drink = " + t0.guest[0].drink + "% | Happiness = " + t0.guest[0].happy;
-    document.getElementById("t0g1status").innerHTML= "Guest 1: Drink = " + t0.guest[1].drink + "% | Happiness = " + t0.guest[1].happy;
-    document.getElementById("t0status").innerHTML= "Status: " + t0.statuses[t0.status] + ": " + t0.timer[t0.displayTimer];
-    document.getElementById("playerDisplay").innerHTML= player.display;
-    document.getElementById("giveApps").innerHTML= "giveApps" + t0.timer[7];
-}
-
-//function timerOn(k, l = -1){ //the time to rule all timers. passing which timer and up or down. default is down.
-//    t0.timer[k] = t0.timer[k] + l;
-//    updater();
-//    //need to do something better with negative output
-//}
-
-
-function newTable(){
-    tbl == player.tableCount++;
-    document.getElementById("newTable").disabled = true;
-    t[tbl].timerVar = setInterval(function(){t[tbl].timer++;}, 1000);
-    t[tbl].flag[0] = 1;
-    t[tbl].guest[0].drink = 0;
-    t[tbl].guest[1].drink = 0;
-    t[tbl].guest[0].happy = getRnd(-1, 5); //see t0 declaration
-    t[tbl].guest[1].happy = getRnd(-1, 5);
-    t[tbl].guest[0].thirst = getRnd(1, 4);
-    t[tbl].guest[1].thirst = getRnd(1, 4);    
-    t[tbl].guest[0].needy = getRnd(1, 11);
-    t[tbl].guest[1].needy = getRnd(1, 11);
-    t[tbl].guest[0].tipper = getRnd(5, 26);
-    t[tbl].guest[1].tipper = getRnd(5, 26);
-    t[tbl].payor = getRnd(0, 2);
-}
-
-//function newTable(){
-//    document.getElementById("newTable").style.display="none";
-//    t0.timerVar[0] = setInterval(timerOn.bind(null, 0 , 1), 1000); 
-//    t0.status = 0;
-//    t0.timer[1] = 30; //timer start value, probably should be passed to timer instead of declared here.
-//    t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
-//    t0.timer[2] = 180; //app timer, runs in background for a while
-//    t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
-//    t0.displayTimer = 1; //this should also maybe be controlled in a function (timerOn?)
-//    t0.guest[0].drink = 0; //fine for two tops. not for 10 tops. loops for all this eventually.
-//    t0.guest[1].drink = 0;
-//    t0.guest[0].happy = getRnd(-1, 5); //see t0 declaration
-//    t0.guest[1].happy = getRnd(-1, 5);
-//    t0.guest[0].thirst = getRnd(1, 4);
-//    t0.guest[1].thirst = getRnd(1, 4);    
-//    t0.guest[0].needy = getRnd(1, 11);
-//    t0.guest[1].needy = getRnd(1, 11);
-//    t0.guest[0].tipper = getRnd(5, 26);
-//    t0.guest[1].tipper = getRnd(5, 26);
-//    t0.payor = getRnd(0, 2);
-//    player.display = "you've been sat";
-//    document.getElementById("t0title").innerHTML= "Table 0";
-//    document.getElementById("greet").style.display="inline";
-//    document.getElementById("newTable").disabled = true;
-//    updater(); 
-//}
-
-function greetTable(){
-    clearInterval(t0.timerVar[1]);
-    if (t0.timer[0] < 5) { //random chance to be mad you are to quick. yes that happens.
-        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
-        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
-        player.display = "they're still playing musical chairs. but hi.";
-    } else { //chance of credit just for showing up.
-        t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
-        t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
-        player.display = "yada yada yada";
-    }
-    document.getElementById("greet").style.display="none";
-    document.getElementById("orderDrinks").style.display="inline";
-    document.getElementById("orderDrinks").disabled = true; //lock btn while greet is happening.
-    t0.status = 2;
-    t0.timer[1] = 5; //timer for actual greet
-    t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
-    setTimeout(function(){ //triggers when greet is over. this will break when i add power ups
-        clearInterval(t0.timerVar[1]);
-        document.getElementById("orderDrinks").disabled = false;
-        t0.status = 3;
-        t0.timer[1] = 90; //timer for next task (order drinks)
-        t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
-        player.display = "greeted. time for a drink order";
-        updater();
-    }, 5000);
-    updater();
-}
-
-function orderDrinks(){ //a lot of repeat code here on out. need some sort of visit general function to updates statuses and timers. sounds complex.
-    clearInterval(t0.timerVar[1]);
-    if (t0.timer[0] < 15) {
-        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
-        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
-        player.display = "they literally just sat down, waters around";
-    } else {
-        t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
-        t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
-        player.display = "2 diets probably";
-    }
-    document.getElementById("orderDrinks").style.display="none";
-    document.getElementById("makeDrinks").style.display="inline";
-    document.getElementById("makeDrinks").disabled = true;
-    document.getElementById("giveDrinks").style.display="inline";
-    document.getElementById("giveDrinks").disabled = true;
-    document.getElementById("orderApps").style.display="inline";
-    document.getElementById("orderApps").disabled = true;
-    t0.status = 4;
-    t0.timer[1] = 30;
-    t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
-    setTimeout(function(){
-        clearInterval(t0.timerVar[1]);
-        document.getElementById("makeDrinks").disabled = false;
-        document.getElementById("orderApps").disabled = false;
-        t0.status = 6;
-        t0.timer[1] = 120;
-        t0.timerVar[1] = setInterval(timerOn.bind(null, 1), 1000);
-        player.display = "got drinks, go make em";
-        updater();
-    }, 30000);
-    updater();
-}
-
-function makeDrinks(){
-    document.getElementById("makeDrinks").style.display="none";
-    document.getElementById("orderApps").disabled = true;
-    player.display = "scooping ice";
-    setTimeout(function(){
-        player.display = "filling first cup";
-    }, 10000);
-    setTimeout(function(){
-        player.display = "filling second cup";
-    }, 20000);    
-    setTimeout(function(){
-        player.display = "drink em if u got em, wait. no. these are for the table.";
-        document.getElementById("giveDrinks").disabled = false;
-    }, 30000);
-    updater();
-}
-
-function giveDrinks(){
-    clearInterval(t0.timerVar[1]);
-    document.getElementById("giveDrinks").style.display="none";
-    document.getElementById("orderApps").disabled = false;
-    t0.guest[0].drink = 100;
-    t0.guest[1].drink = 100;
-    t0.guest[0].happy = t0.guest[0].happy + 1; //need more of these
-    t0.guest[1].happy = t0.guest[1].happy + 1;
-    player.display = "here's your drunks";
-    t0.status = 7; //check if apps ordered
-    t0.displayTimer = 2; //stops using drink timer in display. uses already running app timer
-    updater();
-}
-
-function orderApps(){
-    clearInterval(t0.timerVar[2]);
-    if (t0.timer[2] > 135) {
-        t0.guest[0].happy = Math.round(t0.guest[0].happy - Math.random());
-        t0.guest[1].happy = Math.round(t0.guest[1].happy - Math.random());
-        player.display = "if this weren't a game, they wouldnt get apps";
-    } else {
-        t0.guest[0].happy = Math.round(t0.guest[0].happy + Math.random());
-        t0.guest[1].happy = Math.round(t0.guest[1].happy + Math.random());
-        player.display = "something fried and something mushroom";
-    }
-    document.getElementById("makeDrinks").disabled = true;
-    document.getElementById("orderApps").style.display="none";
-    document.getElementById("sendApps").style.display="inline";
-    document.getElementById("sendApps").disabled = true;
-    document.getElementById("giveApps").style.display="inline";
-    document.getElementById("giveApps").disabled = true;
-    document.getElementById("orderEntrees").style.display="inline";
-    document.getElementById("orderEntrees").disabled = true;
-    t0.status = 8;
-    t0.displayTimer = 2;
-    t0.timer[2] = 30;
-    t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
-    setTimeout(function(){
-        clearInterval(t0.timerVar[2]);
-        document.getElementById("sendApps").disabled = false;
-        document.getElementById("orderEntrees").disabled = false;
-        document.getElementById("makeDrinks").disabled = false;
-        t0.status = 10;
-        t0.timer[2] = 300;
-        t0.timerVar[2] = setInterval(timerOn.bind(null, 2), 1000);
-        player.display = "apps ordered, send em to the kitchen";
-        updater();
-    }, 30000);
-    updater();
-}
-
-function sendApps(){
-    document.getElementById("sendApps").style.display="none";
-    document.getElementById("orderEntrees").disabled = true;
-    document.getElementById("makeDrinks").disabled = true;
-    player.display = "punching in the apps..";
-    setTimeout(function(){
-        player.display = "...nachos...fried shrimp....";
-    }, 10000);
-    setTimeout(function(){
-        player.display = "alright kitchen, dont screw it up";
-        document.getElementById("orderEntrees").disabled = false;
-        document.getElementById("makeDrinks").disabled = false;
-        t0.timer[7] = 180;
-        t0.timerVar[7] = setInterval(timerOn.bind(null, 7), 1000);
-        setTimeout(function(){
-            document.getElementById("giveApps").disabled = false;
-        }, 180000);
-    }, 20000);
-    updater();
-}
-
-function giveApps(){
-    document.getElementById("giveApps").style.display="none";
-    player.display = "wow u beat the game. whew.";
-}
-
-function orderEntrees(){
-    document.getElementById("orderEntrees").style.display="none";
-    player.display = "to be coded...";
-}
-
 function debug(){
-    document.getElementById("debugOut").innerHTML= t0.timer[2];
+    var tbl = 0;
+    document.getElementById("test4").innerHTML= gTimer;
+    document.getElementById("test5").innerHTML= t[tbl].course.drink.actDone;
+    document.getElementById("test6").innerHTML= t[tbl].course.app.makeDone;
 }
 
-//i think my inline comments are probably bad practice. /shrug
-
+function cheat(){
+    gTimer++;
+}
 </script>
- 
 </body>
 </html>
