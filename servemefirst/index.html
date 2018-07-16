@@ -428,7 +428,7 @@ function update(){
             if (t[tbl].course.entree.orderDropd == 1){
                 document.getElementById("dispG0Ent").innerHTML= t[tbl].course.entree.fullness;
                 document.getElementById("dispG1Ent").innerHTML= t[tbl].course.entree.fullness;
-                t[tbl].course.app.show = 0
+                t[tbl].course.app.show = 0;
                 t[tbl].course.salad.show = 0;
             } else if (t[tbl].course.entree.orderTaken == 1){
                 document.getElementById("dispG0Ent").innerHTML= "Waiting on Entrees " + (t[tbl].course.entree.dropDue - (gTimer - t[tbl].timeStart));
