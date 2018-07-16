@@ -124,16 +124,13 @@ blake.r.peterson@gmail.com>
     <button id="busReceipt" type="button" onclick="bus('receipt')">busReceipt</button>
 </p>
 </div>
-<!--
+
+<div id = "dev">
 <p id = "test">test</p>
 <p id = "test2">test2</p>
-<p id = "test3">test3</p>
-<p id = "test4">test4</p>
-<p id = "test5">test5</p>
-<p id = "test6">test6</p>
 <button id="debug" type="button" onclick="debug()">debug</button>
 <button id="cheat" type="button" onclick="cheat()">cheat</button>
--->
+</div>
     
 <script>
 var gTimer = 0;
@@ -145,9 +142,9 @@ window.onload = function(){
     gTimer = 0;
     gTimerVar = setInterval(function(){
         gTimer++;
-        document.getElementById("test3").innerHTML= gTimer;
         update();
     }, 1000);
+    document.getElementById("dev").style.visibility = 'hidden';
 };
 
 var t = [
@@ -734,9 +731,6 @@ function getRnd(min, max) {
 
 function debug(){
     var tbl = 0;
-    document.getElementById("test4").innerHTML= gTimer;
-    document.getElementById("test5").innerHTML= t[tbl].course.drink.actDone;
-    document.getElementById("test6").innerHTML= t[tbl].course.app.makeDone;
 }
 
 function cheat(){
