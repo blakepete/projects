@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 2.0.1</title>
+<title>ServeMeFirst Alpha 2.1.0</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -129,10 +129,8 @@ blake.r.peterson@gmail.com>
 <p id = "test4">test4</p>
 <p id = "test5">test5</p>
 <p id = "test6">test6</p>
-<p id = "test7">test7</p>
-<p id = "test8">test8</p>
-<p id = "test9">test9</p>
 <button id="debug" type="button" onclick="debug()">debug</button>
+<button id="cheat" type="button" onclick="cheat()">cheat</button>
     
 <script>
 var gTimer = 0;
@@ -384,10 +382,29 @@ function update(){
                 document.getElementById("dispG1Grt").innerHTML= "Greeted";
             } else if (t[0].course.greet.orderTaken == 0){
                 t[0].course.greet.show = 1;
-                document.getElementById("dispG0Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
-                document.getElementById("dispG1Grt").innerHTML= "Need " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG0Grt").innerHTML= "Greet " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1Grt").innerHTML= "Greet " + (t[0].course.greet.needAct - (gTimer - t[tbl].timeStart));
             }
-           
+
+            if (t[0].course.app.orderTaken == 1){
+                document.getElementById("dispG0App").innerHTML= "Waiting on Apps";
+                document.getElementById("dispG1App").innerHTML= "Waiting on Apps";
+            } else if (t[0].course.app.orderTaken == 0){
+                document.getElementById("dispG0App").innerHTML= "Order " + (t[0].course.app.needAct - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1App").innerHTML= "Order " + (t[0].course.app.needAct - (gTimer - t[tbl].timeStart));
+            }
+            
+            if (t[0].course.drink.orderDropd == 1){
+                document.getElementById("dispG0Drk").innerHTML= t[0].course.drink.fullness;
+                document.getElementById("dispG1Drk").innerHTML= t[0].course.drink.fullness;
+            } else if (t[0].course.drink.orderTaken == 1){
+                    document.getElementById("dispG0Drk").innerHTML= "Waiting on Drinks " + (t[0].course.drink.dropDue - (gTimer - t[tbl].timeStart));
+                    document.getElementById("dispG1Drk").innerHTML= "Waiting on Drinks " + (t[0].course.drink.dropDue - (gTimer - t[tbl].timeStart));
+                } else if (t[0].course.drink.orderTaken == 0){
+                    document.getElementById("dispG0Drk").innerHTML= "Order " + (t[0].course.drink.needAct - (gTimer - t[tbl].timeStart));
+                    document.getElementById("dispG1Drk").innerHTML= "Order " + (t[0].course.drink.needAct - (gTimer - t[tbl].timeStart));
+                }
+
             break;
 
         case "greet":
@@ -407,17 +424,68 @@ function update(){
             if (t[0].course.greet.actDone == (gTimer - t[tbl].timeStart)){
                 t[0].occupied = "no";
                 t[0].course.greet.orderTaken = 1;
+                t[0].course.drink.show = 1;
+                t[0].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
                 update();
             }
             //other greet stuff
             break;
+        
+        case "orderDrink":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("dispG0Drk").innerHTML= "Ordering Drinks.. " + (t[0].course.drink.actDone - (gTimer - t[tbl].timeStart));
+            document.getElementById("dispG1Drk").innerHTML= "Ordering Drinks.. " + (t[0].course.drink.actDone - (gTimer - t[tbl].timeStart));
+            
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[0].course.drink.actDone == (gTimer - t[tbl].timeStart)){
+                t[0].occupied = "no";
+                t[0].course.drink.orderTaken = 1;
+                t[0].course.drink.dropDue = (gTimer - t[tbl].timeStart) + 120;
+                t[0].course.app.needAct = (gTimer - t[tbl].timeStart) + 180;
+                t[0].course.app.show = 1;
+                //t[0].course.drink.show = 1; //need to prep make/send
+                //t[0].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
+                update();
+            }
+            //other greet stuff
+            break;
+        
+        case "makeDrink":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("makeDrink").innerHTML= "makeDrink" + (t[0].course.drink.makeDone - (gTimer - t[tbl].timeStart));
+            
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[0].course.drink.makeDone == (gTimer - t[tbl].timeStart)){
+                t[0].occupied = "no";
+                t[0].course.drink.makeGot = 1;
+                //t[0].course.drink.show = 1; //need to prep make/send
+                //t[0].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
+                update();
+            }
+            //other greet stuff
+            break;
+            
+            
     }
 }
 
-function debug(){
-    document.getElementById("test4").innerHTML= gTimer;
-    document.getElementById("test5").innerHTML= t[0].course.greet.actDone;
-}
+
 
 function newTable(){
     var tbl = 0;//player.tableCount++;
@@ -448,9 +516,14 @@ function order(k){
             t[tbl].course.greet.actDone = (gTimer - t[tbl].timeStart) + 5;
             t[tbl].occupied = "greet";
             update();
+            break;
+        case 'drink':
+            t[tbl].course.drink.actDone = (gTimer - t[tbl].timeStart) + 30;
+            t[tbl].occupied = "orderDrink";
+            update();
+            break;
     }
     
-
     //callers
         //greet
         //drink
@@ -467,8 +540,16 @@ function order(k){
         //cost
 }
 function make(k){
+    var tbl = 0;
     document.getElementById("test").innerHTML= "make";
     document.getElementById("test2").innerHTML= k;
+    switch(k){
+        case 'drink':
+            t[tbl].course.drink.makeDone = (gTimer - t[tbl].timeStart) + 30;
+            t[tbl].occupied = "makeDrink";
+            update();
+            break;
+    }
     //callers
         //drink
         //salad
@@ -502,8 +583,16 @@ function get(k){
         //set flag shown
 }
 function drop(k){
+    var tbl = 0;
     document.getElementById("test").innerHTML= "drop";
     document.getElementById("test2").innerHTML= k;
+    switch(k){
+        case 'drink':
+            t[0].course.drink.orderDropd = 1;
+            t[0].course.drink.fullness = 100;
+            update();
+            break;
+    }
     //callers
         //drink
         //app
@@ -546,6 +635,15 @@ function getRnd(min, max) {
     return Math.floor(Math.random() * (max - min) ) + min;
 }
 
+function debug(){
+    document.getElementById("test4").innerHTML= gTimer;
+    document.getElementById("test5").innerHTML= t[0].course.drink.actDone;
+    document.getElementById("test6").innerHTML= t[0].course.drink.makeGot;
+}
+
+function cheat(){
+    gTimer++;
+}
 </script>
 </body>
 </html>
