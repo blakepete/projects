@@ -88,7 +88,7 @@ blake.r.peterson@gmail.com>
     <button id="orderDrink" type="button" onclick="order('drink')">orderDrink</button>
     <button id="makeDrink" type="button" onclick="make('drink')">makeDrink</button>
     <button id="dropDrink" type="button" onclick="drop('drink')">dropDrink</button>
-    <!--button id="busDrink" type="button" onclick="bus('drink')">busDrink</button-->
+    <button id="busDrink" type="button" onclick="bus('drink')">busDrink</button>
 </div>
 </p>
 <p>
@@ -97,14 +97,14 @@ blake.r.peterson@gmail.com>
     <button id="sendApp" type="button" onclick="send('app')">sendApp</button>
     <button id="getApp" type="button" onclick="get('app')">getApp</button>
     <button id="dropApp" type="button" onclick="drop('app')">dropApp</button>
-    <!--button id="busApp" type="button" onclick="bus('app')">busApp</button!-->
+    <button id="busApp" type="button" onclick="bus('app')">busApp</button>
 </div>
 </p>
 <p>
     <div id="saladButtons">
     <button id="makeSalad" type="button" onclick="make('salad')">makeSalad</button>
     <button id="dropSalad" type="button" onclick="drop('salad')">dropSalad</button>
-    <!--button id="busSalad" type="button" onclick="bus('salad')">busSalad</button!-->
+    <button id="busSalad" type="button" onclick="bus('salad')">busSalad</button>
 </div>
 </p>
 <p>
@@ -113,7 +113,7 @@ blake.r.peterson@gmail.com>
     <button id="sendEntree" type="button" onclick="send('entree')">sendEntree</button>
     <button id="getEntree" type="button" onclick="get('entree')">getEntree</button>
     <button id="dropEntree" type="button" onclick="drop('entree')">dropEntree</button>
-    <!--button id="busEntree" type="button" onclick="bus('entree')">busEntree</button!-->
+    <button id="busEntree" type="button" onclick="bus('entree')">busEntree</button>
 </div>
 </p>
 <p>
@@ -122,14 +122,14 @@ blake.r.peterson@gmail.com>
     <button id="sendDessert" type="button" onclick="send('dessert')">sendDessert</button>
     <button id="getDessert" type="button" onclick="get('dessert')">getDessert</button>
     <button id="dropDessert" type="button" onclick="drop('dessert')">dropDessert</button>
-    <!--button id="busDessert" type="button" onclick="bus('dessert')">busDessert</button!-->
+    <button id="busDessert" type="button" onclick="bus('dessert')">busDessert</button>
 </div>
 </p>
 <p>
 <div id="billButtons">
     <button id="makeBill" type="button" onclick="make('bill')">makeBill</button>
     <button id="dropBill" type="button" onclick="drop('bill')">dropBill</button>
-    <!--button id="busBill" type="button" onclick="bus('bill')">busBill</button!-->
+    <button id="busBill" type="button" onclick="bus('bill')">busBill</button>
 </div>
 </p>
 <p>
@@ -143,12 +143,19 @@ blake.r.peterson@gmail.com>
 <div id = "dev">
 <p id = "test">test</p>
 <p id = "test2">test2</p>
+<p id = "test3">test3</p>
+<p id = "test4">test4</p>
+<p id = "test5">test5</p>
+<p id = "test6">test6</p>
 <button id="debug" type="button" onclick="debug()">debug</button>
 </div>
 <button id="cheat1" type="button" onclick="cheat1()">cheat1</button>
+<button id="cheat10" type="button" onclick="cheat10()">cheat10</button>
+<button id="cheat20" type="button" onclick="cheat20()">cheat20</button>
 <button id="cheat25" type="button" onclick="cheat25()">cheat25</button>
 <button id="cheat50" type="button" onclick="cheat50()">cheat50</button>
-<p>dont accidentally skip 0 with cheats, things will break</p>
+<button id="cheat100" type="button" onclick="cheat100()">cheat100</button>
+<p>dont skip 0 with cheats, things will break</p>
 
     
 <script>
@@ -171,7 +178,7 @@ window.onload = function(){
         gTimer++;
         update();
     }, 1000);
-    document.getElementById("dev").style.display = "none"; //un comment for show mode
+    document.getElementById("dev").style.display = "none"; //comment for dev mode
 };
 
 var t = [
@@ -221,8 +228,9 @@ var t = [
                 makeReady: 0,
                 makeGot: 0,
                 orderDropd: 0,
-                fullness: 0,
-                dirty: 0
+                emptyDone: 0,
+                dirty: 0,
+                bus:0
             },
             salad: {
                 show: 0,
@@ -303,14 +311,29 @@ var t = [
         g: [
             { //guest 0
                 happy: 0,
-                speed: 0,
+                thirst: 0,
+                hunger: 0,
+                drinkEmpty: 0,
+                saladEmpty: 0,
+                entreeEmpty: 0,
+                dessertEmpty: 0,
+                saladBus: 0,
+                entreeBus: 0,
+                dessertBus: 0,
                 needy: 0,
                 debt: 0,
                 tipAmt: 0,
             },
             { //guest 1
-                happy: 0,
-                speed: 0,
+                thirst: 0,
+                hunger: 0,
+                drinkEmpty: 0,
+                saladEmpty: 0,
+                entreeEmpty: 0,
+                dessertEmpty: 0,
+                saladBus: 0,
+                entreeBus: 0,
+                dessertBus: 0,
                 needy: 0,
                 debt: 0,
                 tipAmt: 0,
@@ -437,11 +460,12 @@ function update(){
                 document.getElementById("dispG0Grt").innerHTML= "Greet " + (t[tbl].course.greet.needAct - (gTimer - t[tbl].timeStart));
                 document.getElementById("dispG1Grt").innerHTML= "Greet " + (t[tbl].course.greet.needAct - (gTimer - t[tbl].timeStart));
             }
-              
+        
             //drink display checks
             if (t[tbl].course.drink.orderDropd == 1){
-                document.getElementById("dispG0Drk").innerHTML= t[tbl].course.drink.fullness;
-                document.getElementById("dispG1Drk").innerHTML= t[tbl].course.drink.fullness;
+                //these should really have a "100 - x" inverse added but somehow it works without it /shrug
+                document.getElementById("dispG0Drk").innerHTML= Math.round((t[tbl].g[0].drinkEmpty - (gTimer - t[tbl].timeStart)) / (27 * (1 / t[tbl].g[0].thirst)));
+                document.getElementById("dispG1Drk").innerHTML= Math.round((t[tbl].g[1].drinkEmpty - (gTimer - t[tbl].timeStart)) / (27 * (1 / t[tbl].g[1].thirst)));
             } else if (t[tbl].course.drink.orderTaken == 1){
                 document.getElementById("dispG0Drk").innerHTML= "Waiting on Drinks " + (t[tbl].course.drink.dropDue - (gTimer - t[tbl].timeStart));
                 document.getElementById("dispG1Drk").innerHTML= "Waiting on Drinks " + (t[tbl].course.drink.dropDue - (gTimer - t[tbl].timeStart));
@@ -452,8 +476,22 @@ function update(){
 
             //app display checks
             if (t[tbl].course.app.orderDropd == 1){
-                document.getElementById("dispG0App").innerHTML= t[tbl].course.app.fullness;
-                document.getElementById("dispG1App").innerHTML= t[tbl].course.app.fullness;
+                if (t[tbl].course.app.bus === 0){
+                    document.getElementById("dispG0App").innerHTML= Math.round((t[tbl].course.app.emptyDone - (gTimer - t[tbl].timeStart)) / (6 * (1 / ((t[tbl].g[0].hunger + t[tbl].g[1].hunger)/2))));
+                    if (t[tbl].course.app.emptyDone <= (gTimer - t[tbl].timeStart)){
+                        document.getElementById("busApp").style.display = "inline";
+                    }
+                } else {
+                    document.getElementById("dispG0App").innerHTML= "";
+                }
+                if (t[tbl].course.app.bus === 0){
+                    document.getElementById("dispG1App").innerHTML= Math.round((t[tbl].course.app.emptyDone - (gTimer - t[tbl].timeStart)) / (6 * (1 / ((t[tbl].g[0].hunger + t[tbl].g[1].hunger)/2))));
+                    if (t[tbl].course.app.emptyDone <= (gTimer - t[tbl].timeStart)){
+                        document.getElementById("busApp").style.display = "inline";
+                    }
+                } else {
+                    document.getElementById("dispG1App").innerHTML= "";
+                }
             } else if (t[tbl].course.app.orderTaken == 1){
                 document.getElementById("dispG0App").innerHTML= "Waiting on Apps " + (t[tbl].course.app.dropDue - (gTimer - t[tbl].timeStart));
                 document.getElementById("dispG1App").innerHTML= "Waiting on Apps " + (t[tbl].course.app.dropDue - (gTimer - t[tbl].timeStart));
@@ -473,8 +511,8 @@ function update(){
 
             //entree display checks
             if (t[tbl].course.entree.orderDropd == 1){
-                document.getElementById("dispG0Ent").innerHTML= t[tbl].course.entree.fullness;
-                document.getElementById("dispG1Ent").innerHTML= t[tbl].course.entree.fullness;
+                document.getElementById("dispG0Ent").innerHTML= Math.round((t[tbl].g[0].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[0].hunger)));
+                document.getElementById("dispG1Ent").innerHTML= Math.round((t[tbl].g[1].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[1].hunger)));
                 t[tbl].course.app.show = 0;
                 t[tbl].course.salad.show = 0;
             } else if (t[tbl].course.entree.orderTaken == 1){
@@ -496,8 +534,22 @@ function update(){
 
             //salad display checks
             if (t[tbl].course.salad.orderDropd == 1){
-                document.getElementById("dispG0Sal").innerHTML= t[tbl].course.salad.fullness;
-                document.getElementById("dispG1Sal").innerHTML= t[tbl].course.salad.fullness;
+                if (t[tbl].g[0].saladBus === 0){
+                    document.getElementById("dispG0Sal").innerHTML= Math.round((t[tbl].g[0].saladEmpty - (gTimer - t[tbl].timeStart)) / (4 * (1 / t[tbl].g[0].hunger)));
+                    if (t[tbl].g[0].saladEmpty <= (gTimer - t[tbl].timeStart)){
+                        document.getElementById("busSalad").style.display = "inline";
+                    }
+                } else {
+                    document.getElementById("dispG0Sal").innerHTML= "";
+                }
+                if (t[tbl].g[1].saladBus === 0){
+                    document.getElementById("dispG1Sal").innerHTML= Math.round((t[tbl].g[1].saladEmpty - (gTimer - t[tbl].timeStart)) / (4 * (1 / t[tbl].g[1].hunger)));
+                    if (t[tbl].g[1].saladEmpty <= (gTimer - t[tbl].timeStart)){
+                        document.getElementById("busSalad").style.display = "inline";
+                    }
+                } else {
+                    document.getElementById("dispG1Sal").innerHTML= "";
+                }
             } else if (t[tbl].course.salad.orderTaken == 1){
                 document.getElementById("dispG0Sal").innerHTML= "Waiting on Salads " + (t[tbl].course.salad.dropDue - (gTimer - t[tbl].timeStart));
                 document.getElementById("dispG1Sal").innerHTML= "Waiting on Salads " + (t[tbl].course.salad.dropDue - (gTimer - t[tbl].timeStart));
@@ -738,8 +790,10 @@ function newTable(){
     t[tbl].g[1].drink = 0;
     t[tbl].g[0].happy = getRnd(-1, 5);
     t[tbl].g[1].happy = getRnd(-1, 5);
-    t[tbl].g[0].speed = getRnd(1, 4);
-    t[tbl].g[1].speed = getRnd(1, 4);    
+    t[tbl].g[0].thirst = getRnd(1, 5);
+    t[tbl].g[1].thirst = getRnd(1, 5); 
+    t[tbl].g[0].hunger = getRnd(1, 5);
+    t[tbl].g[1].hunger = getRnd(1, 5);    
     t[tbl].g[0].needy = getRnd(1, 11);
     t[tbl].g[1].needy = getRnd(1, 11);
     t[tbl].g[0].tipAmt = getRnd(5, 26);
@@ -750,6 +804,10 @@ function newTable(){
     t[tbl].course.greet.needAct = (gTimer - t[tbl].timeStart) + 60;
     document.getElementById("orderGreet").style.display = "inline";
 }
+
+
+
+
 function order(k){
     var tbl = 0;
     document.getElementById("test").innerHTML= "order";
@@ -853,7 +911,8 @@ function drop(k){
         case 'drink':
             if(t[tbl].course.drink.makeGot == 1){
                 t[tbl].course.drink.orderDropd = 1;
-                t[tbl].course.drink.fullness = 100;
+                t[tbl].g[0].drinkEmpty = (gTimer - t[tbl].timeStart) + (2700 * (1 / t[tbl].g[0].thirst));
+                t[tbl].g[1].drinkEmpty = (gTimer - t[tbl].timeStart) + (2700 * (1 / t[tbl].g[1].thirst));
                 document.getElementById("makeDrink").innerHTML= "makeDrink";
                 document.getElementById("dropDrink").style.display = "none";
                 document.getElementById("makeDrink").style.display = "inline";
@@ -863,7 +922,7 @@ function drop(k){
         case 'app':
             if(t[tbl].course.app.makeGot == 1){
                 t[tbl].course.app.orderDropd = 1;
-                t[tbl].course.app.fullness = 100;
+                t[tbl].course.app.emptyDone = (gTimer - t[tbl].timeStart) + (600 * (1 / ((t[tbl].g[0].hunger + t[tbl].g[1].hunger)/2)));
                 t[tbl].course.salad.show = 1;
                 document.getElementById("dispG0Sal").innerHTML= "Order Entrees";
                 document.getElementById("dispG1Sal").innerHTML= "Order Entrees";
@@ -877,21 +936,23 @@ function drop(k){
         case 'salad':
             if(t[tbl].course.salad.makeGot == 1){
                 t[tbl].course.salad.orderDropd = 1;
-                t[tbl].course.salad.fullness = 100;
+                t[tbl].g[0].saladEmpty = (gTimer - t[tbl].timeStart) + (400 * (1 / t[tbl].g[0].hunger));
+                t[tbl].g[1].saladEmpty = (gTimer - t[tbl].timeStart) + (400 * (1 / t[tbl].g[1].hunger));
                 document.getElementById("makeSalad").innerHTML= "makeSalad";
-                document.getElementById("dropSalad").style.visibility = 'hidden';
-                document.getElementById("makeSalad").style.visibility = 'hidden';
+                document.getElementById("dropSalad").style.display = "none";
+                document.getElementById("makeSalad").style.display = "none";
             }
             update();
             break;
         case 'entree':
             if(t[tbl].course.entree.makeGot == 1){
                 t[tbl].course.entree.orderDropd = 1;
-                t[tbl].course.entree.fullness = 100;
+                t[tbl].g[0].entreeEmpty = (gTimer - t[tbl].timeStart) + (1800 * (1 / t[tbl].g[0].hunger));
+                t[tbl].g[1].entreeEmpty = (gTimer - t[tbl].timeStart) + (1800 * (1 / t[tbl].g[1].hunger));
                 t[tbl].course.dessert.show = 1;
-                document.getElementById("dispG0Dst").innerHTML= "Still Eating";
-                document.getElementById("dispG1Dst").innerHTML= "Still Eating";
-                document.getElementById("dropEntree").style.visibility = 'hidden';
+                document.getElementById("dispG0Dst").innerHTML= "surprise twist:";
+                document.getElementById("dispG1Dst").innerHTML= "the game is over";
+                document.getElementById("dropEntree").style.display = "none";
                 //t[tbl].course.dessert.needAct = (gTimer - t[tbl].timeStart) + 600;
             }
             update();
@@ -899,8 +960,29 @@ function drop(k){
     }
 }
 function bus(k){
+    var tbl = 0;
     document.getElementById("test").innerHTML= "bus";
     document.getElementById("test2").innerHTML= k;
+    switch(k){
+        case 'app':
+            if(t[tbl].course.app.emptyDone <= (gTimer - t[tbl].timeStart)){
+                t[tbl].course.app.bus = 1;
+                document.getElementById("busApp").style.display = "none";
+            }
+            update();
+            break;
+        case 'salad':
+            if(t[tbl].g[0].saladEmpty <= (gTimer - t[tbl].timeStart)){
+                t[tbl].g[0].saladBus = 1;
+                document.getElementById("busSalad").style.display = "none";
+            }
+            if(t[tbl].g[1].saladEmpty <= (gTimer - t[tbl].timeStart)){
+                t[tbl].g[1].saladBus = 1;
+                document.getElementById("busSalad").style.display = "none";
+            }
+            update();
+            break;
+    }
 }
 
 function getRnd(min, max) {
@@ -910,16 +992,30 @@ function getRnd(min, max) {
 
 function debug(){
     var tbl = 0;
+    document.getElementById("test3").innerHTML= t[tbl].g[0].drinkEmpty;
+    document.getElementById("test4").innerHTML= t[tbl].g[1].drinkEmpty;
+    document.getElementById("test5").innerHTML= t[tbl].g[0].thirst;
+    document.getElementById("test6").innerHTML= t[tbl].g[1].thirst;
+    
 }
 
 function cheat1(){
     gTimer++;
+}
+function cheat10(){
+    gTimer = gTimer + 10;
+}
+function cheat20(){
+    gTimer = gTimer + 20;
 }
 function cheat25(){
     gTimer = gTimer + 25;
 }
 function cheat50(){
     gTimer = gTimer + 50;
+}
+function cheat100(){
+    gTimer = gTimer + 100;
 }
 </script>
 </body>
