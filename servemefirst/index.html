@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 2.3.0</title>
+<title>ServeMeFirst Alpha 2.3.1</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -80,7 +80,7 @@ blake.r.peterson@gmail.com>
 <!--p> alpha note: yes i know the timers freeze. they work in the background though.</p-->
 <p>
 <div id="greetButtons">
-    <button id="orderGreet" type="button" onclick="order('greet')" >orderGreet</button> 
+    <button id="orderGreet" type="button" onclick="order('greet')" >Greet</button> 
 </div>
 </p>
 <p>
@@ -136,7 +136,7 @@ blake.r.peterson@gmail.com>
 <div id="receiptButtons">
     <button id="makeReceipt" type="button" onclick="make('receipt')">makeReceipt</button>
     <button id="dropReceipt" type="button" onclick="drop('receipt')">dropReceipt</button>
-    <!--button id="busReceipt" type="button" onclick="bus('receipt')">busReceipt</button!-->
+    <button id="busReceipt" type="button" onclick="bus('receipt')">busReceipt</button>
 </div>
 </p>
 </div>
@@ -178,7 +178,7 @@ window.onload = function(){
         gTimer++;
         update();
     }, 1000);
-    document.getElementById("dev").style.display = "none"; //comment for dev mode
+    //document.getElementById("dev").style.display = "none"; //comment for dev mode
 };
 
 var t = [
@@ -511,8 +511,22 @@ function update(){
 
             //entree display checks
             if (t[tbl].course.entree.orderDropd == 1){
-                document.getElementById("dispG0Ent").innerHTML= Math.round((t[tbl].g[0].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[0].hunger)));
-                document.getElementById("dispG1Ent").innerHTML= Math.round((t[tbl].g[1].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[1].hunger)));
+                if (t[tbl].g[0].entreeBus === 0){
+                    document.getElementById("dispG0Ent").innerHTML= Math.round((t[tbl].g[0].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[0].hunger)));
+                    if (t[tbl].g[0].entreeEmpty <= (gTimer - t[tbl].timeStart)){
+                        document.getElementById("busEntree").style.display = "inline";
+                    }
+                } else {
+                    document.getElementById("dispG0Ent").innerHTML= "";
+                }
+                if (t[tbl].g[1].entreeBus === 0){
+                    document.getElementById("dispG1Ent").innerHTML= Math.round((t[tbl].g[1].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[1].hunger)));
+                    if (t[tbl].g[1].entreeEmpty <= (gTimer - t[tbl].timeStart)){
+                        document.getElementById("busEntree").style.display = "inline";
+                    }
+                } else {
+                    document.getElementById("dispG1Ent").innerHTML= "";
+                }
                 t[tbl].course.app.show = 0;
                 t[tbl].course.salad.show = 0;
             } else if (t[tbl].course.entree.orderTaken == 1){
@@ -557,9 +571,50 @@ function update(){
                 document.getElementById("dispG0Sal").innerHTML= "Order Entrees";
                 document.getElementById("dispG1Sal").innerHTML= "Order Entrees";
             }
-
-
             
+            //dessert display checks
+            if (t[tbl].course.dessert.orderDropd == 1){
+                if (t[tbl].g[0].dessertBus === 0){
+                    document.getElementById("dispG0Dst").innerHTML= Math.round((t[tbl].g[0].dessertEmpty - (gTimer - t[tbl].timeStart)) / (6 * (1 / t[tbl].g[0].hunger)));
+                    if (t[tbl].g[0].dessertEmpty <= (gTimer - t[tbl].timeStart)){
+                        document.getElementById("busDessert").style.display = "inline";
+                    }
+                } else {
+                    document.getElementById("dispG0Dst").innerHTML= "";
+                }
+                if (t[tbl].g[1].dessertBus === 0){
+                    document.getElementById("dispG1Dst").innerHTML= Math.round((t[tbl].g[1].dessertEmpty - (gTimer - t[tbl].timeStart)) / (6 * (1 / t[tbl].g[1].hunger)));
+                    if (t[tbl].g[1].dessertEmpty <= (gTimer - t[tbl].timeStart)){
+                        document.getElementById("busDessert").style.display = "inline";
+                    }
+                } else {
+                    document.getElementById("dispG1Dst").innerHTML= "";
+                }
+            } else if (t[tbl].course.dessert.orderTaken == 1){
+                document.getElementById("dispG0Dst").innerHTML= "Waiting on Desserts " + (t[tbl].course.dessert.dropDue - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1Dst").innerHTML= "Waiting on Desserts " + (t[tbl].course.dessert.dropDue - (gTimer - t[tbl].timeStart));
+                if ((t[tbl].course.dessert.makeGot === 0) && (t[tbl].course.dessert.makeSent == 1)){
+                    document.getElementById("getDessert").innerHTML= "getDessert" + (t[tbl].course.dessert.makeDone - (gTimer - t[tbl].timeStart));
+                }
+                if ((t[tbl].course.dessert.makeGot === 0) && (t[tbl].course.dessert.makeDone <= (gTimer - t[tbl].timeStart))){
+                    document.getElementById("getDessert").disabled= false;
+                }
+                if ((t[tbl].course.dessert.makeGot === 0) && (t[tbl].course.dessert.makeDone > (gTimer - t[tbl].timeStart)) && (t[tbl].course.dessert.makeSent == 1)){
+                    document.getElementById("getDessert").disabled= true;
+                }
+            } else if (t[tbl].course.dessert.orderTaken === 0){
+                document.getElementById("dispG0Dst").innerHTML= "Order " + (t[tbl].course.dessert.needAct - (gTimer - t[tbl].timeStart));
+                document.getElementById("dispG1Dst").innerHTML= "Order " + (t[tbl].course.dessert.needAct - (gTimer - t[tbl].timeStart));
+                if (t[tbl].course.entree.orderDropd === 1){
+                    if (((10 > (Math.round((t[tbl].g[0].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[0].hunger)))))) && (10 > (Math.round((t[tbl].g[1].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[1].hunger)))))){
+                        if (t[tbl].course.dessert.show === 0){
+                            t[tbl].course.dessert.show = 1;
+                            t[tbl].course.dessert.needAct = (gTimer - t[tbl].timeStart) + 120;
+                            document.getElementById("orderDessert").style.display = "inline";
+                        }
+                    }
+                }
+            }
             break;
 
         case "greet":
@@ -673,6 +728,34 @@ function update(){
             }
             //other greet stuff
             break;
+        
+        case "orderDessert":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("dispG0Dst").innerHTML= "Ordering Desserts.. " + (t[tbl].course.dessert.actDone - (gTimer - t[tbl].timeStart));
+            document.getElementById("dispG1Dst").innerHTML= "Ordering Desserts.. " + (t[tbl].course.dessert.actDone - (gTimer - t[tbl].timeStart));
+            
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[tbl].course.dessert.actDone == (gTimer - t[tbl].timeStart)){
+                t[tbl].occupied = "no";
+                t[tbl].course.dessert.orderTaken = 1;
+                t[tbl].course.dessert.dropDue = (gTimer - t[tbl].timeStart) + 300;
+                document.getElementById("sendDessert").style.display = "inline";
+                //t[tbl].course.app.needAct = (gTimer - t[tbl].timeStart) + 180;
+                //t[tbl].course.app.show = 1;
+                //t[tbl].course.drink.show = 1; //need to prep make/send
+                //t[tbl].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
+                update();
+            }
+            //other greet stuff
+            break;
 
         case "makeDrink":
             //disable buttons
@@ -745,6 +828,34 @@ function update(){
                 document.getElementById("sendApp").style.display = "none";
                 document.getElementById("getApp").style.display = "inline";
                 document.getElementById("getApp").disabled = true;
+                //t[tbl].course.drink.makeGot = 1;
+                //t[tbl].course.drink.show = 1; //need to prep make/send
+                //t[tbl].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
+                update();
+            }
+            //other greet stuff
+            break;
+        
+        case "sendDessert":
+            //disable buttons
+            var el = document.getElementById('buttons');
+            var all = el.getElementsByTagName('button');
+            var i;
+            for (i = 0; i < all.length; i++) {
+                all[i].disabled = true;
+            }
+
+            //display timer difference
+            document.getElementById("sendDessert").innerHTML= "sendDessert" + (t[tbl].course.dessert.sendDone - (gTimer - t[tbl].timeStart));
+
+            //when timers match, change case back to "no", kick off new stuff
+            if (t[tbl].course.dessert.sendDone == (gTimer - t[tbl].timeStart)){
+                t[tbl].occupied = "no";
+                t[tbl].course.dessert.makeSent = 1;
+                document.getElementById("sendDessert").innerHTML= "sendDessert";
+                document.getElementById("sendDessert").style.display = "none";
+                document.getElementById("getDessert").style.display = "inline";
+                document.getElementById("getDessert").disabled = true;
                 //t[tbl].course.drink.makeGot = 1;
                 //t[tbl].course.drink.show = 1; //need to prep make/send
                 //t[tbl].course.drink.needAct = (gTimer - t[tbl].timeStart) + 60;
@@ -840,6 +951,13 @@ function order(k){
             document.getElementById("sendEntree").style.display = "inline";
             update();
             break;
+        case 'dessert':
+            t[tbl].course.dessert.actDone = (gTimer - t[tbl].timeStart) + 30;
+            t[tbl].occupied = "orderDessert";
+            document.getElementById("orderDessert").style.display = "none";
+            document.getElementById("sendDessert").style.display = "inline";
+            update();
+            break;
     }
 }
 function make(k){
@@ -876,6 +994,12 @@ function send(k){
             t[tbl].occupied = "sendEntree";
             update();
             break;
+        case 'dessert':
+            t[tbl].course.dessert.makeDone = (gTimer - t[tbl].timeStart) + 180;
+            t[tbl].course.dessert.sendDone = (gTimer - t[tbl].timeStart) + 15;
+            t[tbl].occupied = "sendDessert";
+            update();
+            break;
     }
 }
 function get(k){
@@ -898,6 +1022,15 @@ function get(k){
                 document.getElementById("getEntree").innerHTML= "getEntree";
                 document.getElementById("dropEntree").style.display = "inline";
                 document.getElementById("getEntree").style.display = "none";
+            }
+            update();
+            break;
+        case 'dessert':
+            if (t[tbl].course.dessert.makeDone <= (gTimer - t[tbl].timeStart)){
+                t[tbl].course.dessert.makeGot = 1;
+                document.getElementById("getDessert").innerHTML= "getDessert";
+                document.getElementById("dropDessert").style.display = "inline";
+                document.getElementById("getDessert").style.display = "none";
             }
             update();
             break;
@@ -949,11 +1082,23 @@ function drop(k){
                 t[tbl].course.entree.orderDropd = 1;
                 t[tbl].g[0].entreeEmpty = (gTimer - t[tbl].timeStart) + (1800 * (1 / t[tbl].g[0].hunger));
                 t[tbl].g[1].entreeEmpty = (gTimer - t[tbl].timeStart) + (1800 * (1 / t[tbl].g[1].hunger));
-                t[tbl].course.dessert.show = 1;
-                document.getElementById("dispG0Dst").innerHTML= "surprise twist:";
-                document.getElementById("dispG1Dst").innerHTML= "the game is over";
+                document.getElementById("dispG0Dst").innerHTML= "Order Desserts";
+                document.getElementById("dispG1Dst").innerHTML= "Order Desserts";
                 document.getElementById("dropEntree").style.display = "none";
-                //t[tbl].course.dessert.needAct = (gTimer - t[tbl].timeStart) + 600;
+            }
+            update();
+            break;
+        case 'dessert':
+            if(t[tbl].course.dessert.makeGot == 1){
+                t[tbl].course.dessert.orderDropd = 1;
+                t[tbl].g[0].dessertEmpty = (gTimer - t[tbl].timeStart) + (600 * (1 / t[tbl].g[0].hunger));
+                t[tbl].g[1].dessertEmpty = (gTimer - t[tbl].timeStart) + (600 * (1 / t[tbl].g[1].hunger));
+                t[tbl].course.bill.show = 1;
+                document.getElementById("dispG0Bil").innerHTML= "Drop Bill";
+                document.getElementById("dispG1Bil").innerHTML= "Drop Bill";
+                document.getElementById("dropDessert").style.display = "none";
+                document.getElementById("makeBill").style.display = "inline";
+                t[tbl].course.bill.needAct = (gTimer - t[tbl].timeStart) + 300;
             }
             update();
             break;
@@ -982,6 +1127,28 @@ function bus(k){
             }
             update();
             break;
+        case 'entree':
+            if(t[tbl].g[0].entreeEmpty <= (gTimer - t[tbl].timeStart)){
+                t[tbl].g[0].entreeBus = 1;
+                document.getElementById("busEntree").style.display = "none";
+            }
+            if(t[tbl].g[1].entreeEmpty <= (gTimer - t[tbl].timeStart)){
+                t[tbl].g[1].entreeBus = 1;
+                document.getElementById("busEntree").style.display = "none";
+            }
+            update();
+            break;
+        case 'dessert':
+            if(t[tbl].g[0].dessertEmpty <= (gTimer - t[tbl].timeStart)){
+                t[tbl].g[0].dessertBus = 1;
+                document.getElementById("busDessert").style.display = "none";
+            }
+            if(t[tbl].g[1].dessertEmpty <= (gTimer - t[tbl].timeStart)){
+                t[tbl].g[1].dessertBus = 1;
+                document.getElementById("busDessert").style.display = "none";
+            }
+            update();
+            break;
     }
 }
 
@@ -992,10 +1159,10 @@ function getRnd(min, max) {
 
 function debug(){
     var tbl = 0;
-    document.getElementById("test3").innerHTML= t[tbl].g[0].drinkEmpty;
-    document.getElementById("test4").innerHTML= t[tbl].g[1].drinkEmpty;
-    document.getElementById("test5").innerHTML= t[tbl].g[0].thirst;
-    document.getElementById("test6").innerHTML= t[tbl].g[1].thirst;
+    document.getElementById("test3").innerHTML= (Math.round((t[tbl].g[0].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[0].hunger))));
+    document.getElementById("test4").innerHTML= (Math.round((t[tbl].g[1].entreeEmpty - (gTimer - t[tbl].timeStart)) / (18 * (1 / t[tbl].g[1].hunger))));
+    document.getElementById("test5").innerHTML= t[tbl].course.dessert.show;
+    document.getElementById("test6").innerHTML= t[tbl].course.dessert.needAct;
     
 }
 
