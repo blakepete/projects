@@ -8,69 +8,65 @@ blake.r.peterson@gmail.com>
 <body>
 
 <div id="html">
-<table id = "dispHed">
-    <tbody>
-    <tr>
-    <td id = "dispTblKey">Table:</td>
-    <td id = "dispTblOut">XXX</td>
-    <td id = "dispTmeKey">Time:</td>
-    <td id = "dispTmeOut">XXX</td>
-    </tr>
-    <tr>
-    <td id = "dispGstKey">Guests:</td>
-    <td id = "dispGstOut">XXX</td>
-    <td id = "dispBilKey">Bill:</td>
-    <td id = "dispBilOut">XXX</td>
-    </tr>
-    </tbody>
-</table>
-<table id = "dispBod">
-    <tbody>
-    <tr id = "dispRowHed">
-    <td id = "dispNaHed"></td>
-    <td id = "dispG0Hed">Guest 0</td>
-    <td id = "dispG1Hed">Guest 1</td>
-    </tr>
-    <tr id = "dispRowGrt">
-    <td id = "dispIdGrt">Greet</td>
-    <td id = "dispG0Grt"></td>
-    <td id = "dispG1Grt"></td>
-    </tr>
-    <tr id = "dispRowDrk">
-    <td id = "dispIdDrk">Drink</td>
-    <td id = "dispG0Drk"></td>
-    <td id = "dispG1Drk"></td>
-    </tr>
-    <tr id = "dispRowApp">
-    <td id = "dispIdApp">Appetizer</td>
-    <td id = "dispG0App"></td>
-    <td id = "dispG1App"></td>
-    </tr>
-    <tr id = "dispRowSal">
-    <td id = "dispIdSal">Salad</td>
-    <td id = "dispG0Sal"></td>
-    <td id = "dispG1Sal"></td>
-    </tr>
-    <tr id = "dispRowEnt">
-    <td id = "dispIdEnt">Entree</td>
-    <td id = "dispG0Ent"></td>
-    <td id = "dispG1Ent"></td>
-    </tr>
-    <tr id = "dispRowDst">
-    <td id = "dispIdDst">Dessert</td>
-    <td id = "dispG0Dst"></td>
-    <td id = "dispG1Dst"></td>
-    </tr>
-    <tr id = "dispRowBil">
-    <td id = "dispIdBil">Bill</td>
-    <td id = "dispG0Bil"></td>
-    <td id = "dispG1Bil"></td>
-    </tr>
-    <tr id = "dispRowRct">
-    <td id = "dispIdRct">Receipt</td>
-    <td id = "dispG0Rct"></td>
-    <td id = "dispG1Rct"></td>
-    </tr>
+<table id = "gameTable">
+    <tbody id = "dispBody">
+        <tr id ="h0">
+            <td id = "h0b0">Table:</td>
+            <td id = "h0b1">XXX</td>
+            <td id = "h0b2">Time:</td>
+            <td id = "h0b3">XXX</td>
+        </tr>
+        <tr id ="h1">
+            <td id = "h1b0">Guests:</td>
+            <td id = "h1b1">XXX</td>
+            <td id = "h1b2">Bill:</td>
+            <td id = "h1b3">XXX</td>
+        </tr>
+        <tr id = "c0">
+            <td id = "g0c0">X</td>
+            <td id = "g1c0">Guest 0</td>
+            <td id = "g2c0">Guest 1</td>
+        </tr>
+        <tr id = "c1">
+            <td id = "g0c1">Greet</td>
+            <td id = "g1c1"></td>
+            <td id = "g2c1"></td>
+        </tr>
+        <tr id = "c2">
+            <td id = "g0c2">Drink</td>
+            <td id = "g1c2"></td>
+            <td id = "g2c2"></td>
+        </tr>
+        <tr id = "c3">
+            <td id = "g0c3">Appetizer</td>
+            <td id = "g1c3"></td>
+            <td id = "g2c3"></td>
+        </tr>
+        <tr id = "c4">
+            <td id = "g0c4">Salad</td>
+            <td id = "g1c4"></td>
+            <td id = "g2c4"></td>
+        </tr>
+        <tr id = "c5">
+            <td id = "g0c5">Entree</td>
+            <td id = "g1c5"></td>
+            <td id = "g2c5"></td>
+        </tr>
+        <tr id = "c6">
+            <td id = "g0c6">Dessert</td>
+            <td id = "g1c6"></td>
+            <td id = "g2c6"></td>
+        </tr>
+        <tr id = "c7">
+            <td id = "g0c7">Bill</td>
+            <td id = "g1c7"></td>
+            <td id = "g2c7"></td>
+        </tr>
+        <tr id = "c8">
+            <td id = "g0c8">Receipt</td>
+            <td id = "g1c8"></td>
+            <td id = "g2c8"></td>
+        </tr>
     </tbody>
 </table>
 
@@ -391,10 +387,10 @@ var t = [
 
 function update(){
     var tbl = 0;
-    document.getElementById("dispTblOut").innerHTML= tbl;
-    document.getElementById("dispTmeOut").innerHTML= formatTime(getTableTime(tbl));
-    document.getElementById("dispGstOut").innerHTML= t[tbl].g.length;
-    document.getElementById("dispBilOut").innerHTML= "$ " + (t[tbl].g[0].debt + t[tbl].g[1].debt);
+    document.getElementById("h0b1").innerHTML= tbl;
+    document.getElementById("h0b3").innerHTML= formatTime(getTableTime(tbl));
+    document.getElementById("h1b1").innerHTML= t[tbl].g.length;
+    document.getElementById("h1b3").innerHTML= "$ " + (t[tbl].g[0].debt + t[tbl].g[1].debt);
 
     showCheck("greet");
     showCheck("drink");
@@ -420,48 +416,48 @@ function update(){
             //greet display checks
             if (t[tbl].course.greet.orderTaken == 1){
                 t[tbl].course.greet.show = 0;
-                document.getElementById("dispG0Grt").innerHTML= "Greeted";
-                document.getElementById("dispG1Grt").innerHTML= "Greeted";
+                document.getElementById("g1c1").innerHTML= "Greeted";
+                document.getElementById("g2c1").innerHTML= "Greeted";
             } else if (t[tbl].course.greet.orderTaken === 0){
                 t[tbl].course.greet.show = 1;
-                document.getElementById("dispG0Grt").innerHTML= "Greet " + formatTime(timeLeft("greet","needAct"));
-                document.getElementById("dispG1Grt").innerHTML= "Greet " + formatTime(timeLeft("greet","needAct"));
+                document.getElementById("g1c1").innerHTML= "Greet " + formatTime(timeLeft("greet","needAct"));
+                document.getElementById("g2c1").innerHTML= "Greet " + formatTime(timeLeft("greet","needAct"));
             }
         
             //drink display checks
             if (t[tbl].course.drink.orderDropd == 1){
                 //i think these should really have a "100 - x" inverse added but somehow it works without it /shrug
-                document.getElementById("dispG0Drk").innerHTML= centLeft(0,"drinkEmpty",27);
-                document.getElementById("dispG1Drk").innerHTML= centLeft(1,"drinkEmpty",27);
+                document.getElementById("g1c2").innerHTML= centLeft(0,"drinkEmpty",27);
+                document.getElementById("g2c2").innerHTML= centLeft(1,"drinkEmpty",27);
             } else if (t[tbl].course.drink.orderTaken == 1){
-                document.getElementById("dispG0Drk").innerHTML= "Waiting " + formatTime(timeLeft("drink","dropDue"));
-                document.getElementById("dispG1Drk").innerHTML= "Waiting " + formatTime(timeLeft("drink","dropDue"));
+                document.getElementById("g1c2").innerHTML= "Waiting " + formatTime(timeLeft("drink","dropDue"));
+                document.getElementById("g2c2").innerHTML= "Waiting " + formatTime(timeLeft("drink","dropDue"));
             } else if (t[tbl].course.drink.orderTaken === 0){
-                document.getElementById("dispG0Drk").innerHTML= "Order " + formatTime(timeLeft("drink","needAct"));
-                document.getElementById("dispG1Drk").innerHTML= "Order " + formatTime(timeLeft("drink","needAct"));
+                document.getElementById("g1c2").innerHTML= "Order " + formatTime(timeLeft("drink","needAct"));
+                document.getElementById("g2c2").innerHTML= "Order " + formatTime(timeLeft("drink","needAct"));
             }
 
             //app display checks
             if (t[tbl].course.app.orderDropd == 1){
                 if (t[tbl].course.app.bus === 0){
-                    document.getElementById("dispG0App").innerHTML= centLeft("app","emptyDone",6);
+                    document.getElementById("g1c3").innerHTML= centLeft("app","emptyDone",6);
                     if (t[tbl].course.app.emptyDone <= (gTimer - t[tbl].timeStart)){
                         document.getElementById("busApp").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG0App").innerHTML= "";
+                    document.getElementById("g1c3").innerHTML= "";
                 }
                 if (t[tbl].course.app.bus === 0){
-                    document.getElementById("dispG1App").innerHTML= centLeft("app","emptyDone",6);
+                    document.getElementById("g2c3").innerHTML= centLeft("app","emptyDone",6);
                     if (t[tbl].course.app.emptyDone <= (gTimer - t[tbl].timeStart)){
                         document.getElementById("busApp").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG1App").innerHTML= "";
+                    document.getElementById("g2c3").innerHTML= "";
                 }
             } else if (t[tbl].course.app.orderTaken == 1){
-                document.getElementById("dispG0App").innerHTML= "Waiting " + formatTime(timeLeft("app","dropDue"));
-                document.getElementById("dispG1App").innerHTML= "Waiting " + formatTime(timeLeft("app","dropDue"));
+                document.getElementById("g1c3").innerHTML= "Waiting " + formatTime(timeLeft("app","dropDue"));
+                document.getElementById("g2c3").innerHTML= "Waiting " + formatTime(timeLeft("app","dropDue"));
                 if ((t[tbl].course.app.makeGot === 0) && (t[tbl].course.app.makeSent == 1)){
                     document.getElementById("getApp").innerHTML= "Get App " + formatTime(timeLeft("app","makeDue"));
                 }
@@ -472,27 +468,27 @@ function update(){
                     document.getElementById("getApp").disabled= true;
                 }
             } else if (t[tbl].course.app.orderTaken === 0){
-                document.getElementById("dispG0App").innerHTML= "Order " + formatTime(timeLeft("app","needAct"));
-                document.getElementById("dispG1App").innerHTML= "Order " + formatTime(timeLeft("app","needAct"));
+                document.getElementById("g1c3").innerHTML= "Order " + formatTime(timeLeft("app","needAct"));
+                document.getElementById("g2c3").innerHTML= "Order " + formatTime(timeLeft("app","needAct"));
             }
 
             //entree display checks
             if (t[tbl].course.entree.orderDropd == 1){
                 if (t[tbl].g[0].entreeBus === 0){
-                    document.getElementById("dispG0Ent").innerHTML= centLeft(0,"entreeEmpty",18);
+                    document.getElementById("g1c5").innerHTML= centLeft(0,"entreeEmpty",18);
                     if (t[tbl].g[0].entreeEmpty <= (gTimer - t[tbl].timeStart)){
                         document.getElementById("busEntree").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG0Ent").innerHTML= "";
+                    document.getElementById("g1c5").innerHTML= "";
                 }
                 if (t[tbl].g[1].entreeBus === 0){
-                    document.getElementById("dispG1Ent").innerHTML= centLeft(1,"entreeEmpty",18);
+                    document.getElementById("g2c5").innerHTML= centLeft(1,"entreeEmpty",18);
                     if (t[tbl].g[1].entreeEmpty <= (gTimer - t[tbl].timeStart)){
                         document.getElementById("busEntree").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG1Ent").innerHTML= "";
+                    document.getElementById("g2c5").innerHTML= "";
                 }
                 t[tbl].course.app.show = 0;
                 t[tbl].course.salad.show = 0;
@@ -504,8 +500,8 @@ function update(){
                     }
                 }
             } else if (t[tbl].course.entree.orderTaken == 1){
-                document.getElementById("dispG0Ent").innerHTML= "Waiting " + formatTime(timeLeft("entree","dropDue"));
-                document.getElementById("dispG1Ent").innerHTML= "Waiting " + formatTime(timeLeft("entree","dropDue"));
+                document.getElementById("g1c5").innerHTML= "Waiting " + formatTime(timeLeft("entree","dropDue"));
+                document.getElementById("g2c5").innerHTML= "Waiting " + formatTime(timeLeft("entree","dropDue"));
                 if ((t[tbl].course.entree.makeGot === 0) && (t[tbl].course.entree.makeSent == 1)){
                     document.getElementById("getEntree").innerHTML= "Get Entree " + formatTime(timeLeft("entree","makeDone"));
                 }
@@ -516,58 +512,58 @@ function update(){
                     document.getElementById("getEntree").disabled= true;
                 }
             } else if (t[tbl].course.entree.orderTaken === 0){
-                document.getElementById("dispG0Ent").innerHTML= "Order " + formatTime(timeLeft("entree","needAct"));
-                document.getElementById("dispG1Ent").innerHTML= "Order " + formatTime(timeLeft("entree","needAct"));
+                document.getElementById("g1c5").innerHTML= "Order " + formatTime(timeLeft("entree","needAct"));
+                document.getElementById("g2c5").innerHTML= "Order " + formatTime(timeLeft("entree","needAct"));
             }
 
             //salad display checks
             if (t[tbl].course.salad.orderDropd == 1){
                 if (t[tbl].g[0].saladBus === 0){
-                    document.getElementById("dispG0Sal").innerHTML= centLeft(0,"saladEmpty",4);
+                    document.getElementById("g1c4").innerHTML= centLeft(0,"saladEmpty",4);
                     if (t[tbl].g[0].saladEmpty <= getTableTime()){
                         document.getElementById("busSalad").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG0Sal").innerHTML= "";
+                    document.getElementById("g1c4").innerHTML= "";
                 }
                 if (t[tbl].g[1].saladBus === 0){
-                    document.getElementById("dispG1Sal").innerHTML= centLeft(1,"saladEmpty",4);
+                    document.getElementById("g2c4").innerHTML= centLeft(1,"saladEmpty",4);
                     if (t[tbl].g[1].saladEmpty <= getTableTime()){
                         document.getElementById("busSalad").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG1Sal").innerHTML= "";
+                    document.getElementById("g2c4").innerHTML= "";
                 }
             } else if (t[tbl].course.salad.orderTaken == 1){
-                document.getElementById("dispG0Sal").innerHTML= "Waiting " + formatTime(timeLeft("salad","dropDue"));
-                document.getElementById("dispG1Sal").innerHTML= "Waiting " + formatTime(timeLeft("salad","dropDue"));
+                document.getElementById("g1c4").innerHTML= "Waiting " + formatTime(timeLeft("salad","dropDue"));
+                document.getElementById("g2c4").innerHTML= "Waiting " + formatTime(timeLeft("salad","dropDue"));
             } else if (t[tbl].course.salad.orderTaken === 0){
-                document.getElementById("dispG0Sal").innerHTML= "";
-                document.getElementById("dispG1Sal").innerHTML= "";
+                document.getElementById("g1c4").innerHTML= "";
+                document.getElementById("g2c4").innerHTML= "";
             }
             
             //dessert display checks
             if (t[tbl].course.dessert.orderDropd == 1){
                 if (t[tbl].g[0].dessertBus === 0){
-                    document.getElementById("dispG0Dst").innerHTML= centLeft(0,"dessertEmpty",4);
+                    document.getElementById("g1c6").innerHTML= centLeft(0,"dessertEmpty",4);
                     if (t[tbl].g[0].dessertEmpty <= getTableTime()){
                         document.getElementById("busDessert").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG0Dst").innerHTML= "";
+                    document.getElementById("g1c6").innerHTML= "";
                 }
                 if (t[tbl].g[1].dessertBus === 0){
-                    document.getElementById("dispG1Dst").innerHTML= centLeft(1,"dessertEmpty",4);
+                    document.getElementById("g2c6").innerHTML= centLeft(1,"dessertEmpty",4);
                     if (t[tbl].g[1].dessertEmpty <= getTableTime()){
                         document.getElementById("busDessert").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG1Dst").innerHTML= "";
+                    document.getElementById("g2c6").innerHTML= "";
                 }
                 t[tbl].course.entree.show = 0;
             } else if (t[tbl].course.dessert.orderTaken == 1){
-                document.getElementById("dispG0Dst").innerHTML= "Waiting " + formatTime(timeLeft("dessert","dropDue"));
-                document.getElementById("dispG1Dst").innerHTML= "Waiting " + formatTime(timeLeft("dessert","dropDue"));
+                document.getElementById("g1c6").innerHTML= "Waiting " + formatTime(timeLeft("dessert","dropDue"));
+                document.getElementById("g2c6").innerHTML= "Waiting " + formatTime(timeLeft("dessert","dropDue"));
                 if ((t[tbl].course.dessert.makeGot === 0) && (t[tbl].course.dessert.makeSent == 1)){
                     document.getElementById("getDessert").innerHTML= "Get Dessert " + formatTime(timeLeft("dessert","makeDone"));
                 }
@@ -578,8 +574,8 @@ function update(){
                     document.getElementById("getDessert").disabled= true;
                 }
             } else if (t[tbl].course.dessert.orderTaken === 0){
-                document.getElementById("dispG0Dst").innerHTML= "Order " + formatTime(timeLeft("dessert","needAct"));
-                document.getElementById("dispG1Dst").innerHTML= "Order " + formatTime(timeLeft("dessert","needAct"));
+                document.getElementById("g1c6").innerHTML= "Order " + formatTime(timeLeft("dessert","needAct"));
+                document.getElementById("g2c6").innerHTML= "Order " + formatTime(timeLeft("dessert","needAct"));
                 if (t[tbl].course.entree.orderDropd === 1){
                 }
             }
@@ -587,50 +583,50 @@ function update(){
             //bill display checks
             if (t[tbl].course.bill.orderDropd == 1){
                 if (t[tbl].g[0].billBus === 0){
-                    document.getElementById("dispG0Bil").innerHTML= (100 - centLeft(0,"dessertEmpty",4));
+                    document.getElementById("g1c7").innerHTML= (100 - centLeft(0,"dessertEmpty",4));
                     if (t[tbl].g[0].billEmpty <= (gTimer - t[tbl].timeStart)){
                         document.getElementById("busBill").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG0Bil").innerHTML= "";
+                    document.getElementById("g1c7").innerHTML= "";
                 }
                 if (t[tbl].g[1].billBus === 0){
-                    document.getElementById("dispG1Bil").innerHTML= (100 - centLeft(1,"dessertEmpty",4));
+                    document.getElementById("g2c7").innerHTML= (100 - centLeft(1,"dessertEmpty",4));
                     if (t[tbl].g[1].billEmpty <= (gTimer - t[tbl].timeStart)){
                         document.getElementById("busBill").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG1Bil").innerHTML= "";
+                    document.getElementById("g2c7").innerHTML= "";
                 }
             } else if (t[tbl].course.bill.orderTaken === 1){
-                document.getElementById("dispG0Bil").innerHTML= "Waiting " + formatTime(timeLeft("bill","dropDue"));
-                document.getElementById("dispG1Bil").innerHTML= "Waiting " + formatTime(timeLeft("bill","dropDue"));
+                document.getElementById("g1c7").innerHTML= "Waiting " + formatTime(timeLeft("bill","dropDue"));
+                document.getElementById("g2c7").innerHTML= "Waiting " + formatTime(timeLeft("bill","dropDue"));
             }
 
             //receipt display checks
             if (t[tbl].course.receipt.orderDropd == 1){
                 if (t[tbl].g[0].receiptBus === 0){
-                    document.getElementById("dispG0Rct").innerHTML= "game "; //Math.round((t[tbl].g[0].receiptEmpty - (gTimer - t[tbl].timeStart)) / (1 * (1 / ((t[tbl].g[0].hunger + t[tbl].g[0].thirst)/4))));
+                    document.getElementById("g1c8").innerHTML= "game "; //Math.round((t[tbl].g[0].receiptEmpty - (gTimer - t[tbl].timeStart)) / (1 * (1 / ((t[tbl].g[0].hunger + t[tbl].g[0].thirst)/4))));
                     if (t[tbl].g[0].receiptEmpty <= (gTimer - t[tbl].timeStart)){
                         //document.getElementById("busReceipt").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG0Rct").innerHTML= "";
+                    document.getElementById("g1c8").innerHTML= "";
                 }
                 if (t[tbl].g[1].receiptBus === 0){
-                    document.getElementById("dispG1Rct").innerHTML= "over"; //Math.round((t[tbl].g[1].receiptEmpty - (gTimer - t[tbl].timeStart)) / (1 * (1 / ((t[tbl].g[1].hunger + t[tbl].g[1].thirst)/4))));
+                    document.getElementById("g2c8").innerHTML= "over"; //Math.round((t[tbl].g[1].receiptEmpty - (gTimer - t[tbl].timeStart)) / (1 * (1 / ((t[tbl].g[1].hunger + t[tbl].g[1].thirst)/4))));
                     if (t[tbl].g[1].receiptEmpty <= (gTimer - t[tbl].timeStart)){
                         //document.getElementById("busRct").style.display = "inline";
                     }
                 } else {
-                    document.getElementById("dispG1Rct").innerHTML= "";
+                    document.getElementById("g2c8").innerHTML= "";
                 }
                 t[tbl].course.drink.show = 0;
                 t[tbl].course.dessert.show = 0;
                 t[tbl].course.bill.show = 0;
             } else if (t[tbl].course.receipt.orderTaken === 1){
-                document.getElementById("dispG0Rct").innerHTML= "Waiting " + formatTime(timeLeft("receipt","dropDue"));
-                document.getElementById("dispG1Rct").innerHTML= "Waiting " + formatTime(timeLeft("receipt","dropDue"));
+                document.getElementById("g1c8").innerHTML= "Waiting " + formatTime(timeLeft("receipt","dropDue"));
+                document.getElementById("g2c8").innerHTML= "Waiting " + formatTime(timeLeft("receipt","dropDue"));
             }
             break;
 
@@ -639,8 +635,8 @@ function update(){
             disabledButtons(true);
 
             //display timer difference
-            document.getElementById("dispG0Grt").innerHTML= "Greeting " + formatTime(timeLeft("greet","actDone"));
-            document.getElementById("dispG1Grt").innerHTML= "Greeting " + formatTime(timeLeft("greet","actDone"));
+            document.getElementById("g1c1").innerHTML= "Greeting " + formatTime(timeLeft("greet","actDone"));
+            document.getElementById("g2c1").innerHTML= "Greeting " + formatTime(timeLeft("greet","actDone"));
             
             //when timers match, change case back to "no", kick off new stuff
             if (t[tbl].course.greet.actDone == (gTimer - t[tbl].timeStart)){
@@ -656,8 +652,8 @@ function update(){
             disabledButtons(true);
 
             //display timer difference
-            document.getElementById("dispG0Drk").innerHTML= "Ordering " + formatTime(timeLeft("drink","actDone"));
-            document.getElementById("dispG1Drk").innerHTML= "Ordering " + formatTime(timeLeft("drink","actDone"));
+            document.getElementById("g1c2").innerHTML= "Ordering " + formatTime(timeLeft("drink","actDone"));
+            document.getElementById("g2c2").innerHTML= "Ordering " + formatTime(timeLeft("drink","actDone"));
             
             //when timers match, change case back to "no", kick off new stuff
             if (t[tbl].course.drink.actDone == (gTimer - t[tbl].timeStart)){
@@ -676,8 +672,8 @@ function update(){
             disabledButtons(true);
 
             //display timer difference
-            document.getElementById("dispG0App").innerHTML= "Ordering " + formatTime(timeLeft("app","actDone"));
-            document.getElementById("dispG1App").innerHTML= "Ordering " + formatTime(timeLeft("app","actDone"));
+            document.getElementById("g1c3").innerHTML= "Ordering " + formatTime(timeLeft("app","actDone"));
+            document.getElementById("g2c3").innerHTML= "Ordering " + formatTime(timeLeft("app","actDone"));
             
             //when timers match, change case back to "no", kick off new stuff
             if (t[tbl].course.app.actDone == (gTimer - t[tbl].timeStart)){
@@ -695,10 +691,10 @@ function update(){
             disabledButtons(true);
 
             //display timer difference
-            document.getElementById("dispG0Ent").innerHTML= "Ordering " + formatTime(timeLeft("entree","actDone"));
-            document.getElementById("dispG1Ent").innerHTML= "Ordering " + formatTime(timeLeft("entree","actDone"));
-            document.getElementById("dispG0Sal").innerHTML= "Ordering " + formatTime(timeLeft("entree","actDone"));
-            document.getElementById("dispG1Sal").innerHTML= "Ordering " + formatTime(timeLeft("entree","actDone"));
+            document.getElementById("g1c5").innerHTML= "Ordering " + formatTime(timeLeft("entree","actDone"));
+            document.getElementById("g2c5").innerHTML= "Ordering " + formatTime(timeLeft("entree","actDone"));
+            document.getElementById("g1c4").innerHTML= "Ordering " + formatTime(timeLeft("entree","actDone"));
+            document.getElementById("g2c4").innerHTML= "Ordering " + formatTime(timeLeft("entree","actDone"));
             
             //when timers match, change case back to "no", kick off new stuff
             if (t[tbl].course.entree.actDone == (gTimer - t[tbl].timeStart)){
@@ -718,8 +714,8 @@ function update(){
             disabledButtons(true);
 
             //display timer difference
-            document.getElementById("dispG0Dst").innerHTML= "Ordering " + formatTime(timeLeft("dessert","actDone"));
-            document.getElementById("dispG1Dst").innerHTML= "Ordering " + formatTime(timeLeft("dessert","actDone"));
+            document.getElementById("g1c6").innerHTML= "Ordering " + formatTime(timeLeft("dessert","actDone"));
+            document.getElementById("g2c6").innerHTML= "Ordering " + formatTime(timeLeft("dessert","actDone"));
             
             //when timers match, change case back to "no", kick off new stuff
             if (t[tbl].course.dessert.actDone == (gTimer - t[tbl].timeStart)){
@@ -1172,35 +1168,35 @@ function showCheck(c){
     }
     switch(c){
     case "greet":
-        document.getElementById("dispRowGrt").style.visibility = a;
+        document.getElementById("c1").style.visibility = a;
         document.getElementById("greetButtons").style.display = b;
         break;
     case "drink":
-        document.getElementById("dispRowDrk").style.visibility = a;
+        document.getElementById("c2").style.visibility = a;
         document.getElementById("drinkButtons").style.display = b;
         break;
     case "app":
-        document.getElementById("dispRowApp").style.visibility = a;
+        document.getElementById("c3").style.visibility = a;
         document.getElementById("appButtons").style.display = b;
         break;
     case "salad":
-        document.getElementById("dispRowSal").style.visibility = a;
+        document.getElementById("c4").style.visibility = a;
         document.getElementById("saladButtons").style.display = b;
         break;
     case "entree":
-        document.getElementById("dispRowEnt").style.visibility = a;
+        document.getElementById("c5").style.visibility = a;
         document.getElementById("entreeButtons").style.display = b;
         break;
     case "dessert":
-        document.getElementById("dispRowDst").style.visibility = a;
+        document.getElementById("c6").style.visibility = a;
         document.getElementById("dessertButtons").style.display = b;
         break;
     case "bill":
-        document.getElementById("dispRowBil").style.visibility = a;
+        document.getElementById("c7").style.visibility = a;
         document.getElementById("billButtons").style.display = b;
         break;
     case "receipt":
-        document.getElementById("dispRowRct").style.visibility = a;
+        document.getElementById("c8").style.visibility = a;
         document.getElementById("receiptButtons").style.display = b;
         break;
     }

@@ -1,0 +1,64 @@
+<table>
+    <tbody id="dispBody"></tbody>
+</table>
+<body>
+    <button id="newTable" type="button" onclick="displayTable()">newTable</button>
+    <button id="addGuestDisp" type="button" onclick="addGuestDisp(1)">addGuest</button>
+</body>
+<script>
+var dispHedVar = [ 
+    {
+        "b0": "Table: ",
+        "b1": "0",
+        "b2": "Time",
+        "b3": "0:00"
+    },
+    {
+        "b0": "Guests: ",
+        "b1": "num",
+        "b2": "Bill",
+        "b3": "$0"
+    }];
+
+var dispTableVar = [{
+    "g0": ""}, {
+    "g0": "Greet"}, {
+    "g0": "Drink"}, {
+    "g0": "Appetizer"}, {
+    "g0": "Salad"}, {
+    "g0": "Entree"}, {
+    "g0": "Dessert"}, {
+    "g0": "Bill"}, {
+    "g0": "Receipt"
+}];
+
+function displayTable(){
+    var tbody = document.getElementById("dispBody");
+    tbody.innerHTML = ""; //wipes old table
+    for (var i = 0; i < Object.keys(dispHedVar).length; i++) {
+        temp = "<tr id = \"" + "h" + i + "\">";
+        for (let key in dispHedVar[i]) {
+            temp += "<td id = \"" + "h" + i + key + "\">" + dispHedVar[i][key] + "</td>";
+        } 
+        tbody.innerHTML += temp;
+    }   
+    for (var i = 0; i < Object.keys(dispTableVar).length; i++) {
+        temp = "<tr id = \"" + "c" + i + "\">";
+        for (let key in dispTableVar[i]) {
+            temp += "<td id = \"" + key + "c" + i + "\">" + dispTableVar[i][key] + "</td>";
+        } 
+        tbody.innerHTML += temp;
+    }
+}
+
+function addGuestDisp(k){
+    for (var j = 0; j < k; j++){
+        guestNum = Object.keys(dispTableVar[0]).length;
+        dispTableVar[0]["g"+guestNum] = "Guest " + guestNum;
+        for (var i = 1; i < Object.keys(dispTableVar).length; i++) {
+            dispTableVar[i]["g"+guestNum] = "";
+        }
+    }
+    dispHedVar[1].b1 = guestNum
+}
+</script>
