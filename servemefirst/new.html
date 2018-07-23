@@ -1,11 +1,224 @@
+<!DOCTYPE html>
+<html>
+<title>ServeMeFirst Alpha 4.0.0</title>
+<head>
+<!Blake Peterson 2018
+blake.r.peterson@gmail.com>
+</head>
+<body>
+
 <table>
     <tbody id="dispBody"></tbody>
 </table>
-<body>
-    <button id="newTable" type="button" onclick="displayTable()">newTable</button>
+<div id="buttons">
+<!--p> alpha note: yes i know the timers freeze. they work in the background though.</p-->
+<p>
+<div id="greetButtons">
+    <button id="orderGreet" type="button" onclick="order('greet')" >Greet</button> 
+</div>
+</p>
+<p>
+<div id="drinkButtons">
+    <button id="orderDrink" type="button" onclick="order('drink')">Order Drink</button>
+    <button id="makeDrink" type="button" onclick="make('drink')">Make Drink</button>
+    <button id="dropDrink" type="button" onclick="drop('drink')">Drop Drink</button>
+    <button id="busDrink" type="button" onclick="bus('drink')">Bus Drink</button>
+</div>
+</p>
+<p>
+<div id="appButtons">
+    <button id="orderApp" type="button" onclick="order('app')">Order App</button>
+    <button id="sendApp" type="button" onclick="send('app')">Send App</button>
+    <button id="getApp" type="button" onclick="get('app')">Get App</button>
+    <button id="dropApp" type="button" onclick="drop('app')">Drop App</button>
+    <button id="busApp" type="button" onclick="bus('app')">Bus App</button>
+</div>
+</p>
+<p>
+    <div id="saladButtons">
+    <button id="makeSalad" type="button" onclick="make('salad')">Make Salad</button>
+    <button id="dropSalad" type="button" onclick="drop('salad')">Drop Salad</button>
+    <button id="busSalad" type="button" onclick="bus('salad')">Bus Salad</button>
+</div>
+</p>
+<p>
+<div id="entreeButtons">
+    <button id="orderEntree" type="button" onclick="order('entree')">Order Entree</button>
+    <button id="sendEntree" type="button" onclick="send('entree')">Send Entree</button>
+    <button id="getEntree" type="button" onclick="get('entree')">Get Entree</button>
+    <button id="dropEntree" type="button" onclick="drop('entree')">Drop Entree</button>
+    <button id="busEntree" type="button" onclick="bus('entree')">Bus Entree</button>
+</div>
+</p>
+<p>
+<div id="dessertButtons">
+    <button id="orderDessert" type="button" onclick="order('dessert')">Order Dessert</button>
+    <button id="sendDessert" type="button" onclick="send('dessert')">Send Dessert</button>
+    <button id="getDessert" type="button" onclick="get('dessert')">Get Dessert</button>
+    <button id="dropDessert" type="button" onclick="drop('dessert')">Drop Dessert</button>
+    <button id="busDessert" type="button" onclick="bus('dessert')">Bus Dessert</button>
+</div>
+</p>
+<p>
+<div id="billButtons">
+    <button id="makeBill" type="button" onclick="make('bill')">Print Bill</button>
+    <button id="dropBill" type="button" onclick="drop('bill')">Drop Bill</button>
+    <button id="busBill" type="button" onclick="bus('bill')">Pick Up Bill</button>
+</div>
+</p>
+<p>
+<div id="receiptButtons">
+    <button id="makeReceipt" type="button" onclick="make('receipt')">Run Bill</button>
+    <button id="dropReceipt" type="button" onclick="drop('receipt')">Drop Receipt</button>
+    <button id="busReceipt" type="button" onclick="bus('receipt')">Pick Up Receipt</button>
+</div>
+</p>
+</div>
+<div id = "devbuttons">
+    <button id="display Table" type="button" onclick="displayTable()">newTable</button>
     <button id="addGuestDisp" type="button" onclick="addGuestDisp(1)">addGuest</button>
+</div>
+
 </body>
+
 <script>
+var gTimer = 0;
+var gTimerVar = 0;
+var t = [
+    { //table 0
+        timeStart: 0,
+        occupied: "no",
+        course: {
+            greet: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0
+            },
+            drink: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeDone: 0,
+                makeGot: 0,
+                orderDropd: 0,
+            },
+            app: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeGot: 0,
+                orderDropd: 0,
+                emptyDone: 0,
+                bus: 0
+            },
+            salad: {
+                show: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeDone: 0,
+                makeGot: 0,
+                orderDropd: 0
+            },
+            entree: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeGot: 0,
+                orderDropd: 0
+            },
+            dessert: {
+                show: 0,
+                needAct: 0,
+                actDone: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeSent: 0,
+                makeDone: 0,
+                sendDone: 0,
+                makeGot: 0,
+                orderDropd: 0
+            },
+            bill: {
+                show: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeDone: 0,
+                makeGot: 0,
+                orderDropd: 0
+            },
+            receipt: {
+                show: 0,
+                orderTaken: 0,
+                dropDue: 0,
+                makeDone: 0,
+                makeGot: 0,
+                orderDropd: 0
+            },
+        },
+        g: [
+            {//empty because these are actually disp columns and 0 is the sider
+            },
+            { //guest 0
+                thirst: 0,
+                hunger: 0,
+                drinkEmpty: 0,
+                saladEmpty: 0,
+                entreeEmpty: 0,
+                dessertEmpty: 0,
+                saladBus: 0,
+                entreeBus: 0,
+                dessertBus: 0,
+                billBus: 0,
+                receiptBus: 0,
+                debt: 0
+            },
+            { //guest 1
+                thirst: 0,
+                hunger: 0,
+                drinkEmpty: 0,
+                saladEmpty: 0,
+                entreeEmpty: 0,
+                dessertEmpty: 0,
+                saladBus: 0,
+                entreeBus: 0,
+                dessertBus: 0,
+                billBus: 0,
+                receiptBus: 0,
+                debt: 0
+            }
+        ]
+    },
+    { //table 1
+    }
+];
+
+window.onload = function(){
+    displayButtons("none");
+    addGuestDisp(getRnd(2,6));
+    displayTable();
+    //update();
+    gTimer = 0;
+    gTimerVar = setInterval(function(){
+        gTimer++;
+        console.log = gTimer
+        //update();
+    }, 1000);
+};
+
+
 var dispHedVar = [ 
     {
         "b0": "Table: ",
@@ -50,7 +263,6 @@ function displayTable(){
         tbody.innerHTML += temp;
     }
 }
-
 function addGuestDisp(k){
     for (var j = 0; j < k; j++){
         guestNum = Object.keys(dispTableVar[0]).length;
@@ -60,5 +272,17 @@ function addGuestDisp(k){
         }
     }
     dispHedVar[1].b1 = guestNum
+}
+function displayButtons(k){
+    var el = document.getElementById('buttons');
+    var all = el.getElementsByTagName('button');
+    var i;
+    for (i = 0; i < all.length; i++) {
+       all[i].style.display = k;
+    }
+}
+function getRnd(min, max) {
+    //returns int; min (included) and max (excluded)
+    return Math.floor(Math.random() * (max - min) ) + min;
 }
 </script>
