@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 4.0.1</title>
+<title>ServeMeFirst Alpha 4.0.3</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -10,11 +10,15 @@ blake.r.peterson@gmail.com>
 <table>
     <tbody id="dispBody"></tbody>
 </table>
+<p>
+<div id="otherButtons">
+    <button id="newTable" type="button" onclick="newTable()">newTable</button> 
+</div>
+</p>
 <div id="buttons">
-<!--p> alpha note: yes i know the timers freeze. they work in the background though.</p-->
 <p>
 <div id="greetButtons">
-    <button id="orderGreet" type="button" onclick="order('greet')" >Greet</button> 
+    <button id="orderGreet" type="button" onclick="order('greet')">Greet</button> 
 </div>
 </p>
 <p>
@@ -75,11 +79,10 @@ blake.r.peterson@gmail.com>
 </p>
 </div>
 <div id = "devButtons">
-    <button id="displayTable" type="button" onclick="displayTable()">displayTable</button>
-    <button id="addGuestDisp" type="button" onclick="addGuestDisp(1)">addGuest</button>
-    <button id="addGuestInit" type="button" onclick="addGuestInit()">addGuestInit</button>
+    <button id="debug" type="button" onclick="debug()">debug</button>
 </div>
 <p id="test">words</p>
+<p id="test2">words</p>
 </body>
 
 <script>
@@ -185,20 +188,6 @@ var t = [
                 billBus: 0,
                 receiptBus: 0,
                 debt: 0
-            },
-            { //guest 2
-                thirst: 0,
-                hunger: 0,
-                drinkEmpty: 0,
-                saladEmpty: 0,
-                entreeEmpty: 0,
-                dessertEmpty: 0,
-                saladBus: 0,
-                entreeBus: 0,
-                dessertBus: 0,
-                billBus: 0,
-                receiptBus: 0,
-                debt: 0
             }
         ]
     },
@@ -208,18 +197,18 @@ var t = [
 
 window.onload = function(){
     displayButtons("none");
-    addGuestDisp(getRnd(2,6));
-    displayTable();
-    //update();
     gTimer = 0;
     gTimerVar = setInterval(function(){
         gTimer++;
-        console.log = gTimer
-        //update();
+        document.getElementById("test").innerHTML = gTimer;
+        if (chillthefuckout == 1){
+            update();
+        }
     }, 1000);
 };
 
-var tbl = 0
+var chillthefuckout= 0;
+var tbl = 0;
 var dispHedVar = [{
         "b0": "Table: ",
         "b1": "0",
@@ -253,10 +242,10 @@ function displayTable(){
         } 
         tbody.innerHTML += temp;
     }   
-    for (var i = 0; i < Object.keys(dispTableVar).length; i++) {
-        temp = "<tr id = \"" + "c" + i + "\">";
-        for (let key in dispTableVar[i]) {
-            temp += "<td id = \"" + key + "c" + i + "\">" + dispTableVar[i][key] + "</td>";
+    for (var j = 0; j < Object.keys(dispTableVar).length; j++) {
+        temp = "<tr id = \"" + "c" + j + "\">";
+        for (let key in dispTableVar[j]) {
+            temp += "<td id = \"" + key + "c" + j + "\">" + dispTableVar[j][key] + "</td>";
         } 
         tbody.innerHTML += temp;
     }
@@ -269,7 +258,7 @@ function addGuestDisp(k){
             dispTableVar[i]["g"+guestNum] = "";
         }
     }
-    dispHedVar[1].b1 = guestNum
+    displayTable();
 }
 function displayButtons(k){
     var el = document.getElementById('buttons');
@@ -284,21 +273,73 @@ function getRnd(min, max) {
     return Math.floor(Math.random() * (max - min) ) + min;
 }
 
-function addGuestInit(){
-    guestNum = 3;
-    t[tbl].g[guestNum] = {};
-    temp = Object.getOwnPropertyNames(t[tbl].g[1])
-    for (var i = 0; i < Object.keys(t[tbl].g[1]).length; i++) {
-        
-        nowTemp = temp[i]
-        t[tbl].g[3][[nowTemp]] = 0;
-        document.getElementById("test").innerHTML += t[tbl].g[3][[nowTemp]];
-        
+function addGuestInit(k){
+    for (j = 1; j < k; j++){
+        guestNum = t[tbl].g.length; 
+        t[tbl].g[guestNum] = {};
+        temp = Object.getOwnPropertyNames(t[tbl].g[1]);
+        for (var i = 0; i < Object.keys(t[tbl].g[1]).length; i++) {
+            nowTemp = temp[i];
+            t[tbl].g[guestNum][[nowTemp]] = 0;
+        }
     }
 }
 
+function update(){
+    var tbl = 0;
+    document.getElementById("h0b1").innerHTML= tbl;
+    document.getElementById("h0b3").innerHTML= formatTime(getTableTime(tbl));
+    document.getElementById("h1b1").innerHTML= t[tbl].g.length - 1;
+    document.getElementById("h1b3").innerHTML= "$ " + addBill();
+}
+function getTableTime(tbl){
+    return (gTimer - t[tbl].timeStart);
+}
+function formatTime(s) {
+    //source: https://stackoverflow.com/a/37770048
+    return(0>s?(s=-s,'-'):0)+(s-(s%=60))/60+(9<s?':':':0')+s;
+}
 
+function newTable(){
+    guestCount = getRnd(1,9);
+    document.getElementById("test2").innerHTML= guestCount;
+    addGuestInit(guestCount);
+    addGuestDisp(guestCount);
+    displayTable();
+    t[tbl].timeStart = gTimer;
+    for (i = 1; i < (t[tbl].g.length); i++){
+        temp = Object.getOwnPropertyNames(t[tbl].g[1]);
+        for (var j = 0; j < Object.keys(t[tbl].g[1]).length; j++) {
+            nowTemp = temp[j];
+            setGVar(i,nowTemp);
+        }
+    }
+    document.getElementById("newTable").disabled = true;
+    chillthefuckout = 1;
+}
 
+function setGVar(guest,prop){
+    switch (prop){
+        case "thirst":
+        case "hunger":
+            t[tbl].g[guest][prop] = getRnd(1, 5);
+            break;
+        default:
+            t[tbl].g[guest][prop] = 0;
+            break;
+    }
+}
 
+function debug(){
+    document.getElementById("test2").innerHTML= t[tbl].g[5].hunger;
+}
+
+function addBill(){
+    var sum = 0;
+    for(i = 1; i < (t[tbl].g.length); i++){
+        sum += t[tbl].g[i].debt;
+    }
+  return sum;
+}
 
 </script>
