@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 4.0.0</title>
+<title>ServeMeFirst Alpha 4.0.1</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -74,11 +74,12 @@ blake.r.peterson@gmail.com>
 </div>
 </p>
 </div>
-<div id = "devbuttons">
-    <button id="display Table" type="button" onclick="displayTable()">newTable</button>
+<div id = "devButtons">
+    <button id="displayTable" type="button" onclick="displayTable()">displayTable</button>
     <button id="addGuestDisp" type="button" onclick="addGuestDisp(1)">addGuest</button>
+    <button id="addGuestInit" type="button" onclick="addGuestInit()">addGuestInit</button>
 </div>
-
+<p id="test">words</p>
 </body>
 
 <script>
@@ -171,7 +172,7 @@ var t = [
         g: [
             {//empty because these are actually disp columns and 0 is the sider
             },
-            { //guest 0
+            { //guest 1
                 thirst: 0,
                 hunger: 0,
                 drinkEmpty: 0,
@@ -185,7 +186,7 @@ var t = [
                 receiptBus: 0,
                 debt: 0
             },
-            { //guest 1
+            { //guest 2
                 thirst: 0,
                 hunger: 0,
                 drinkEmpty: 0,
@@ -218,22 +219,20 @@ window.onload = function(){
     }, 1000);
 };
 
-
-var dispHedVar = [ 
-    {
+var tbl = 0
+var dispHedVar = [{
         "b0": "Table: ",
         "b1": "0",
         "b2": "Time",
         "b3": "0:00"
-    },
-    {
+    }, {
         "b0": "Guests: ",
         "b1": "num",
         "b2": "Bill",
         "b3": "$0"
     }];
-
-var dispTableVar = [{
+var dispTableVar = [
+    {
     "g0": ""}, {
     "g0": "Greet"}, {
     "g0": "Drink"}, {
@@ -244,7 +243,6 @@ var dispTableVar = [{
     "g0": "Bill"}, {
     "g0": "Receipt"
 }];
-
 function displayTable(){
     var tbody = document.getElementById("dispBody");
     tbody.innerHTML = ""; //wipes old table
@@ -285,4 +283,22 @@ function getRnd(min, max) {
     //returns int; min (included) and max (excluded)
     return Math.floor(Math.random() * (max - min) ) + min;
 }
+
+function addGuestInit(){
+    guestNum = 3;
+    t[tbl].g[guestNum] = {};
+    temp = Object.getOwnPropertyNames(t[tbl].g[1])
+    for (var i = 0; i < Object.keys(t[tbl].g[1]).length; i++) {
+        
+        nowTemp = temp[i]
+        t[tbl].g[3][[nowTemp]] = 0;
+        document.getElementById("test").innerHTML += t[tbl].g[3][[nowTemp]];
+        
+    }
+}
+
+
+
+
+
 </script>
