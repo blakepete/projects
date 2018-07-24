@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 4.0.5</title>
+<title>ServeMeFirst Alpha 4.0.6</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -98,7 +98,7 @@ var t = [
                 needAct: 0,
                 actDone: 0,
                 orderTaken: 0,
-                display: "order"
+                dispF: "order"
             },
             drink: {
                 show: 0,
@@ -109,7 +109,7 @@ var t = [
                 makeDone: 0,
                 makeGot: 0,
                 orderDropd: 0,
-                display: "order"
+                dispF: "blank"
             },
             app: {
                 show: 0,
@@ -123,7 +123,8 @@ var t = [
                 makeGot: 0,
                 orderDropd: 0,
                 emptyDone: 0,
-                bus: 0
+                bus: 0,
+                dispF: "blank"
             },
             salad: {
                 show: 0,
@@ -143,7 +144,8 @@ var t = [
                 makeDone: 0,
                 sendDone: 0,
                 makeGot: 0,
-                orderDropd: 0
+                orderDropd: 0,
+                dispF: "blank"
             },
             dessert: {
                 show: 0,
@@ -155,7 +157,8 @@ var t = [
                 makeDone: 0,
                 sendDone: 0,
                 makeGot: 0,
-                orderDropd: 0
+                orderDropd: 0,
+                dispF: "blank"
             },
             bill: {
                 show: 0,
@@ -163,7 +166,8 @@ var t = [
                 dropDue: 0,
                 makeDone: 0,
                 makeGot: 0,
-                orderDropd: 0
+                orderDropd: 0,
+                dispF: "blank"
             },
             receipt: {
                 show: 0,
@@ -171,7 +175,8 @@ var t = [
                 dropDue: 0,
                 makeDone: 0,
                 makeGot: 0,
-                orderDropd: 0
+                orderDropd: 0,
+                dispF: "blank"
             },
         },
         g: [
@@ -321,17 +326,17 @@ function update(){
         for (var p = 0; p < 2; p++){
             var cell = ("g"+j+"c"+(p+1));
             var c = temp[p];
-            var f = t[tbl].course[c].display;
+            var f = t[tbl].course[c].dispF;
             var z = stage[c][f]();
             document.getElementById(cell).innerHTML= z;
         }
     }
     if (t[tbl].occupied > getTableTime()){
         disabledButtons(true);
-        document.getElementById("status").innerHTML= "busy";
+        document.getElementById("status").innerHTML= "busy" + formatTime(t[tbl].occupied - getTableTime());
     } else {
         disabledButtons(false);
-        document.getElementById("status").innerHTML= "nerd";
+        document.getElementById("status").innerHTML= "do something";
     }
 //    if (t[tbl].course.greet.orderTaken == 1){
 //        t[tbl].course.greet.show = 0;
@@ -366,7 +371,7 @@ function newTable(){
     chillthefuckout = 1;
     t[tbl].course.greet.show = 1;
     document.getElementById("orderGreet").style.display = "inline";
-    t[tbl].course.greet.needAct = 30;
+    t[tbl].course.greet.needAct = 5;
 }
 
 function setGVar(guest,prop){
@@ -395,19 +400,22 @@ function addBill(){
 function order(k){
     switch(k){
         case 'greet':
-            t[tbl].occupied = setEndTime("greet","actDone",5);
+            t[tbl].occupied = setEndTime("greet","actDone",3);
             //t[tbl].course.greet.show = 0;
             t[tbl].course.drink.show = 1;
-            t[tbl].course.greet.display = "ordering";
+            t[tbl].course.greet.dispF = "ordering";
+            t[tbl].course.drink.dispF = "order";
             t[tbl].course.drink.needAct = 30 + getTableTime();
             document.getElementById("orderGreet").style.display = "none";
             document.getElementById("orderDrink").style.display = "inline";
             update();
             break;
         case 'drink':
-            t[tbl].occupied = setEndTime("drink","actDone",15);
+            t[tbl].occupied = setEndTime("drink","actDone",3);
+            t[tbl].course.greet.show = 0;
             t[tbl].course.app.show = 1;
-            t[tbl].course.drink.display = "ordering";
+            t[tbl].course.drink.dispF = "ordering";
+            setEndTime("drink","dropDue",180);
             document.getElementById("orderDrink").style.display = "none";
             document.getElementById("makeDrink").style.display = "inline";
             document.getElementById("orderApp").style.display = "inline";
@@ -440,8 +448,10 @@ function order(k){
 function make(k){
     switch(k){ //need if checks for orderTaken
         case 'drink':
-            setEndTime("drink","makeDone",30);
-            t[tbl].occupied = "makeDrink";
+            t[tbl].occupied = setEndTime("drink","makeDone",4);
+            watcher = setInterval(function() {
+                t[tbl].course.drink.makeGot = endWatcher(t[tbl].course.drink.makeDone,[watcher]);
+            }, 1000);
             document.getElementById("dropDrink").style.display = "inline";
             document.getElementById("makeDrink").style.display = "none";
             update();
@@ -533,6 +543,7 @@ function drop(k){
         case 'drink':
             if(t[tbl].course.drink.makeGot == 1){
                 t[tbl].course.drink.orderDropd = 1;
+                t[tbl].course.drink.makeGot = 0;
                 setEmptyTime(0,"drinkEmpty",2700);
                 setEmptyTime(0,"drinkEmpty",2700);
                 document.getElementById("dropDrink").style.display = "none";
@@ -674,23 +685,49 @@ function setEndTime(c,x,y){
 
 var stage = { //possible new data structure.
     greet: {
-        blank:"",
+        blank: function() {
+            return "";
+        },
         order: function() {
-            return ("Greet " + formatTime(timeLeft("greet","needAct")));
+            if (timeLeft("greet","needAct") <= 0){
+                return "late";
+            } else {
+                return ("Greet " + formatTime(timeLeft("greet","needAct")));
+            }
         },
         ordering: function() {
-            return ("Greeting " + formatTime(timeLeft("greet","actDone")));
+            if (timeLeft("greet","actDone") <= 0){
+                return "Greeted";
+            } else {
+                return ("Greeting " + formatTime(timeLeft("greet","actDone")));
+            }
         }
     },
     drink: {
-        blank:"a",
+        blank: function() {
+            return "";
+        },
         order: function() {
-            return ("drink " + formatTime(timeLeft("drink","needAct")));
         },
         ordering: function() {
-            return ("Ordering " + formatTime(timeLeft("drink","actDone")));
         },
-        taken:"s",
+        order: function() {
+            if (timeLeft("drink","needAct") <= 0){
+                return "late";
+            } else {
+                return ("Order Drink " + formatTime(timeLeft("drink","needAct")));
+            }
+        },
+        ordering: function() {
+            if (timeLeft("drink","actDone") <= 0){
+                return ("Waiting " + formatTime(timeLeft("drink","dropDue")));
+            } else {
+                return ("Ordering " + formatTime(timeLeft("drink","actDone")));
+            }
+        },
+        taken: function() {
+            return ("Waiting " + formatTime(timeLeft("drink","dropDue")));
+        },
         sent:"d",
         making:"f",
         done:"g",
@@ -783,6 +820,13 @@ var stage = { //possible new data structure.
 
 function timeLeft(c,x){
     return (t[tbl].course[c][x] - getTableTime());
+}
+
+function endWatcher(time,flag){
+    if (time <= (getTableTime(tbl))+1){
+        clearInterval(flag);
+        return 1; //make got, etc
+    }
 }
 
 function centLeft(c,x,y){
