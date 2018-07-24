@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 4.0.8</title>
+<title>ServeMeFirst Alpha 4.0.9</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -98,7 +98,9 @@ var t = [
                 needAct: 0,
                 actDone: 0,
                 orderTaken: 0,
-                dispF: "order"
+                dispF: "order",
+                orderTime: 3, //seconds
+                needTime: 40 //seconds
             },
             drink: {
                 show: 0,
@@ -110,7 +112,11 @@ var t = [
                 makeGot: 0,
                 orderDropd: 0,
                 dispF: "blank",
-                estTime: 45 //minutes
+                estTime: 45, //minutes
+                orderTime: 3, //seconds
+                makeTime: 3, //seconds
+                dueTime: 90, //seconds
+                needTime: 40 //seconds
             },
             app: {
                 show: 0,
@@ -127,7 +133,12 @@ var t = [
                 emptyDone: 0,
                 bus: 0,
                 dispF: "blank",
-                estTime: 1 //minutes
+                estTime: 1, //minutes
+                orderTime: 3, //seconds
+                makeTime: 7, //seconds
+                sendTime: 3, //seconds
+                dueTime: 75, //seconds
+                needTime: 40 //seconds
             },
             salad: {
                 show: 0,
@@ -137,7 +148,12 @@ var t = [
                 makeGot: 0,
                 orderDropd: 0,
                 dispF: "blank",
-                estTime: 1 //minutes
+                estTime: 1, //minutes
+                orderTime: 3, //seconds
+                makeTime: 3, //seconds
+                busCount: 0,
+                dueTime: 100, //seconds
+                needTime: 40 //seconds
             },
             entree: {
                 show: 0,
@@ -152,7 +168,13 @@ var t = [
                 makeGot: 0,
                 orderDropd: 0,
                 dispF: "blank",
-                estTime: 1 //minutes
+                estTime: 1, //minutes
+                orderTime: 3, //seconds
+                makeTime: 7, //seconds
+                sendTime: 3, //seconds
+                busCount: 0,
+                dueTime: 240, //seconds
+                needTime: 40 //seconds
             },
             dessert: {
                 show: 0,
@@ -166,7 +188,13 @@ var t = [
                 makeGot: 0,
                 orderDropd: 0,
                 dispF: "blank",
-                estTime: 1 //minutes
+                estTime: 1, //minutes
+                orderTime: 3, //seconds
+                makeTime: 7, //seconds
+                sendTime: 3, //seconds
+                busCount: 0,
+                dueTime: 120, //seconds
+                needTime: 40 //seconds
             },
             bill: {
                 show: 0,
@@ -391,7 +419,7 @@ function newTable(){
     chillthefuckout = 1;
     t[tbl].course.greet.show = 1;
     document.getElementById("ordergreet").style.display = "inline";
-    t[tbl].course.greet.needAct = 5;
+    setEndTime("greet","needAct",t[tbl].course.greet.needTime);
 }
 
 function setGVar(guest,prop){
@@ -418,22 +446,23 @@ function addBill(){
 }
 
 function order(k){
-    t[tbl].occupied = setEndTime(k,"actDone",3);
+    t[tbl].occupied = setEndTime(k,"actDone",t[tbl].course[k].orderTime);
     t[tbl].course[k].dispF = "ordering";
     var d = "order"+k;
     document.getElementById(d).style.display = "none";
-    setEndTime(k,"dropDue",120);
+    setEndTime(k,"dropDue",t[tbl].course[k].dueTime);
     switch(k){
         case 'greet':
+            setEndTime("drink","needAct",t[tbl].course.drink.needTime);
             t[tbl].course.drink.show = 1;
             t[tbl].course.drink.dispF = "order";
-            t[tbl].course.drink.needAct = 30 + getTableTime();
             document.getElementById("orderdrink").style.display = "inline";
             break;
         case 'drink':
-            t[tbl].course.greet.show = 0;
+            setEndTime("app","needAct",t[tbl].course.app.needTime);
             t[tbl].course.app.show = 1;
-            t[tbl].course.app.dispF = "blank";
+            t[tbl].course.app.dispF = "order";
+            t[tbl].course.greet.dispF = "blank";
             document.getElementById("makedrink").style.display = "inline";
             document.getElementById("orderapp").style.display = "inline";
             break;
@@ -441,6 +470,8 @@ function order(k){
             document.getElementById("sendapp").style.display = "inline";
             break;
         case 'entree':
+            setEndTime("salad","dropDue",t[tbl].course.salad.dueTime);
+            t[tbl].course.salad.dispF = "ordering";
             document.getElementById("sendentree").style.display = "inline";
             document.getElementById("makesalad").style.display = "inline";
             break;
@@ -451,7 +482,7 @@ function order(k){
     update();
 }
 function make(k){
-    t[tbl].occupied = setEndTime(k,"makeDone",4);
+    t[tbl].occupied = setEndTime(k,"makeDone",t[tbl].course[k].makeTime);
     makeWatcher = setInterval(function() {
         t[tbl].course[k].makeGot = endWatcher(t[tbl].course[k].makeDone,[makeWatcher]);
     }, 1000);
@@ -476,68 +507,27 @@ function make(k){
     update();
 }
 function send(k){
-    t[tbl].occupied = setEndTime(k,"makeDone",7);
-    t[tbl].occupied = setEndTime(k,"sendDone",3);
+    t[tbl].occupied = setEndTime(k,"makeDone",t[tbl].course[k].makeTime);
+    t[tbl].occupied = setEndTime(k,"sendDone",t[tbl].course[k].sendTime);
+    var d = "send"+k;
+    var h = "get"+k;
+    document.getElementById(d).style.display = "none";
+    document.getElementById(h).style.display = "inline";
     t[tbl].course[k].orderSent = 1;
     sendWatcher = setInterval(function() {
         t[tbl].course[k].makeReady = endWatcher(t[tbl].course[k].makeDone,[sendWatcher]);
     }, 1000);
-    switch(k){
-        case 'app':
-            //setEndTime("app","makeDone",180);
-            //setEndTime("app","sendDone",15);
-            document.getElementById("sendapp").style.display = "none";
-            document.getElementById("getapp").style.display = "inline";
-            document.getElementById("getapp").disabled = true;
-            //t[tbl].occupied = "sendapp";
-            break;
-        case 'entree':
-            //setEndTime("entree","makeDone",600);
-            //setEndTime("entree","sendDone",30);
-            document.getElementById("sendentree").style.display = "none";
-            document.getElementById("getentree").style.display = "inline";
-            //t[tbl].occupied = "sendentree";
-            break;
-        case 'dessert':
-            //setEndTime("dessert","makeDone",180);
-            //setEndTime("dessert","sendDone",15);
-            document.getElementById("senddessert").style.display = "none";
-            document.getElementById("getdessert").style.display = "inline";
-            //t[tbl].occupied = "senddessert";
-            break;
-    }
     update();
 }
 function get(k){
-    switch(k){
-        case 'app':
-            if (t[tbl].course.app.makeDone <= getTableTime()){
-                t[tbl].course.app.makeGot = 1;
-                document.getElementById("getapp").innerHTML= "Get App";
-                document.getElementById("dropapp").style.display = "inline";
-                document.getElementById("getapp").style.display = "none";
-            }
-            update();
-            break;
-        case 'entree':
-            if (t[tbl].course.entree.makeDone <= getTableTime()){
-                t[tbl].course.entree.makeGot = 1;
-                document.getElementById("getentree").innerHTML= "Get Entree";
-                document.getElementById("dropentree").style.display = "inline";
-                document.getElementById("getentree").style.display = "none";
-            }
-            update();
-            break;
-        case 'dessert':
-            if (t[tbl].course.dessert.makeDone <= getTableTime()){
-                t[tbl].course.dessert.makeGot = 1;
-                document.getElementById("getdessert").innerHTML= "Get Dessert";
-                document.getElementById("dropdessert").style.display = "inline";
-                document.getElementById("getdessert").style.display = "none";
-            }
-            update();
-            break;
+    var d = "drop"+k;
+    var h = "get"+k;
+    if (t[tbl].course[k].makeDone <= getTableTime()){
+        t[tbl].course[k].makeGot = 1;
+        document.getElementById(d).style.display = "inline";
+        document.getElementById(h).style.display = "none";
     }
+    update();
 }
 function drop(k){
     if(t[tbl].course[k].makeGot == 1){
@@ -561,7 +551,9 @@ function drop(k){
                 document.getElementById("orderentree").style.display = "inline";
                 t[tbl].course.salad.show = 1;
                 t[tbl].course.entree.show = 1;
-                setEndTime("entree","needAct",120);
+                setEndTime("entree","needAct",t[tbl].course.entree.needTime);
+                t[tbl].course.entree.dispF = "order";
+                t[tbl].course.salad.dispF = "order";
                 break;
             case 'salad':
                 for (var j = 1; j < t[tbl].g.length; j++) {
@@ -575,6 +567,8 @@ function drop(k){
                 }
                 document.getElementById("dropentree").style.display = "none";
                 document.getElementById("orderdessert").style.display = "inline";
+                setEndTime("dessert","needAct",t[tbl].course.dessert.needTime);
+                t[tbl].course.dessert.dispF = "order";
                 t[tbl].course.dessert.show = 1;
                 break;
             case 'dessert':
@@ -617,8 +611,15 @@ function bus(k){
             for (var j = 1; j < t[tbl].g.length; j++) {
                 if(t[tbl].g[j].saladEmpty <= getTableTime(tbl)){
                     t[tbl].g[j].saladBus = 1;
-                    //t[tbl].course[k].dispF = "bus";
-                    //document.getElementById("bussalad").style.display = "none";
+                }
+            }
+            var temp = 0;
+            for (var j = 1; j < t[tbl].g.length; j++) {                
+                if (t[tbl].g[j].saladBus == 1){
+                    temp+=1;
+                }
+                if (temp == (t[tbl].g.length - 1)){
+                    document.getElementById("bussalad").style.display = "none";
                 }
             }
             break;
@@ -626,8 +627,15 @@ function bus(k){
             for (var j = 1; j < t[tbl].g.length; j++) {
                 if(t[tbl].g[j].entreeEmpty <= getTableTime()){
                     t[tbl].g[j].entreeBus = 1;
-                    //t[tbl].course[k].dispF = "bus";
-                    //document.getElementById("busentree").style.display = "none";
+                }
+            }
+            var temp = 0;
+            for (var j = 1; j < t[tbl].g.length; j++) {                
+                if (t[tbl].g[j].entreeBus == 1){
+                    temp+=1;
+                }
+                if (temp == (t[tbl].g.length - 1)){
+                    document.getElementById("busentree").style.display = "none";
                 }
             }
             break;
@@ -635,8 +643,15 @@ function bus(k){
             for (var j = 1; j < t[tbl].g.length; j++) {
                 if(t[tbl].g[j].dessertEmpty <= getTableTime()){
                     t[tbl].g[j].dessertBus = 1;
-                    //t[tbl].course[k].dispF = "bus";
-                    //document.getElementById("busdessert").style.display = "none";
+                }
+            }
+            var temp = 0;
+            for (var j = 1; j < t[tbl].g.length; j++) {                
+                if (t[tbl].g[j].dessertBus == 1){
+                    temp+=1;
+                }
+                if (temp == (t[tbl].g.length - 1)){
+                    document.getElementById("busdessert").style.display = "none";
                 }
             }
             break;
@@ -715,7 +730,7 @@ var stage = { //possible new data structure.
             if (timeLeft("app","needAct") <= 0){
                 return "late";
             } else {
-                return ("app " + formatTime(timeLeft("app","needAct")));
+                return ("Order " + formatTime(timeLeft("app","needAct")));
             }
         },
         ordering: function() {
@@ -743,17 +758,17 @@ var stage = { //possible new data structure.
             return "";
         },
         order: function() {
-            if (timeLeft("salad","needAct") <= 0){
+            if (timeLeft("entree","needAct") <= 0){
                 return "late";
             } else {
-                return ("Order " + formatTime(timeLeft("salad","needAct")));
+                return ("Order " + formatTime(timeLeft("entree","needAct")));
             }
         },
         ordering: function() {
-            if (timeLeft("salad","actDone") <= 0){
+            if (timeLeft("entree","actDone") <= 0){
                 return ("Waiting " + formatTime(timeLeft("salad","dropDue")));
             } else {
-                return ("Ordering " + formatTime(timeLeft("salad","actDone")));
+                return ("Ordering " + formatTime(timeLeft("entree","actDone")));
             }
         },
         taken:"s",
@@ -811,7 +826,7 @@ var stage = { //possible new data structure.
             return "";
         },
         order: function() {
-            return ("dessert " + formatTime(timeLeft("dessert","needAct")));
+            return ("Order " + formatTime(timeLeft("dessert","needAct")));
         },
         ordering: function() {
             if (timeLeft("dessert","actDone") <= 0){
@@ -876,29 +891,34 @@ function centLeft(c,x,z){
     if (c == "app"){
         y = (t[tbl].course.app.estTime * 0.6);
         for (var j = 1; j < t[tbl].g.length; j++) {
-            temp += t[tbl].g[j].thirst;
+            temp += t[tbl].g[j].hunger;
         }
         temp = temp / t[tbl].g.length;
         return ((Math.round((t[tbl].course[c][x] - getTableTime(tbl)) / (y * (1 / temp)))) + "%");
-    } else {
+    } else if (z == "drink") {
         temp = t[tbl].g[c].thirst;
+        return ((Math.round((t[tbl].g[[c]][x] - getTableTime(tbl)) / (y * (1 / temp))))+ "%");
+    } else {
+        temp = t[tbl].g[c].hunger;
         return ((Math.round((t[tbl].g[[c]][x] - getTableTime(tbl)) / (y * (1 / temp))))+ "%");
     }
 }
 
 function setEmptyTime(c,x,z){
-    document.getElementById("test2").innerHTML+= z;
     var y = (t[tbl].course[z].estTime * 60);
     var temp = 0;
     if (c == "app"){
         y = (t[tbl].course.app.estTime * 60);
         for (var j = 1; j < t[tbl].g.length; j++) {
-            temp += t[tbl].g[j].thirst;
+            temp += t[tbl].g[j].hunger;
         }
         temp = temp / t[tbl].g.length;
         t[tbl].course[c][x] = getTableTime(tbl) + (y * (1 / temp));
-    } else {
+    } else if (z == "drink"){
         temp = t[tbl].g[c].thirst;
+        t[tbl].g[c][x] = getTableTime(tbl) + (y * (1 / temp));
+    } else {
+        temp = t[tbl].g[c].hunger;
         t[tbl].g[c][x] = getTableTime(tbl) + (y * (1 / temp));
     }
 }
