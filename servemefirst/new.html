@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>ServeMeFirst Alpha 4.0.9</title>
+<title>ServeMeFirst Alpha 4.1.0</title>
 <head>
 <!Blake Peterson 2018
 blake.r.peterson@gmail.com>
@@ -12,12 +12,13 @@ blake.r.peterson@gmail.com>
 </table>
 <p>
 <div id="otherButtons">
-    <button id="newTable" type="button" onclick="newTable()">newTable</button> 
+    <button id="newTable" type="button" onclick="newTable()">Start</button> 
 </div>
 </p>
 <div id="buttons">
 <p>
 <div id="b1">
+    <!--missing camelCase because i need to ref the id with concatenation later-->
     <button id="ordergreet" type="button" onclick="order('greet')">Greet</button> 
 </div>
 </p>
@@ -78,11 +79,18 @@ blake.r.peterson@gmail.com>
 </div>
 </p>
 </div>
-<div id = "devButtons">
-    <button id="debug" type="button" onclick="debug()">debug</button>
+<div id = "dev">
+<div id = "cheat">
+    <button id="cheat1" type="button" onclick="cheat(1)">cheat01</button>
+    <button id="cheat10" type="button" onclick="cheat(10)">cheat10</button>
+    <button id="cheat20" type="button" onclick="cheat(20)">cheat20</button>
+<br>
+    <button id="cheat25" type="button" onclick="cheat(25)">cheat25</button>
+    <button id="cheat50" type="button" onclick="cheat(50)">cheat50</button>
+    <button id="cheat120" type="button" onclick="cheat(120)">cheat120</button>
+    <br>
 </div>
-<p id="test">words</p>
-<p id="test2">words</p>
+</div>
 </body>
 
 <script>
@@ -99,8 +107,8 @@ var t = [
                 actDone: 0,
                 orderTaken: 0,
                 dispF: "order",
-                orderTime: 3, //seconds
-                needTime: 40 //seconds
+                orderTime: 5, //seconds
+                needTime: 120 //seconds
             },
             drink: {
                 show: 0,
@@ -113,10 +121,10 @@ var t = [
                 orderDropd: 0,
                 dispF: "blank",
                 estTime: 45, //minutes
-                orderTime: 3, //seconds
-                makeTime: 3, //seconds
-                dueTime: 90, //seconds
-                needTime: 40 //seconds
+                orderTime: 20, //seconds
+                makeTime: 30, //seconds
+                dueTime: 120, //seconds
+                needTime: 120 //seconds
             },
             app: {
                 show: 0,
@@ -133,12 +141,12 @@ var t = [
                 emptyDone: 0,
                 bus: 0,
                 dispF: "blank",
-                estTime: 1, //minutes
-                orderTime: 3, //seconds
-                makeTime: 7, //seconds
-                sendTime: 3, //seconds
-                dueTime: 75, //seconds
-                needTime: 40 //seconds
+                estTime: 20, //minutes
+                orderTime: 15, //seconds
+                makeTime: 240, //seconds
+                sendTime: 10, //seconds
+                dueTime: 360, //seconds
+                needTime: 180 //seconds
             },
             salad: {
                 show: 0,
@@ -148,12 +156,11 @@ var t = [
                 makeGot: 0,
                 orderDropd: 0,
                 dispF: "blank",
-                estTime: 1, //minutes
-                orderTime: 3, //seconds
-                makeTime: 3, //seconds
-                busCount: 0,
-                dueTime: 100, //seconds
-                needTime: 40 //seconds
+                estTime: 16, //minutes
+                //orderTime: 3, //seconds
+                makeTime: 30, //seconds
+                dueTime: 240, //seconds
+                needTime: 180 //seconds
             },
             entree: {
                 show: 0,
@@ -168,13 +175,12 @@ var t = [
                 makeGot: 0,
                 orderDropd: 0,
                 dispF: "blank",
-                estTime: 1, //minutes
-                orderTime: 3, //seconds
-                makeTime: 7, //seconds
-                sendTime: 3, //seconds
-                busCount: 0,
-                dueTime: 240, //seconds
-                needTime: 40 //seconds
+                estTime: 40, //minutes
+                orderTime: 60, //seconds
+                makeTime: 540, //seconds
+                sendTime: 45, //seconds
+                dueTime: 720, //seconds
+                needTime: 180 //seconds
             },
             dessert: {
                 show: 0,
@@ -188,13 +194,12 @@ var t = [
                 makeGot: 0,
                 orderDropd: 0,
                 dispF: "blank",
-                estTime: 1, //minutes
-                orderTime: 3, //seconds
-                makeTime: 7, //seconds
-                sendTime: 3, //seconds
-                busCount: 0,
-                dueTime: 120, //seconds
-                needTime: 40 //seconds
+                estTime: 10, //minutes
+                orderTime: 15, //seconds
+                makeTime: 120, //seconds
+                sendTime: 15, //seconds
+                dueTime: 240, //seconds
+                needTime: 1200 //seconds
             },
             bill: {
                 show: 0,
@@ -203,7 +208,9 @@ var t = [
                 makeDone: 0,
                 makeGot: 0,
                 orderDropd: 0,
-                dispF: "blank"
+                dispF: "blank",
+                estTime: 2, //minutes
+                makeTime: 10, //seconds
             },
             receipt: {
                 show: 0,
@@ -212,7 +219,10 @@ var t = [
                 makeDone: 0,
                 makeGot: 0,
                 orderDropd: 0,
-                dispF: "blank"
+                dispF: "blank",
+                estTime: 2, //minutes
+                dueTime: 240, //seconds
+                makeTime: 30 //seconds
             },
         },
         g: [
@@ -225,6 +235,8 @@ var t = [
                 saladEmpty: 0,
                 entreeEmpty: 0,
                 dessertEmpty: 0,
+                billEmpty: 0,
+                receiptEmpty: 0,
                 saladBus: 0,
                 entreeBus: 0,
                 dessertBus: 0,
@@ -241,11 +253,11 @@ window.onload = function(){
     gTimer = 0;
     gTimerVar = setInterval(function(){
         gTimer++;
-        document.getElementById("test").innerHTML = gTimer;
         if (chillthefuckout == 1){
             update();
         }
     }, 1000);
+    //document.getElementById("dev").style.display = "none"; //comment for dev mode
 };
 
 var chillthefuckout= 0;
@@ -359,7 +371,7 @@ function update(){
         document.getElementById(["b"+(i+1)]).style.display = y;
     }
     for (var j = 1; j < t[tbl].g.length; j++) {
-        for (var p = 0; p < 6; p++){
+        for (var p = 0; p < 8; p++){
             var cell = ("g"+j+"c"+(p+1));
             var c = temp[p];
             var f = t[tbl].course[c].dispF;
@@ -386,13 +398,6 @@ function update(){
             document.getElementById("status").innerHTML= "cooking " + formatTime(t[tbl].course.dessert.makeDone - getTableTime());
         }
     }
-//    if (t[tbl].course.greet.orderTaken == 1){
-//        t[tbl].course.greet.show = 0;
-//        document.getElementById("g1c1").innerHTML= "Greeted";
-//    } else if (t[tbl].course.greet.orderTaken === 0){
-//        t[tbl].course.greet.show = 1;
-//        document.getElementById("g1c1").innerHTML= "Greet " + formatTime(timeLeft("greet","needAct"));
-//    }
 }
 function getTableTime(tbl = 0){
     return (gTimer - t[tbl].timeStart);
@@ -403,7 +408,7 @@ function formatTime(s) {
 }
 
 function newTable(){
-    guestCount = getRnd(1,5);
+    guestCount = getRnd(1,9);
     addGuestInit(guestCount);
     addGuestDisp(guestCount);
     displayTable();
@@ -426,7 +431,7 @@ function setGVar(guest,prop){
     switch (prop){
         case "thirst":
         case "hunger":
-            t[tbl].g[guest][prop] = getRnd(1, 5);
+            t[tbl].g[guest][prop] = getRnd(2, 5);
             break;
         default:
             t[tbl].g[guest][prop] = 0;
@@ -483,27 +488,13 @@ function order(k){
 }
 function make(k){
     t[tbl].occupied = setEndTime(k,"makeDone",t[tbl].course[k].makeTime);
-    makeWatcher = setInterval(function() {
+    makeWatcher = setInterval(function() { //needs multi call support
         t[tbl].course[k].makeGot = endWatcher(t[tbl].course[k].makeDone,[makeWatcher]);
     }, 1000);
-    switch(k){ //need if checks for orderTaken
-        case 'drink':
-            document.getElementById("dropdrink").style.display = "inline";
-            document.getElementById("makedrink").style.display = "none";
-            break;
-        case 'salad':
-            document.getElementById("dropsalad").style.display = "inline";
-            document.getElementById("makesalad").style.display = "none";
-            break;
-        case 'bill':
-            document.getElementById("dropbill").style.display = "inline";
-            document.getElementById("makebill").style.display = "none";
-            break;
-        case 'receipt':
-            document.getElementById("dropreceipt").style.display = "inline";
-            document.getElementById("makereceipt").style.display = "none";
-            break;
-    }
+    var d = "drop"+k;
+    var h = "make"+k;
+    document.getElementById(d).style.display = "inline";
+    document.getElementById(h).style.display = "none";
     update();
 }
 function send(k){
@@ -535,19 +526,18 @@ function drop(k){
         t[tbl].course[k].orderDropd = 1;
         t[tbl].course[k].dispF = "dropd";
         var d = "bus"+k;
+        var h = "drop"+k;
+        var r = k+"Empty";
         document.getElementById(d).style.display = "inline";
-        document.getElementById("busdrink").style.display = "none";
+        document.getElementById("busdrink").style.display = "none"; //clears unused drink bus
+        document.getElementById("busreceipt").style.display = "none"; //clears unused drink bus
+        document.getElementById(h).style.display = "none";
+        for (var j = 1; j < t[tbl].g.length; j++) {
+            setEmptyTime(j,r,k);
+        }
         switch(k){
-            case 'drink':
-                for (var j = 1; j < t[tbl].g.length; j++) {
-                    setEmptyTime(j,"drinkEmpty",k);
-                }
-                document.getElementById("dropdrink").style.display = "none";
-                document.getElementById("makedrink").style.display = "inline";
-                break;
             case 'app':
                 setEmptyTime("app","emptyDone",k);
-                document.getElementById("dropapp").style.display = "none";
                 document.getElementById("orderentree").style.display = "inline";
                 t[tbl].course.salad.show = 1;
                 t[tbl].course.entree.show = 1;
@@ -555,50 +545,50 @@ function drop(k){
                 t[tbl].course.entree.dispF = "order";
                 t[tbl].course.salad.dispF = "order";
                 break;
-            case 'salad':
-                for (var j = 1; j < t[tbl].g.length; j++) {
-                    setEmptyTime(j,"saladEmpty",k);
-                }
-                document.getElementById("dropsalad").style.display = "none";
+            case 'drink':
+                document.getElementById("makedrink").style.display = "inline";
                 break;
             case 'entree':
-                for (var j = 1; j < t[tbl].g.length; j++) {
-                    setEmptyTime(j,"entreeEmpty",k);
-                }
-                document.getElementById("dropentree").style.display = "none";
                 document.getElementById("orderdessert").style.display = "inline";
                 setEndTime("dessert","needAct",t[tbl].course.dessert.needTime);
                 t[tbl].course.dessert.dispF = "order";
                 t[tbl].course.dessert.show = 1;
                 break;
             case 'dessert':
-                for (var j = 1; j < t[tbl].g.length; j++) {
-                    setEmptyTime(j,"dessertEmpty",k);
-                }
-                document.getElementById("dropdessert").style.display = "none";
                 document.getElementById("makebill").style.display = "inline";
                 t[tbl].course.bill.show = 1;
-                //t[tbl].course.bill.orderTaken = 1;
-                setEndTime("bill","dropDue",300);
-                break;
-            case 'bill':
-                setEmptyTime(0,"billEmpty",100);
-                setEmptyTime(1,"billEmpty",100);
-                document.getElementById("dropbill").style.display = "none";
-                t[tbl].course.receipt.orderTaken = 1;
-                setEndTime("receipt","dropDue",300);
-                setEndTime("receipt","needAct",300);
                 break;
             case 'receipt':
-                setEmptyTime(0,"receiptEmpty",100);
-                setEmptyTime(1,"receiptEmpty",100);
-                document.getElementById("dropreceipt").style.display = "none";
+                t[tbl].course.greet.show = 0;
+                t[tbl].course.drink.show = 0;
+                t[tbl].course.app.show = 0;
+                t[tbl].course.salad.show = 0;
+                t[tbl].course.entree.show = 0;
+                t[tbl].course.dessert.show = 0;
+                t[tbl].course.bill.show = 0;
                 break;
         }
         update();
     }
 }
 function bus(k){
+    var d = k+"Bus";
+    var h = "bus"+k;
+    var r = k+"Empty";
+    for (var j = 1; j < t[tbl].g.length; j++) {
+        if(t[tbl].g[j][r] <= getTableTime(tbl)){
+            t[tbl].g[j][d] = 1;
+        }
+    }
+    var temp = 0;
+    for (var m = 1; m < t[tbl].g.length; m++) {                
+        if (t[tbl].g[m][d] == 1){
+            temp+=1;
+        }
+        if (temp == (t[tbl].g.length - 1)){
+            document.getElementById(h).style.display = "none";
+        }
+    }
     switch(k){
         case 'app':
             if(t[tbl].course.app.emptyDone <= getTableTime()){
@@ -607,61 +597,13 @@ function bus(k){
                 t[tbl].course.app.dispF = "bus";
             }
             break;
-        case 'salad':
-            for (var j = 1; j < t[tbl].g.length; j++) {
-                if(t[tbl].g[j].saladEmpty <= getTableTime(tbl)){
-                    t[tbl].g[j].saladBus = 1;
-                }
-            }
-            var temp = 0;
-            for (var j = 1; j < t[tbl].g.length; j++) {                
-                if (t[tbl].g[j].saladBus == 1){
-                    temp+=1;
-                }
-                if (temp == (t[tbl].g.length - 1)){
-                    document.getElementById("bussalad").style.display = "none";
-                }
-            }
-            break;
-        case 'entree':
-            for (var j = 1; j < t[tbl].g.length; j++) {
-                if(t[tbl].g[j].entreeEmpty <= getTableTime()){
-                    t[tbl].g[j].entreeBus = 1;
-                }
-            }
-            var temp = 0;
-            for (var j = 1; j < t[tbl].g.length; j++) {                
-                if (t[tbl].g[j].entreeBus == 1){
-                    temp+=1;
-                }
-                if (temp == (t[tbl].g.length - 1)){
-                    document.getElementById("busentree").style.display = "none";
-                }
-            }
-            break;
-        case 'dessert':
-            for (var j = 1; j < t[tbl].g.length; j++) {
-                if(t[tbl].g[j].dessertEmpty <= getTableTime()){
-                    t[tbl].g[j].dessertBus = 1;
-                }
-            }
-            var temp = 0;
-            for (var j = 1; j < t[tbl].g.length; j++) {                
-                if (t[tbl].g[j].dessertBus == 1){
-                    temp+=1;
-                }
-                if (temp == (t[tbl].g.length - 1)){
-                    document.getElementById("busdessert").style.display = "none";
-                }
-            }
-            break;
         case 'bill':
-            if ((t[tbl].g[0].billEmpty <= getTableTime()) && (t[tbl].g[1].billEmpty <= getTableTime())){
-                t[tbl].g[0].billBus = 1;
-                t[tbl].g[1].billBus = 1;
-                t[0].course.receipt.show = 1;
+            if (temp == (t[tbl].g.length - 1)){
                 document.getElementById("busbill").style.display = "none";
+                t[0].course.receipt.show = 1;
                 document.getElementById("makereceipt").style.display = "inline";
+                t[tbl].course.receipt.dispF = "ordering";
+                setEndTime("receipt","dropDue",t[tbl].course.receipt.dueTime);
             }
             break;
     }
@@ -853,24 +795,45 @@ var stage = { //possible new data structure.
         }
     },
     bill: {
-        blank:"a",
+        blank: function() {
+            return "";
+        },
         taken:"s",
         sent:"d",
         making:"f",
         done:"g",
         got:"h",
-        dropd:"j",
+        dropd: function(g,k) {
+            if (t[tbl].g[g].billBus == 1){
+                return "Paid";
+            } else if (t[tbl].g[g].billEmpty < getTableTime()){
+                return "Paying 100%";
+            } else {
+            return ("Paying " + centLeft(g,"billEmpty",k));
+            }
+        },
         dirty:"k",
         bus:"l"
     },
     receipt:{
-        blank:"a",
+        blank: function() {
+            return "";
+        },
+        ordering: function() {
+            if (timeLeft("receipt","dropDue") > 0){
+                return ("Waiting " + formatTime(timeLeft("receipt","dropDue")));
+            } else {
+                return "late1";
+            }
+        },
         taken:"s",
         sent:"d",
         making:"f",
         done:"g",
         got:"h",
-        dropd:"j"
+        dropd: function(g,k) {
+            return "game over";
+        }
     },
 };
 
@@ -898,6 +861,9 @@ function centLeft(c,x,z){
     } else if (z == "drink") {
         temp = t[tbl].g[c].thirst;
         return ((Math.round((t[tbl].g[[c]][x] - getTableTime(tbl)) / (y * (1 / temp))))+ "%");
+    } else if (z == "bill") {
+        temp = (t[tbl].g[c].thirst + t[tbl].g[c].hunger);
+        return ((100-(Math.round((t[tbl].g[[c]][x] - getTableTime(tbl)) / (y * (1 / temp)))))+ "%");
     } else {
         temp = t[tbl].g[c].hunger;
         return ((Math.round((t[tbl].g[[c]][x] - getTableTime(tbl)) / (y * (1 / temp))))+ "%");
@@ -917,10 +883,15 @@ function setEmptyTime(c,x,z){
     } else if (z == "drink"){
         temp = t[tbl].g[c].thirst;
         t[tbl].g[c][x] = getTableTime(tbl) + (y * (1 / temp));
+    } else if (z == "bill") {
+        temp = (t[tbl].g[c].thirst + t[tbl].g[c].hunger);
+        t[tbl].g[c][x] = getTableTime(tbl) + (y * (1 / temp));
     } else {
         temp = t[tbl].g[c].hunger;
         t[tbl].g[c][x] = getTableTime(tbl) + (y * (1 / temp));
     }
 }
-
+function cheat(k){
+    gTimer = gTimer + k;
+}
 </script>
